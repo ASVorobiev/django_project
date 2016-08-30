@@ -1,7 +1,9 @@
+from django.conf.urls import patterns
 from django.db import models
 
 # Create your models here.
 from django.forms import ModelForm
+from django.shortcuts import redirect
 from django.utils.datetime_safe import datetime
 from django.utils.safestring import mark_safe
 
@@ -45,6 +47,7 @@ class UploadForm(ModelForm):
         model = Upload
         fields = '__all__'
 
+
 class Locations(models.Model):
     name = models.CharField(max_length=255)
     vk_group_id = models.IntegerField(blank=True, null=True)
@@ -59,8 +62,9 @@ class Locations(models.Model):
     def __str__(self):
         return self.name
 
+
 class Events(models.Model):
-    location_id = models.ForeignKey(Locations)
+    location = models.ForeignKey(Locations)
     title = models.CharField(max_length=255, verbose_name='заголовок')
     description = models.TextField(blank=True, verbose_name='описание')
     image = models.ImageField(max_length=255, blank=True, null=True, verbose_name='афиша')
@@ -93,8 +97,20 @@ class Events(models.Model):
             return mark_safe('<img src="%s" width="150" height="150" />' % self.image.url)
         else:
             return '(none)'
+
     image_small.short_description = 'Thumb'
     image_small.allow_tags = True
+
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = patterns('',
+                           (r'^(?P<pk>\d+)/events/$', self.admin_site.admin_view(self.do_evil_view))
+                           )
+        return my_urls + urls
+
+    def do_evil_view(self, request, pk):
+        print('doing evil with', Events.objects.get(pk=int(pk)))
+        return redirect('/admin/mysite/events/%s/' % pk)
 
     def __str__(self):
         return self.title

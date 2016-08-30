@@ -45,13 +45,25 @@ class PersonsAdmin(admin.ModelAdmin):
 
 
 class EventsAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {
+            'fields': ('location', 'title', 'description', 'image', 'start_date', 'start_time',)
+        }),
+        ('Advanced options', {
+            'classes': ('collapse',),
+            'fields': ('category_id', 'duration', 'finish_date', 'is_perodic', 'shedule', 'place_id', 'place_comment',
+                       'organizer_id', 'is_free', 'tickets', 'tags', 'phone', 'url', 'priority', 'is_active',
+                       'export_vk', 'is_deleted', 'created', 'modified'),
+        }),
+    )
     readonly_fields = ['modified', 'created']
-    exclude = ['thumb']
+    actions = ['is_active']
+    #exclude = ['thumb']
     search_fields = ['title', 'description']
     models = Events
 
     def list_locations_name(self, obj):
-        return obj.location_id.name
+        return obj.location.name
     list_locations_name.admin_order_field = 'start_date'  #Allows column order sorting
     list_locations_name.short_description = 'Город'  # Renames column head
 
