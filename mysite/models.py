@@ -97,7 +97,6 @@ class Events(models.Model):
             return mark_safe('<img src="%s" width="150" height="150" />' % self.image.url)
         else:
             return '(none)'
-
     image_small.short_description = 'Thumb'
     image_small.allow_tags = True
 

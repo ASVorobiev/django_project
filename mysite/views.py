@@ -17,6 +17,10 @@ def home(request):
     return render(request, 'home.html', {'form':img, 'images':images})
 
 
-def post_list(request):
+def events_list(request):
     posts = Events.objects.all()
-    return render(request, 'mysite/post_list.html', {'posts': posts})
+    return render(request, 'mysite/events_list.html', {'posts': posts})
+
+def add_event_form(request):
+    posts = Events.objects.all()
+    return render(request, 'mysite/add_event_form.html', {'posts': posts})
