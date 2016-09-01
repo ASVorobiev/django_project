@@ -14,4 +14,9 @@ from .models import Events
 class EventsForm(forms.ModelForm):
     class Meta:
         model = Events
-        fields = ('title', 'description', 'image_url')
+        fields = ('title', 'description')
+
+class AddNewEvent(forms.ModelForm):
+    class Meta:
+        model = Events
+        fields = ('title', 'description', 'image', 'location', 'start_date', 'start_time')

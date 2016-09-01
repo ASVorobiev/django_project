@@ -1,4 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.template.context_processors import csrf
+
+from mysite.forms import AddNewEvent
 from mysite.models import UploadForm, Upload, Events
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -22,5 +25,18 @@ def events_list(request):
     return render(request, 'mysite/events_list.html', {'posts': posts})
 
 def add_event_form(request):
-    posts = Events.objects.all()
-    return render(request, 'mysite/add_event_form.html', {'posts': posts})
+    #posts = AddNewEvent
+    context = {}
+    context['EventsMod'] = AddNewEvent
+    context.update(csrf(request))
+    if request.POST:
+        new_event = AddNewEvent(request.POST, request.FILES)
+        new_event.title = request.POST['title']
+        new_event.description = request.POST['description']
+        new_event.location = request.POST['location']
+        new_event.image = request.FILES['image']
+        new_event.start_time = request.POST['start_time']
+        new_event.start_date = request.POST['start_date']
+        new_event.save()
+        return redirect('post_list')
+    return render(request, 'mysite/add_event_form.html', context)
