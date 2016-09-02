@@ -1,0 +1,36 @@
+1,Can add log entry,1,add_logentry
+2,Can change log entry,1,change_logentry
+3,Can delete log entry,1,delete_logentry
+4,Can add permission,2,add_permission
+5,Can change permission,2,change_permission
+6,Can delete permission,2,delete_permission
+7,Can add group,3,add_group
+8,Can change group,3,change_group
+9,Can delete group,3,delete_group
+10,Can add user,4,add_user
+11,Can change user,4,change_user
+12,Can delete user,4,delete_user
+13,Can add content type,5,add_contenttype
+14,Can change content type,5,change_contenttype
+15,Can delete content type,5,delete_contenttype
+16,Can add session,6,add_session
+17,Can change session,6,change_session
+18,Can delete session,6,delete_session
+19,Can add person,7,add_person
+20,Can change person,7,change_person
+21,Can delete person,7,delete_person
+22,Can add document,8,add_document
+23,Can change document,8,change_document
+24,Can delete document,8,delete_document
+25,Can add upload,9,add_upload
+26,Can change upload,9,change_upload
+27,Can delete upload,9,delete_upload
+28,Can add locations,10,add_locations
+29,Can change locations,10,change_locations
+30,Can delete locations,10,delete_locations
+31,Can add events,11,add_events
+32,Can change events,11,change_events
+33,Can delete events,11,delete_events
+34,Can add location cities,12,add_locationcities
+35,Can change location cities,12,change_locationcities
+36,Can delete location cities,12,delete_locationcities
