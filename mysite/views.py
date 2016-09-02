@@ -9,20 +9,18 @@ from django.core.urlresolvers import reverse
 
 
 def home(request):
-    if request.method == "POST":
-        img = UploadForm(request.POST, request.FILES)
-        if img.is_valid():
-            img.save()
-            return HttpResponseRedirect(reverse('imageupload'))
-    else:
-        img=UploadForm()
-    images=Upload.objects.all()
-    return render(request, 'home.html', {'form':img, 'images':images})
+    return render(request, 'mysite/events_list.html')
 
 
 def events_list(request):
     posts = Events.objects.all()
     return render(request, 'mysite/events_list.html', {'posts': posts})
+
+
+def events_details(request, pk):
+    posts = Events.objects.get(id=pk)
+    return render(request, 'mysite/event_details.html', {'posts': posts})
+
 
 def add_event_form(request):
     #posts = AddNewEvent
@@ -38,5 +36,5 @@ def add_event_form(request):
         new_event.start_time = request.POST['start_time']
         new_event.start_date = request.POST['start_date']
         new_event.save()
-        return redirect('post_list')
+        return redirect('event_details', pk=new_event.pk)
     return render(request, 'mysite/add_event_form.html', context)

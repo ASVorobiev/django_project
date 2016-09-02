@@ -1,0 +1,30 @@
+{% extends "mysite/base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="container">
+<form method="post">
+    <div class="row">
+        <div class="col s5">
+            <img class="parallax-container" src={{ posts.image.url }}>
+
+
+        </div>
+      <div class="col s7">
+      <form class="col s12">
+        <div class="row">
+          <div class="input-field col s6">
+            <h4> {{ posts.title }}</h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <span class="black-text">{{ posts.description }}</span>
+          </div>
+        </div>
+      </form>
+    </div>
+        </div>
+</form>
+</div>
+{% endblock  %}

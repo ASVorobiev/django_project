@@ -23,7 +23,6 @@ from mysite import views
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^upload/$', views.home, name='imageupload'),
     url(r'', include('mysite.urls')),
 )
 urlpatterns += staticfiles_urlpatterns()
