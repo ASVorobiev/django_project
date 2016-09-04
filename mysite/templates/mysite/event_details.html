@@ -2,25 +2,22 @@
 {% load staticfiles %}
 
 {% block content %}
-<div class="container">
+<div class="">
     <div class="row">
-        <div class="col s5 ">
-            <img class="parallax-container aligned" src={{ posts.image.url }}>
+        <div class="col s12 l5">
+            <img class="materialboxed responsive-img" src={{ event_data.image.url }}>
         </div>
-      <div class="col s7">
-          <form class="col s12">
-            <div class="row">
-              <div class="input-field col s6">
-                <h4> {{ posts.title }}</h4>
-              </div>
+       <div class="col s12 l7">
+            <div class="row center-align">
+                <h3>{{ event_data.title }}</h3>
             </div>
+           <div>
+               <a>{{ event_data.start_date }}</a><a>{{ event_data.start_time }}</a>
+           </div>
             <div class="row">
-              <div class="input-field col s12">
-                <span class="black-text">{{ posts.description }}</span>
-              </div>
+                <span class="black-text flow-text">{{ event_data.description }}</span>
             </div>
-          </form>
-      </div>
+       </div>
     </div>
 </div>
 {% endblock  %}

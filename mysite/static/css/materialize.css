@@ -1989,6 +1989,7 @@
 
 .blue-grey.lighten-2 {
   background-color: #90a4ae !important;
+  opacity: 0.5;
 }
 
 .blue-grey-text.text-lighten-2 {
@@ -7597,10 +7598,10 @@ input[type=range]:focus::-ms-fill-upper {
 .slider .slides li .caption {
   color: #fff;
   position: absolute;
-  top: 15%;
-  left: 15%;
+  top: 1%;
+  right: 1%;
   width: 70%;
-  opacity: 0;
+  opacity: 70;
 }
 
 .slider .slides li .caption p {
@@ -8465,4 +8466,29 @@ button.picker__today:focus, button.picker__clear:focus, button.picker__close:foc
   .picker--time .picker__box {
     margin-bottom: 5em;
   }
+}
+
+header, main, footer {
+  padding-left: 300px;
+}
+
+@media only screen and (max-width : 992px) {
+  header, main, footer {
+    padding-left: 0;
+  }
+}
+
+/*// Class for when element is above threshold*/
+.pin-top {
+  position: relative;
+}
+
+/*// Class for when element is below threshold*/
+.pin-bottom {
+  position: relative;
+}
+
+/*// Class for when element is pinned*/
+.pinned {
+  position: fixed !important;
 }

@@ -113,5 +113,6 @@ STATIC_URL = '/static/'
 # For example: /var/www/yoursite.com/static/
 #STATIC_ROOT should be set on production server. Development server ignores this setting.
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'storage')
+MEDIA_ROOT = 'C:\\vKalendare\\storage'
+MEDIA_URL = '/storage/'
