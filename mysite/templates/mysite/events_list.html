@@ -8,7 +8,7 @@
               {% for ev in priority_events %}
                 <li class="caption">
                   <a href="{% url 'event_details' ev.location_id ev.id %}">
-                  <img src="{{ ev.image.url }}">
+                  <img src="{{ ev.image.url }}"/>
                   <div class="caption card-panel right-align  blue-grey lighten-2">
                     <h4>{{ ev.title }}</h4>
                     <h6 class="light grey-text text-lighten-3">{{ ev.start_date }}</h6>
@@ -26,7 +26,10 @@
           {% for event in location_events %}
               <div class="col s12 m4 l3">
                   <div class="card sticky-action medium z-depth-2">
-                      <div>123124</div>
+{#                      <div class="valign-wrapper">#}
+{#                        <i class="material-icons">date_range</i>{{ event.start_date }}#}
+{#                        <i class="material-icons">access_time</i>{{ event.start_time }}#}
+{#                      </div>#}
                       <div class="card-image waves-effect waves-block waves-light">
                           <img class="activator" src={{ event.image.url }}>
                       </div>

@@ -9,8 +9,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <!--Import jQuery before materialize.js-->
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/mod.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
+  {% block scripts %}
+  {% endblock %}
 </head>
 
 
@@ -28,6 +30,7 @@
     <nav class="top-nav light-blue darken-3">
       <div class="">
         <div class="nav-wrapper">
+          <a href="#" data-activates="nav-mobile" class="button-collapse top-nav full"><i class="material-icons">menu</i></a>
           <a href="{% url 'events_list' %}" class="brand-logo">вКалендаре</a>
           <ul class="right hide-on-med-and-down">
             <li>
@@ -43,15 +46,18 @@
       </div>
     </nav>
 
-
-    <div class="container"><a href="#" data-activates="nav-mobile" class="button-collapse top-nav full hide-on-large-only"><i class="material-icons">menu</i></a></div>
-    <ul id="nav-mobile" class="side-nav fixed" style="transform: translateX(0%);">
-      <li><div class="userView">
-      <li class="logo"><a id="logo-container" href="#" class="brand-logo">
-          <img id="front-page-logo" width="100" src="{% static 'logo/vkalendare_logo_only.png' %}"></a></li>
+    <ul id="nav-mobile" class="side-nav fixed">
+      <li>qwer</li>
+      <li class="logo">
+        <a id="logo-container" href="#" class="brand-logo center-align" style="height: 100px;">
+          <img id="front-page-logo" height="100px" src="{% static 'logo/vkalendare_logo_only.png' %}"/>
+        </a>
+      </li>
 {#      <li class="search">#}
 {#        <div class="search-wrapper card">#}
-{#          <input id="search"><i class="material-icons">search</i><div class="search-results"></div>#}
+{#          <i class="material-icons prefix">search</i>#}
+{#          <input id="search"/>#}
+{#          <div class="search-results"></div>#}
 {#        </div>#}
 {#      </li>#}
       <li class="bold"><a href="#" class="waves-effect waves-teal">О нас</a></li>
