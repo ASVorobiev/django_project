@@ -7,9 +7,9 @@
           <ul class="slides">
               {% for ev in priority_events %}
                 <li class="caption">
-                  <a href="{% url 'event_details' ev.location_id ev.id %}">
+                  <a href="{% url 'event_details' ev.location_id ev.id %}"></a>
                   <img src="{{ ev.image.url }}"/>
-                  <div class="caption card-panel right-align  blue-grey lighten-2">
+                  <div class="caption right-align">
                     <h4>{{ ev.title }}</h4>
                     <h6 class="light grey-text text-lighten-3">{{ ev.start_date }}</h6>
                   </div>
@@ -26,12 +26,18 @@
           {% for event in location_events %}
               <div class="col s12 m4 l3">
                   <div class="card sticky-action medium z-depth-2">
-{#                      <div class="valign-wrapper">#}
-{#                        <i class="material-icons">date_range</i>{{ event.start_date }}#}
-{#                        <i class="material-icons">access_time</i>{{ event.start_time }}#}
-{#                      </div>#}
+
                       <div class="card-image waves-effect waves-block waves-light">
-                          <img class="activator" src={{ event.image.url }}>
+                        <div class="" style="font-size: small;">
+                          <div>
+                            <i class="material-icons">date_range</i>
+                            {{ event.start_date|date:"SHORT_DATE_FORMAT" }}
+
+                            <i class="material-icons">access_time</i>
+                            {{ event.start_time }}
+                          </div>
+                        </div>
+                        <img class="activator" src={{ event.image.url }}>
                       </div>
                       <div class="card-content">
                           <span class="card-title activator grey-text text-darken-4">{{ event.title }}<i class="material-icons right">more_vert</i></span>

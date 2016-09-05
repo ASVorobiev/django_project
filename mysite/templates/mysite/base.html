@@ -47,12 +47,14 @@
     </nav>
 
     <ul id="nav-mobile" class="side-nav fixed">
-      <li>qwer</li>
-      <li class="logo">
-        <a id="logo-container" href="#" class="brand-logo center-align" style="height: 100px;">
-          <img id="front-page-logo" height="100px" src="{% static 'logo/vkalendare_logo_only.png' %}"/>
-        </a>
+      <li class="logo"  >
+        <div class="card-image center-align">
+          <a href="{% url 'events_list' %}" style="height: 120px; padding: 10px;">
+            <img id="front-page-logo" height="100%" src="{% static 'logo/vkalendare_logo_only.png' %}"/>
+          </a>
+        </div>
       </li>
+
 {#      <li class="search">#}
 {#        <div class="search-wrapper card">#}
 {#          <i class="material-icons prefix">search</i>#}
@@ -60,11 +62,12 @@
 {#          <div class="search-results"></div>#}
 {#        </div>#}
 {#      </li>#}
+
       <li class="bold"><a href="#" class="waves-effect waves-teal">О нас</a></li>
       <li class="bold"><a href="#" class="waves-effect waves-teal">Введение</a></li>
       <li class="no-padding">
         <ul class="collapsible collapsible-accordion">
-          <li class="bold"><a class="collapsible-header  waves-effect waves-teal">CSS</a>
+          <li class="bold"><a class="collapsible-header  waves-effect waves-teal">Категории</a>
             <div class="collapsible-body" style="">
               <ul>
                 <li><a href="http://materializecss.com/color.html">Цвет</a></li>
@@ -116,7 +119,7 @@
 
 
 
-  <footer class="page-footer light-blue accent-4">
+  <footer class="page-footer light-blue darken-3">
     <div class="container">
       <div class="row">
         <div class="col l4 s12">
