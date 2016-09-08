@@ -11,6 +11,7 @@
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script type="text/javascript" src="{% static 'js/mod.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
+  <script type="application/javascript">$('select').material_select('destroy');</script>
   {% block scripts %}
   {% endblock %}
 </head>
@@ -37,7 +38,7 @@
               <a class="center waves-effect waves-light btn hide-on-small-and-down red darken-2"  href="{% url 'add_event_form' %}">Добавить мероприятие</a>
             </li>
             <li>
-              <a class="dropdown-button hide-on-med-and-down " href="#!" data-activates="dropdown1">{{ current_location }}
+              <a class="dropdown-button hide-on-med-and-down" data-activates="dropdown1">{{ current_location }}
                 <i class="material-icons right">arrow_drop_down</i>
               </a>
             </li>
@@ -64,10 +65,32 @@
 {#      </li>#}
       <li class="bold">
         {% if user.is_authenticated %}
-          <div class="user-details">
-            You are logged in as <code>{{ user.username }}</code>!
+          <div class="user-details center-align">
+            Вы вошли как <code>{{ user.username }}</code>!
           </div>
         {% endif %}
+      </li>
+
+      <li>
+        <div class="card dropdown-button " data-activates="dropdown1">
+          <a>{{ current_location }}<i class="material-icons right center">arrow_drop_down</i></a>
+
+          </div>
+      </li>
+
+      <div class="input-field card ">
+    <select class="">
+      <a>
+      <option value="" disabled selected>Выберите ваш город</option>
+      {% for loc in locations %}
+        <option value={{ loc.id }}><a href="{% url 'location_events' loc.id %}">{{ loc.name }}</a></option>
+      {% endfor %}
+      </a>
+    </select>
+  </div>
+
+      <li>
+        <a class="center waves-effect waves-light btn hide-on-large-only red darken-2"  href="{% url 'add_event_form' %}">Добавить мероприятие</a>
       </li>
       <li class="bold"><a href="#" class="waves-effect waves-teal">О нас</a></li>
       <li class="bold"><a href="#" class="waves-effect waves-teal">Введение</a></li>
@@ -83,12 +106,16 @@
           </li>
         </ul>
       </li>
+
       <li class="bold"><a href="#" class="waves-effect waves-teal">Примеры сайтов</a></li>
-    </ul>
+    <div class="divider"></div>
+      {% if user.is_authenticated %}
+        <li class="bold"><a href="{% url 'logout' %}" class="waves-effect waves-teal">Выйти</a></li></ul>
+      {% else %}
+        <li class="bold"><a href="{% url 'login' %}" class="waves-effect waves-teal">Войти</a></li></ul>
+      {% endif %}
+
   </header>
-
-
-
 
   <main>
     <div class="">

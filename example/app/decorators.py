@@ -4,7 +4,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 
 
-def render_to(tpl):
+def render_to(tpl, ref=None):
     def decorator(func):
         @wraps(func)
         def wrapper(request, *args, **kwargs):

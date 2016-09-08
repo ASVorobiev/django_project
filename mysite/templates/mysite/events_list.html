@@ -2,17 +2,18 @@
 {% load staticfiles %}
 
 {% block slider %}
-  <div class="">
+  <div class="card">
       <div class="slider">
           <ul class="slides">
               {% for ev in priority_events %}
                 <li class="caption">
-                  <a href="{% url 'event_details' ev.location_id ev.id %}"></a>
-                  <img src="{{ ev.image.url }}"/>
-                  <div class="caption right-align">
-                    <h4>{{ ev.title }}</h4>
-                    <h6 class="light grey-text text-lighten-3">{{ ev.start_date }}</h6>
-                  </div>
+                  <a href="{% url 'event_details' ev.location_id ev.id %}">
+                    <img src="{{ ev.image.url }}"/>
+                    <div class="caption right-align">
+                      <h4>{{ ev.title }}</h4>
+                      <h6 class="light grey-text text-lighten-3">{{ ev.start_date }}</h6>
+                    </div>
+                  </a>
                 </li>
               {% endfor %}
           </ul>

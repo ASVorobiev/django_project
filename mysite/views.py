@@ -48,6 +48,8 @@ def events_details(request, location_id, pk):
 
 
 def add_event_form(request):
+    if request.user.is_anonymous():
+        return redirect('/login')
     context = {}
     context['EventsMod'] = AddNewEvent
     context.update(csrf(request))

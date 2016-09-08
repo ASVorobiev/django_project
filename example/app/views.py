@@ -17,7 +17,7 @@ from example.app.decorators import render_to
 def logout(request):
     """Logs out user"""
     auth_logout(request)
-    return redirect('/')
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 def context(**extra):
@@ -31,8 +31,9 @@ def context(**extra):
 @render_to('home.html')
 def home(request):
     """Home view, displays login mechanism"""
+    request.session['http_referer_foo'] = request.META.get('HTTP_REFERER')
     if request.user.is_authenticated():
-        return redirect('done')
+        return redirect(request.META.get('HTTP_REFERER'))
     return context()
 
 
@@ -40,7 +41,7 @@ def home(request):
 @render_to('home.html')
 def done(request):
     """Login complete view, displays user data"""
-    return context()
+    return redirect(request.session._session['http_referer_foo'])
 
 
 @render_to('home.html')

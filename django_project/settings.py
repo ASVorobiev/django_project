@@ -126,38 +126,16 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 AUTHENTICATION_BACKENDS = (
-    'social.backends.dropbox.DropboxOAuth',
-    'social.backends.dropbox.DropboxOAuth2',
-    'social.backends.evernote.EvernoteSandboxOAuth',
-    'social.backends.facebook.FacebookAppOAuth2',
     'social.backends.facebook.FacebookOAuth2',
-    'social.backends.flickr.FlickrOAuth',
-    'social.backends.foursquare.FoursquareOAuth2',
-    'social.backends.github.GithubOAuth2',
-    'social.backends.google.GoogleOAuth',
     'social.backends.google.GoogleOAuth2',
-    'social.backends.google.GoogleOpenId',
-    'social.backends.google.GooglePlusAuth',
-    'social.backends.google.GoogleOpenIdConnect',
     'social.backends.instagram.InstagramOAuth2',
-    'social.backends.live.LiveOAuth2',
-    'social.backends.livejournal.LiveJournalOpenId',
-    'social.backends.mailru.MailruOAuth2',
     'social.backends.odnoklassniki.OdnoklassnikiOAuth2',
-    'social.backends.open_id.OpenIdAuth',
-    'social.backends.openstreetmap.OpenStreetMapOAuth',
-    'social.backends.runkeeper.RunKeeperOAuth2',
-    'social.backends.stackoverflow.StackoverflowOAuth2',
-    'social.backends.steam.SteamOpenId',
-    'social.backends.tumblr.TumblrOAuth',
     'social.backends.twitter.TwitterOAuth',
     'social.backends.vk.VKOAuth2',
     'social.backends.yandex.YandexOAuth2',
-    'social.backends.lastfm.LastFmAuth',
     'social.backends.email.EmailAuth',
     'social.backends.username.UsernameAuth',
     'django.contrib.auth.backends.ModelBackend',
-    'social.backends.upwork.UpworkOAuth',
 )
 
 AUTH_USER_MODEL = 'app.CustomUser'
