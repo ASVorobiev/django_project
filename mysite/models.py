@@ -7,8 +7,6 @@ from django.shortcuts import redirect
 from django.utils.datetime_safe import datetime
 from django.utils.safestring import mark_safe
 
-from django_project.settings import MEDIA_URL
-
 
 class Person(models.Model):
     images_path = 'images/'
@@ -24,28 +22,6 @@ class Person(models.Model):
 
     image_small.short_description = 'Thumb'
     image_small.allow_tags = True
-
-
-class Document(models.Model):
-    docfile = models.FileField(upload_to='documents/%Y/%m/%d')
-
-
-class Upload(models.Model):
-    pic = models.ImageField("Image", upload_to=MEDIA_URL)
-    upload_date = models.DateTimeField(auto_now_add=True)
-
-    def image_tag(self):
-        return mark_safe('<img src="/directory/%s" width="150" height="150" />' % self.pic)
-
-    image_tag.short_description = 'Image'
-    image_tag.allow_tags = True
-
-
-# FileUpload form class.
-class UploadForm(ModelForm):
-    class Meta:
-        model = Upload
-        fields = '__all__'
 
 
 class Locations(models.Model):

@@ -7,7 +7,7 @@ from django.contrib.admin.widgets import AdminFileWidget
 from django.utils.safestring import mark_safe
 
 from mysite import models
-from mysite.models import Person, Upload, Events, Locations
+from mysite.models import Person, Events, Locations
 
 
 class AdminImageWidget(AdminFileWidget):

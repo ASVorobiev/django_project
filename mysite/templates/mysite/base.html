@@ -62,7 +62,13 @@
 {#          <div class="search-results"></div>#}
 {#        </div>#}
 {#      </li>#}
-
+      <li class="bold">
+        {% if user.is_authenticated %}
+          <div class="user-details">
+            You are logged in as <code>{{ user.username }}</code>!
+          </div>
+        {% endif %}
+      </li>
       <li class="bold"><a href="#" class="waves-effect waves-teal">О нас</a></li>
       <li class="bold"><a href="#" class="waves-effect waves-teal">Введение</a></li>
       <li class="no-padding">

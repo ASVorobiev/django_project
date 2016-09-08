@@ -21,6 +21,10 @@
 {% endblock %}
 
 {% block content %}
+
+  <style type="text/css">
+  .material-icons.md-14 { font-size: 14px; }
+  </style>
   <div class="">
       <div class="row">
           {% for event in location_events %}
@@ -29,12 +33,13 @@
 
                       <div class="card-image waves-effect waves-block waves-light">
                         <div class="" style="font-size: small;">
-                          <div>
-                            <i class="material-icons">date_range</i>
+                          <div class="">
+                            <i class="material-icons md-14">date_range</i>
                             {{ event.start_date|date:"SHORT_DATE_FORMAT" }}
-
-                            <i class="material-icons">access_time</i>
-                            {{ event.start_time }}
+                            <div class="right">
+                              <i class="material-icons md-14">access_time</i>
+                              {{ event.start_time }}
+                            </div>
                           </div>
                         </div>
                         <img class="activator" src={{ event.image.url }}>

@@ -6,7 +6,7 @@ from django.template.context_processors import csrf
 from django.views.decorators.csrf import csrf_protect
 
 from mysite.forms import AddNewEvent
-from mysite.models import UploadForm, Upload, Events, Locations
+from mysite.models import Events, Locations
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 

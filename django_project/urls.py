@@ -22,8 +22,18 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from mysite import views
 
 urlpatterns = patterns('',
-    url(r'^admin/', include(admin.site.urls)),
     url(r'', include('mysite.urls')),
+    url(r'', include('social.apps.django_app.urls', namespace='social')),
+    url(r'^admin/', include(admin.site.urls)),
+
+    #url(r'^$', 'example.app.views.home'),
+    url(r'^email-sent/', 'example.app.views.validation_sent'),
+    url(r'^login/$', 'example.app.views.home'),
+    url(r'^logout/$', 'example.app.views.logout'),
+    url(r'^done/$', 'example.app.views.done', name='done'),
+    url(r'^ajax-auth/(?P<backend>[^/]+)/$', 'example.app.views.ajax_auth', name='ajax-auth'),
+    url(r'^email/$', 'example.app.views.require_email', name='require_email'),
+
 )
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
