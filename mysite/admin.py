@@ -7,7 +7,7 @@ from django.contrib.admin.widgets import AdminFileWidget
 from django.utils.safestring import mark_safe
 
 from mysite import models
-from mysite.models import Person, Events, Locations
+from mysite.models import Events, Locations
 
 
 class AdminImageWidget(AdminFileWidget):
@@ -70,8 +70,6 @@ class EventsAdmin(admin.ModelAdmin):
     list_display = ['image_small', 'title', 'list_locations_name',  'description', 'start_date', 'start_time', ]
     list_filter = ('start_date', 'location_id__name')
 
-admin.site.register(Person, PersonsAdmin)
-#admin.site.register(Upload, MyUpload)
 admin.site.register(Events, EventsAdmin)
 
 

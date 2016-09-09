@@ -10,6 +10,10 @@ from mysite.models import Events, Locations
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
+from datetime import date, timedelta
+
+today = date.today()
+
 
 # Create your views here.
 
@@ -19,12 +23,17 @@ def home(request):
 
 
 def events_list(request, location_id=None):
-    all_events = Events.objects.all().order_by('-start_date')[:28]
-    priority_events = Events.objects.filter(priority=1).order_by('-start_date')[:10]
+    # all_events = Events.objects.filter(start_date__gte=today, start_date__gt=today + datetime.timedelta(days=10)).order_by('priority', '-start_date')[:52]
+    all_events = Events.objects.exclude(start_date__lte=today).exclude(
+        start_date__gte=today + timedelta(days=45)).order_by('start_date')[:52]
+    priority_events = Events.objects.exclude(start_date__lte=today).order_by('-priority', 'start_date')[:10]
     locations = Locations.objects.all()
 
     if location_id:
-        location_events = Events.objects.filter(location=location_id).order_by('-id')[:28]
+        location_events = Events.objects.filter(location=location_id).exclude(start_date__lte=today).exclude(
+            start_date__gte=today + timedelta(days=45)).order_by('priority').order_by('start_date')[:52]
+        priority_events = Events.objects.filter(location=location_id).exclude(
+            start_date__lte=today).order_by('-priority', 'start_date')[:10]
         current_location = Locations.objects.get(id=location_id)
         return render(request, 'mysite/events_list.html', {'location_events': location_events,
                                                            'priority_events': priority_events,
@@ -49,7 +58,8 @@ def events_details(request, location_id, pk):
 
 def add_event_form(request):
     if request.user.is_anonymous():
-        return redirect('/login')
+        request.session['add_event_form_http_referer'] = 1
+        return redirect('/login', {'21342': 5234532445})
     context = {}
     context['EventsMod'] = AddNewEvent
     context.update(csrf(request))

@@ -16,7 +16,7 @@
       <excludeFolder url="file://$MODULE_DIR$/.idea" />
       <excludeFolder url="file://$MODULE_DIR$/storage" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.3.5 (C:\Python33\python.exe)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.4.4 virtualenv at C:\SSDWork\django_virtualenv" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="jquery-2.1.1" level="application" />
   </component>
@@ -25,6 +25,7 @@
     <option name="TEMPLATE_FOLDERS">
       <list>
         <option value="$MODULE_DIR$/mysite/templates" />
+        <option value="$MODULE_DIR$/example/templates" />
       </list>
     </option>
   </component>

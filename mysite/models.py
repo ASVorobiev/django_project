@@ -8,22 +8,6 @@ from django.utils.datetime_safe import datetime
 from django.utils.safestring import mark_safe
 
 
-class Person(models.Model):
-    images_path = 'images/'
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
-    image = models.ImageField(upload_to=images_path, null=True, blank=True)
-
-    def image_small(self):
-        if self.image:
-            return mark_safe('<img src="%s" width="150" height="150" />' % self.image.url)
-        else:
-            return '(none)'
-
-    image_small.short_description = 'Thumb'
-    image_small.allow_tags = True
-
-
 class Locations(models.Model):
     name = models.CharField(max_length=255)
     vk_group_id = models.IntegerField(blank=True, null=True)
@@ -95,3 +79,44 @@ class LocationCities(models.Model):
     vk_city_id = models.IntegerField(primary_key=True)
     location_id = models.IntegerField()
     vk_city_name = models.CharField(max_length=255)
+
+
+class MysiteCategories(models.Model):
+    name = models.CharField(max_length=255)
+
+    class Meta:
+        managed = False
+        db_table = 'mysite_categories'
+
+
+class MysiteOrganizers(models.Model):
+    vk_id = models.IntegerField(blank=True, null=True)
+    vk_type = models.CharField(max_length=5, blank=True, null=True)
+    name = models.CharField(max_length=255)
+    logo = models.CharField(max_length=255, blank=True, null=True)
+    url = models.CharField(max_length=255, blank=True, null=True)
+    followers = models.IntegerField(blank=True, null=True)
+    place_id = models.IntegerField(blank=True, null=True)
+    confidence = models.IntegerField()
+    is_deleted = models.IntegerField()
+    modified = models.IntegerField()
+    created = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'mysite_organizers'
+        unique_together = (('vk_id', 'vk_type'),)
+
+
+class MysitePlaces(models.Model):
+    name = models.CharField(max_length=255)
+    logo = models.CharField(max_length=255)
+    lat = models.FloatField(blank=True, null=True)
+    lan = models.FloatField(blank=True, null=True)
+    is_deleted = models.IntegerField()
+    modified = models.IntegerField()
+    created = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'mysite_places'

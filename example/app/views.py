@@ -41,6 +41,12 @@ def home(request):
 @render_to('home.html')
 def done(request):
     """Login complete view, displays user data"""
+    try:
+        if request.session._session['add_event_form_http_referer']:
+            request.session._session['add_event_form_http_referer'] = False
+            return redirect('/add_event_form')
+    except KeyError:
+        print ('add_event_form_http_referer no found')
     return redirect(request.session._session['http_referer_foo'])
 
 
