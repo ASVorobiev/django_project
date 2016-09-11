@@ -1,0 +1,117 @@
+{% extends "mysite/base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<script type="text/javascript">
+  $(document).ready(function(){
+    // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+    $('.modal-trigger').leanModal();
+
+    $('input.autocomplete').autocomplete({
+      data: {
+        "Apple": null,
+        "Microsoft": null,
+        "Google": 'http://placehold.it/250x250'
+      }
+    });
+  });
+</script>
+<script type="text/javascript">
+function upload_img(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $('#img_id').attr('src', e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+
+<!-- Modal Structure -->
+<div id="modal2" class="modal">
+  <div class="modal-content">
+    <h4>Modal Header</h4>
+    <p>A bunch of text</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+  </div>
+</div>
+
+<div class="">
+
+  <form class="card-panel z-depth-3" action="{% url 'add_event_form'%}" method="post"  enctype="multipart/form-data">
+  {% csrf_token %}
+<!-- Modal Trigger -->
+<a class="col l12 waves-effect waves-light btn modal-trigger" href="#modal2">Читать инструкцию</a>
+    <div class="row">
+      <div class="input-field col s12">
+        <input type="text" name="title" length="50">
+        <label for="title">Заголовок</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="input-field col s12">
+        <textarea class="materialize-textarea" name="description" length="1000"></textarea>
+        <label for="textarea1">Описание мероприятия</label>
+      </div>
+    </div>
+
+      <div class="row">
+        <div class="input-field col s12">
+                {% for loc in EventsMod.location %}
+                    {{  loc }}
+                {% endfor %}
+            <label>Город</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col s10">
+          <div class="file-field input-field file-upload">
+            <div class="btn">
+              <span>Загрузить афишу</span>
+              <input type="file" name="image" onchange="upload_img(this);" />
+
+            </div>
+            <div class="file-path-wrapper">
+              <input class="file-path validate" type="text" placeholder="Upload one or more files">
+            </div>
+          </div>
+          </div>
+        <div class="col s2 "><img id="img_id" class="responsive-img" src="#" alt="your image"/></div>
+
+      </div>
+
+      <div class="row">
+        <div class="input-field col s12">
+          <i class="material-icons prefix">textsms</i>
+          <input type="text" id="autocomplete-input" class="autocomplete">
+          <label for="autocomplete-input">Autocomplete</label>
+        </div>
+      </div>
+
+    <div class="row">
+        <div class="input-field col s5 offset-s1">
+              <i for="date">Дата</i>
+               <input id="date" type="date" name="start_date" class="date" value="2013-01-08">
+        </div>
+
+        <div class="input-field col s4 offset-s1">
+            <i for="time">Время</i>
+               <input type="time" id="time" name="start_time" class="vTimeField" value="11:11">
+        </div>
+    </div>
+
+    <div class="row right-align">
+          <button class="btn waves-effect waves-light btn-large right-align" type="submit" name="action">Отправить на модерацию
+              <i class="material-icons right">send</i>
+          </button>
+    </div>
+  </form>
+</div>
+{% endblock %}

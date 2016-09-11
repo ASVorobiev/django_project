@@ -1,0 +1,80 @@
+{% extends "mysite/base.html" %}
+{% load staticfiles %}
+
+{% block slider %}
+  <div class="card">
+      <div class="slider">
+          <ul class="slides">
+              {% for ev in priority_events %}
+                <li class="caption">
+                  <a href="{% url 'event_details' ev.location_id ev.id %}">
+                    <img src="{{ ev.image.url }}"/>
+                    <div class="caption right-align">
+                      <h4>{{ ev.title }}</h4>
+                      <h6 class="light grey-text text-lighten-3">{{ ev.start_date }}</h6>
+                    </div>
+                  </a>
+                </li>
+              {% endfor %}
+          </ul>
+      </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+
+  <style type="text/css">
+  .material-icons.md-14 { font-size: 14px; }
+  </style>
+  <div class="">
+      <div class="row">
+          {% for event in location_events %}
+              <div class="col s12 m4 l3">
+                  <div class="card sticky-action medium z-depth-2">
+
+                      <div class="card-image waves-effect waves-block waves-light">
+                        <div class="" style="font-size: small;">
+                          <div class="">
+                            <i class="material-icons md-14">date_range</i>
+                            {{ event.start_date|date:"SHORT_DATE_FORMAT" }}
+                            <div class="right">
+                              <i class="material-icons md-14">access_time</i>
+                              {{ event.start_time }}
+                            </div>
+                          </div>
+                        </div>
+                        <img class="activator" src={{ event.image.url }}>
+                      </div>
+                      <div class="card-content">
+                          <span class="card-title activator grey-text text-darken-4">{{ event.title }}<i class="material-icons right">more_vert</i></span>
+                          <p>{{ event.description|linebreaksbr }}</p>
+                      </div>
+                      <div class="card-reveal">
+                          <span class="card-title grey-text text-darken-4">{{ event.title }}<i class="material-icons right">close</i></span>
+                          <p class="truncate">{{ event.description|linebreaksbr }}</p>
+                      </div>
+                      <div class="card-action">
+                          <a href="{% url 'event_details' event.location_id event.id  %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span>Подробнее...</a>
+                      </div>
+                  </div>
+              </div>
+          {% endfor %}
+      </div>
+  </div>
+
+  <div class=" ">
+          <span class="">I am a very simple card. I am good at containing small bits of information.
+          I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
+          </span>
+  </div>
+
+  <ul class="pagination center-align">
+      <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+      <li class="active"><a href="#!">1</a></li>
+      <li class="waves-effect"><a href="#!">2</a></li>
+      <li class="waves-effect"><a href="#!">3</a></li>
+      <li class="waves-effect"><a href="#!">4</a></li>
+      <li class="waves-effect"><a href="#!">5</a></li>
+      <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+  </ul>
+{% endblock %}
