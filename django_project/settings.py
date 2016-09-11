@@ -72,10 +72,10 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'django_project.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'example.wsgi.application'
+WSGI_APPLICATION = 'django_project.wsgi.application'
 
-TEMPLATE_DIRS = [os.path.join(ROOT_PATH, 'mysite/templates'),
-                 os.path.join(ROOT_PATH, 'example/templates')]
+TEMPLATE_DIRS = [os.path.join(ROOT_PATH, 'django_project/mysite/templates'),
+                 os.path.join(ROOT_PATH, 'django_project/user_auth/templates')]
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -86,8 +86,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'social.apps.django_app.default',
-    'example.app',
-    'mysite'
+    'django_project.user_auth',
+    'django_project.mysite'
 )
 
 LOGGING = {
@@ -138,7 +138,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-AUTH_USER_MODEL = 'app.CustomUser'
+AUTH_USER_MODEL = 'user_auth.CustomUser'
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/done/'
@@ -146,12 +146,12 @@ URL_PATH = ''
 SOCIAL_AUTH_STRATEGY = 'social.strategies.django_strategy.DjangoStrategy'
 SOCIAL_AUTH_STORAGE = 'social.apps.django_app.default.models.DjangoStorage'
 SOCIAL_AUTH_GOOGLE_OAUTH_SCOPE = [
-    'https://www.googleapis.com/auth/drive',
-    'https://www.googleapis.com/auth/userinfo.profile'
+    'https://www.googleapis.com/user_auth/drive',
+    'https://www.googleapis.com/user_auth/userinfo.profile'
 ]
 # SOCIAL_AUTH_EMAIL_FORM_URL = '/signup-email'
 SOCIAL_AUTH_EMAIL_FORM_HTML = 'email_signup.html'
-SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = 'example.app.mail.send_validation'
+SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = 'django_project.user_auth.mail.send_validation'
 SOCIAL_AUTH_EMAIL_VALIDATION_URL = '/email-sent/'
 # SOCIAL_AUTH_USERNAME_FORM_URL = '/signup-username'
 SOCIAL_AUTH_USERNAME_FORM_HTML = 'username_signup.html'
@@ -162,7 +162,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.auth_allowed',
     'social.pipeline.social_auth.social_user',
     'social.pipeline.user.get_username',
-    'example.app.pipeline.require_email',
+    'django_project.user_auth.pipeline.require_email',
     'social.pipeline.mail.mail_validation',
     'social.pipeline.social_auth.associate_by_email',
     'social.pipeline.user.create_user',

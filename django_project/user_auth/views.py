@@ -1,17 +1,16 @@
 import json
 
 from django.conf import settings
+from django.contrib.auth import logout as auth_logout, login
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout as auth_logout, login
-
-from social.backends.oauth import BaseOAuth1, BaseOAuth2
-from social.backends.google import GooglePlusAuth
-from social.backends.utils import load_backends
 from social.apps.django_app.utils import psa
+from social.backends.google import GooglePlusAuth
+from social.backends.oauth import BaseOAuth1, BaseOAuth2
+from social.backends.utils import load_backends
 
-from example.app.decorators import render_to
+from django_project.user_auth.decorators import render_to
 
 
 def logout(request):
@@ -28,7 +27,7 @@ def context(**extra):
     }, **extra)
 
 
-@render_to('home.html')
+@render_to('auth.html')
 def home(request):
     """Home view, displays login mechanism"""
     request.session['http_referer_foo'] = request.META.get('HTTP_REFERER')
@@ -38,7 +37,7 @@ def home(request):
 
 
 @login_required
-@render_to('home.html')
+@render_to('auth.html')
 def done(request):
     """Login complete view, displays user data"""
     try:
@@ -50,7 +49,7 @@ def done(request):
     return redirect(request.session._session['http_referer_foo'])
 
 
-@render_to('home.html')
+@render_to('auth.html')
 def validation_sent(request):
     return context(
         validation_sent=True,
@@ -58,7 +57,7 @@ def validation_sent(request):
     )
 
 
-@render_to('home.html')
+@render_to('auth.html')
 def require_email(request):
     backend = request.session['partial_pipeline']['backend']
     return context(email_required=True, backend=backend)
