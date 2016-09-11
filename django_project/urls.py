@@ -19,10 +19,10 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = patterns('',
-                       url(r'', include('django_project.mysite.urls')),
                        url(r'', include('django_project.user_auth.urls')),
                        url(r'', include('social.apps.django_app.urls', namespace='social')),
                        url(r'^admin/', include(admin.site.urls)),
+                       url(r'', include('django_project.mysite.urls')),
 
                        #url(r'^$', 'example.app.views.home'),
 

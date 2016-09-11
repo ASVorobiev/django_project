@@ -151,10 +151,13 @@ SOCIAL_AUTH_GOOGLE_OAUTH_SCOPE = [
 ]
 # SOCIAL_AUTH_EMAIL_FORM_URL = '/signup-email'
 SOCIAL_AUTH_EMAIL_FORM_HTML = 'email_signup.html'
-SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = 'django_project.user_auth.mail.send_validation'
+#SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = 'django_project.user_auth.mail.send_validation'
 SOCIAL_AUTH_EMAIL_VALIDATION_URL = '/email-sent/'
 # SOCIAL_AUTH_USERNAME_FORM_URL = '/signup-username'
 SOCIAL_AUTH_USERNAME_FORM_HTML = 'username_signup.html'
+
+EMAIL_FROM = ''
+SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
 
 SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.social_details',
@@ -177,11 +180,11 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 # SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['first_name', 'last_name', 'email',
 #                                         'username']
-
-try:
-    from example.local_settings import *
-except ImportError:
-    pass
+#
+# try:
+#     from example.local_settings import *
+# except ImportError:
+#     pass
 
 SOCIAL_AUTH_VK_OAUTH2_KEY = '5618522'
 SOCIAL_AUTH_VK_OAUTH2_SECRET = 'QaEBvN2GbCRdHdSr1PhU'

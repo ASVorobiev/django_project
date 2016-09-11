@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {% block content %}
-<div class="">
+<div class="card">
     <div class="row">
         <div class="col s12 l5">
             <img class="materialboxed responsive-img" src={{ event_data.image.url }}>
@@ -15,7 +15,7 @@
                <a>{{ event_data.start_date }}</a><a>{{ event_data.start_time }}</a>
            </div>
             <div class="row">
-                <span class="black-text flow-text">{{ event_data.description }}</span>
+                <span class="black-text">{{ event_data.description }}</span>
             </div>
        </div>
     </div>

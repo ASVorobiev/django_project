@@ -23,7 +23,7 @@
 <!-- Dropdown Structure -->
 <ul id="locations_ddown" class="dropdown-content">
   {% for loc in locations %}
-      <li value={{ loc.id }}><a href="{% url 'location_events' loc.id %}">{{  loc.name }}</a></li>
+      <li value={{ loc.site_screen_name }}><a href="{% url 'location_events' loc.site_screen_name %}">{{ loc.name }}</a></li>
   {% endfor %}
 </ul>
 
@@ -86,7 +86,7 @@
             <option value="" disabled selected>Выберите ваш город</option>
           {% endif %}
             {% for loc in locations %}
-              <option value="{% url 'location_events' loc.id %}">{{ loc.name }}</option>
+              <option value="{% url 'location_events' loc.site_screen_name %}">{{ loc.name }}</option>
             {% endfor %}
           </a>
         </select>

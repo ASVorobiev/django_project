@@ -1,13 +1,14 @@
+
+
 {% extends "mysite/base.html" %}
 {% load staticfiles %}
-
 {% block slider %}
   <div class="card">
       <div class="slider">
           <ul class="slides">
               {% for ev in priority_events %}
                 <li class="caption">
-                  <a href="{% url 'event_details' ev.location_id ev.id %}">
+                  <a href="{% url 'event_details' ev.location.site_screen_name ev.id ev.title_translit|urlencode %}">
                     <img src="{{ ev.image.url }}"/>
                     <div class="caption right-align">
                       <h4>{{ ev.title }}</h4>
@@ -54,7 +55,7 @@
                           <p class="truncate">{{ event.description|linebreaksbr }}</p>
                       </div>
                       <div class="card-action">
-                          <a href="{% url 'event_details' event.location_id event.id  %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span>Подробнее...</a>
+                          <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span>Подробнее...</a>
                       </div>
                   </div>
               </div>

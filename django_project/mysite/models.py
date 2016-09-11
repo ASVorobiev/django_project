@@ -1,3 +1,4 @@
+import re
 from django.conf.urls import patterns
 from django.db import models
 
@@ -6,12 +7,14 @@ from django.forms import ModelForm
 from django.shortcuts import redirect
 from django.utils.datetime_safe import datetime
 from django.utils.safestring import mark_safe
+from transliterate import translit
 
 
 class Locations(models.Model):
     name = models.CharField(max_length=255)
     vk_group_id = models.IntegerField(blank=True, null=True)
     vk_screen_name = models.CharField(max_length=255, blank=True, null=True)
+    site_screen_name = models.CharField(max_length=255, blank=True, null=True)
     vk_owner_id = models.IntegerField(blank=True, null=True)
     vk_location_event_id = models.IntegerField(blank=True, null=True)
     tz = models.IntegerField(blank=True, null=True)
@@ -70,6 +73,10 @@ class Events(models.Model):
     def do_evil_view(self, request, pk):
         print('doing evil with', Events.objects.get(pk=int(pk)))
         return redirect('/admin/mysite/events/%s/' % pk)
+
+    def title_translit(self):
+        trans = translit(self.title.strip(), 'ru', reversed=True)
+        return re.sub("[^.\w-]+", '_', trans)
 
     def __str__(self):
         return self.title
