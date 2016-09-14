@@ -75,7 +75,8 @@ ROOT_URLCONF = 'django_project.urls'
 WSGI_APPLICATION = 'django_project.wsgi.application'
 
 TEMPLATE_DIRS = [os.path.join(ROOT_PATH, 'django_project/mysite/templates'),
-                 os.path.join(ROOT_PATH, 'django_project/user_auth/templates')]
+                 os.path.join(ROOT_PATH, 'django_project/user_auth/templates'),
+                 os.path.join(ROOT_PATH, 'django_project/text_ru/templates')]
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -87,7 +88,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'social.apps.django_app.default',
     'django_project.user_auth',
-    'django_project.mysite'
+    'django_project.mysite',
+    'django_project.text_ru'
 )
 
 LOGGING = {
