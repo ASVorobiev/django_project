@@ -37,7 +37,7 @@
                         <div class="" style="font-size: small;">
                           <div class="">
                             <i class="material-icons md-14">date_range</i>
-                            {{ event.start_date|date:"SHORT_DATE_FORMAT" }}
+                            {{ event.start_date|date:"d.m.Y (D)"  }}
                             <div class="right">
                               <i class="material-icons md-14">access_time</i>
                               {{ event.start_time }}
@@ -52,7 +52,7 @@
                       </div>
                       <div class="card-reveal">
                           <span class="card-title grey-text text-darken-4">{{ event.title }}<i class="material-icons right">close</i></span>
-                          <p class="truncate">{{ event.description|linebreaksbr }}</p>
+                          <p>{{ event.description|linebreaksbr }}</p>
                       </div>
                       <div class="card-action">
                           <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span>Подробнее...</a>
