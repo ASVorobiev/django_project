@@ -125,6 +125,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.media',
     'django.contrib.messages.context_processors.messages',
     'social.apps.django_app.context_processors.backends',
+    'django.template.context_processors.request',
 )
 
 AUTHENTICATION_BACKENDS = (

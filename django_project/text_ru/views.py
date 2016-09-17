@@ -28,7 +28,7 @@ def send_text_form(request):
     if request.POST:
         context['text'] = TextForm(request.POST)
         context['message'] = request.POST['input_name']
-        context['text_ru'] = send_text(context['message'])
+        # context['text_ru'] = send_text(context['message'])
         return render(request, 'text_ru.html', context)
     return render(request, 'text_ru.html', context)
 
@@ -64,3 +64,19 @@ def send_text(text):
             'text_uid': send_response['text_uid'],
             'unique': get_response['unique']
             }
+
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
+        # user = authenticate(username=username, password=password)
+        if 'qwe' is not None:
+            # login(request, user)
+            return HttpResponse({'message': request.POST.get('input_name'),
+                                 'unique': 100},
+                                content_type='text/html')
+        else:
+            return HttpResponse('неверный логин/пароль!', content_type='text/html')
+    else:
+        return HttpResponse('Ошибка авторизации!', content_type='text/html')

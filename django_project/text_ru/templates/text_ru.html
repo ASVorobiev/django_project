@@ -12,7 +12,8 @@
 
 
   <div class="row">
-    <form class="col s12 card-panel z-depth-3" id="myform"  action="{% url 'result_send_text'%}" method="post">{% csrf_token %}
+    <form class="col s12 card-panel z-depth-3" id="myform"  action="{% url 'result_send_text'%}" method="post">
+      {% csrf_token %}
       <div class="row">
         <div class="input-field col s12">
           <textarea id="message" name="input_name" class="materialize-textarea"></textarea>
@@ -32,4 +33,30 @@
         </button>
       </div>
     </div>
+{% endblock %}
+
+
+{% block scripts %}
+  <script type="application/javascript">
+    jQuery(document).ready(function ($) {
+        $('#myform').submit(function(e){
+            e.preventDefault();
+            var data = $(this).serialize();
+            $.ajax({
+                type: "POST",
+                url: "/jq/",
+                data: data,
+                cache: false,
+                success: function(data){
+                    if (data == 'ok'){
+                       location.reload();
+                    }
+                    else{
+                       $('#error-login').html(data);
+                    }
+                }
+           });
+        });
+    });
+  </script>
 {% endblock %}
