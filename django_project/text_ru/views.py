@@ -8,7 +8,8 @@ from django.contrib.auth import logout as auth_logout, login
 from django.contrib.auth.decorators import login_required
 
 from django.http import HttpResponse, HttpResponseBadRequest, request
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, render_to_response
+from django.template import RequestContext
 from django.template.context_processors import csrf
 from social.apps.django_app.utils import psa
 from social.backends.google import GooglePlusAuth
@@ -80,3 +81,18 @@ def login_view(request):
             return HttpResponse('неверный логин/пароль!', content_type='text/html')
     else:
         return HttpResponse('Ошибка авторизации!', content_type='text/html')
+
+
+def advert(request):
+    if request.method == "POST":
+        # form = TextForm(request.POST)
+        #
+        # message = 'something wrong!'
+        # # if form.is_valid():
+        # print(request.POST['input_name'])
+        # message = request.POST['input_name']
+        sleep(3)
+        return HttpResponse(json.dumps({'message': request.POST['txt']}), content_type='application/json')
+
+    # return render_to_response('text_ru.html',
+    #         {'form': TextForm()}, RequestContext(request))

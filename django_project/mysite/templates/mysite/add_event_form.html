@@ -16,6 +16,8 @@
     });
   });
 </script>
+
+<!-- Превью афиши -->
 <script type="text/javascript">
 function upload_img(input) {
     if (input.files && input.files[0]) {
@@ -43,7 +45,7 @@ function upload_img(input) {
 
 <div class="">
 
-  <form class="card-panel z-depth-3" action="{% url 'add_event_form'%}" method="post"  enctype="multipart/form-data">
+  <form class="card-panel z-depth-3" action="{% url 'add_event_form'%}" method="post" id="main_form" name="main_form" enctype="multipart/form-data">
   {% csrf_token %}
 <!-- Modal Trigger -->
 <a class="col l12 waves-effect waves-light btn modal-trigger" href="#modal2">Читать инструкцию</a>
@@ -53,14 +55,12 @@ function upload_img(input) {
         <label for="title">Заголовок</label>
       </div>
     </div>
-
     <div class="row">
       <div class="input-field col s12">
-        <textarea class="materialize-textarea" name="description" length="1000"></textarea>
+        <textarea class="materialize-textarea" name="description" id="description" length="1000"></textarea>
         <label for="textarea1">Описание мероприятия</label>
       </div>
     </div>
-
       <div class="row">
         <div class="input-field col s12">
                 {% for loc in EventsMod.location %}
@@ -98,12 +98,12 @@ function upload_img(input) {
     <div class="row">
         <div class="input-field col s5 offset-s1">
               <i for="date">Дата</i>
-               <input id="date" type="date" name="start_date" class="date" value="2013-01-08">
+               <input id="date" type="date" name="start_date" class="datepicker" value="2013-01-08">
         </div>
 
         <div class="input-field col s4 offset-s1">
             <i for="time">Время</i>
-               <input type="time" id="time" name="start_time" class="vTimeField" value="11:11">
+               <input type="time" id="time" name="start_time" class="timepicker" value="11:10">
         </div>
     </div>
 
@@ -114,4 +114,91 @@ function upload_img(input) {
     </div>
   </form>
 </div>
+{% endblock %}
+
+{% block pin %}
+  <div class="row pinned">
+  <div class="card-panel">
+    <div class="row">
+      <div id="wont">
+        Хотите узнать, насколько Ваше мероприятие уникально?
+      </div>
+      <div id="uniq_bar" hidden>
+        Уникальность вашего мероприятия:
+        <div class="progress center" style="height: 20px;" id="prog_bar">
+          <div id="set_progress"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <button class="btn waves-effect waves-light" form="main_form" type="submit" id="check_text">Проверить
+        <i class="material-icons right">send</i>
+      </button>
+    </div>
+
+    <div class="row">
+
+    </div>
+  </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script type="text/javascript" src="{% static 'js/materialize.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/materialize.clockpicker.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'css/materialize.clockpicker.css' %}">
+  <script type="application/javascript">
+
+      $('.datepicker').pickadate({
+      selectMonths: true, // Creates a dropdown to control month
+      firstDay: 0,
+      selectYears: 4 // Creates a dropdown of 15 years to control year
+    });
+
+  $(document).ready(function(){
+
+
+    $('.timepicker').pickatime({
+      default: '',           // default time, 'now' or '13:14' e.g.
+      fromnow: 0,            // set default time to * milliseconds from now
+      donetext: 'Применить',      // done button text
+      autoclose: true,      // auto close when minute is selected
+      ampmclickable: false,  // set am/pm button on itself
+      darktheme: false,      // set to dark theme
+      twelvehour: false,      // change to 12 hour AM/PM clock from 24 hour
+      vibrate: true,         // vibrate the device when dragging clock hand
+      container: 'datepicker'          // default will append clock next to input
+    });
+  });
+  </script>
+
+  <script type="application/javascript">
+    $(document).on('submit', '#main_form', function (e) {
+      e.preventDefault();
+      $('#set_progress').replaceWith('<div id="set_progress" class="indeterminate"></div>');
+
+      $('#wont').hide();
+      $('#uniq_bar').show();
+      $('#check_text').attr("disabled", true);
+
+      $.ajax({
+        type: 'POST',
+        url: {% url 'jq' %},
+        dateType: 'json',
+        data:{
+          txt:$('#description').val(),
+          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+        },
+        success:function (json) {
+          $("#qqq").html(json.message);
+          $('#check_text').attr("disabled", false);
+
+          $('#set_progress').replaceWith('<div id="set_progress" class="determinate red" style="width: 40%">40%</div>');
+        }
+      })
+    })
+  </script>
+
+
 {% endblock %}

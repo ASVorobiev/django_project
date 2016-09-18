@@ -1,6 +1,6 @@
 {% extends "mysite/base.html" %}
 {% load staticfiles %}
-{% load backend_utils %}
+
 
 {% block content %}
   <span>{{ message }}</span>
@@ -12,7 +12,7 @@
 
 
   <div class="row">
-    <form class="col s12 card-panel z-depth-3" id="myform"  action="{% url 'result_send_text'%}" method="post">
+    <form class="col s12 card-panel z-depth-3" id="myform" method="post">
       {% csrf_token %}
       <div class="row">
         <div class="input-field col s12">
@@ -26,37 +26,71 @@
 {% endblock %}
 
 {% block pin %}
-    <div class="card-panel">
-        <div class="row">
-        <button class="btn waves-effect waves-light" form="myform"  type="submit" name="action">Проверить на уникальность
-          <i class="material-icons right">send</i>
-        </button>
+  <div class="card-panel">
+    <div class="row">
+      <div id="wont">
+        Хотите узнать, насколько Ваше мероприятие уникально?
+      </div>
+      <div id="uniq_bar" hidden>
+        Уникальность вашего мероприятия:
+        <div class="progress center" style="height: 20px;" id="prog_bar">
+          <div id="set_progress"></div>
+{#          <div class="indeterminate" id="uniq_data"></div>#}
+{#          <div class="determinate red" style="width: 70%">70%</div>#}
+        </div>
+{#        <div id="pbar" hidden>#}
+{#          <div class="progress">#}
+{#            <div class="indeterminate"></div>#}
+{#          </div>#}
+{#        </div>#}
       </div>
     </div>
+
+    <div class="row">
+      <button class="btn waves-effect waves-light" form="myform" type="submit" id="check_text">Проверить
+        <i class="material-icons right">send</i>
+      </button>
+    </div>
+
+    <div class="row">
+
+    </div>
+
+{#    <div id="qqq" name="qqq">#}
+{#      message text here#}
+{#    </div>#}
+  </div>
 {% endblock %}
 
 
 {% block scripts %}
-  <script type="application/javascript">
-    jQuery(document).ready(function ($) {
-        $('#myform').submit(function(e){
-            e.preventDefault();
-            var data = $(this).serialize();
-            $.ajax({
-                type: "POST",
-                url: "/jq/",
-                data: data,
-                cache: false,
-                success: function(data){
-                    if (data == 'ok'){
-                       location.reload();
-                    }
-                    else{
-                       $('#error-login').html(data);
-                    }
-                }
-           });
-        });
-    });
-  </script>
+<script type="application/javascript">
+  $(document).on('submit', '#myform', function (e) {
+    e.preventDefault();
+
+{#    $('.progress').empty()#}
+{#    $('.progress').append('<div class="indeterminate"></div>');#}
+    $('#set_progress').replaceWith('<div id="set_progress" class="indeterminate"></div>');
+
+    $('#wont').hide();
+    $('#uniq_bar').show();
+    $('#check_text').attr("disabled", true);
+
+    $.ajax({
+      type: 'POST',
+      url: '/jq/',
+      dateType: 'json',
+      data:{
+        txt:$('#message').val(),
+        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+      },
+      success:function (json) {
+        $("#qqq").html(json.message);
+        $('#check_text').attr("disabled", false);
+
+        $('#set_progress').replaceWith('<div id="set_progress" class="determinate red" style="width: 40%">40%</div>');
+      }
+    })
+  })
+</script>
 {% endblock %}

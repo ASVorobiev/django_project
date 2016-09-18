@@ -24,9 +24,6 @@ urlpatterns = patterns('',
                        url(r'', include('social.apps.django_app.urls', namespace='social')),
                        url(r'^admin/', include(admin.site.urls)),
                        url(r'', include('django_project.mysite.urls')),
-
-                       #url(r'^$', 'example.app.views.home'),
-
                        )
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
