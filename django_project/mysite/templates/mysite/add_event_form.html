@@ -142,6 +142,21 @@ function upload_img(input) {
     </div>
   </div>
   </div>
+
+
+<div id="modal_results" class="modal">
+  <div class="modal-content">
+    <h4>Результаты анализа описания мероприятия</h4>
+    <p>A bunch of text</p>
+    <div id="modal_results_content">
+        {{ json }}
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+  </div>
+</div>
+
 {% endblock %}
 
 {% block scripts %}
@@ -187,14 +202,18 @@ function upload_img(input) {
         url: {% url 'jq' %},
         dateType: 'json',
         data:{
-          txt:$('#description').val(),
+          description:$('#description').val(),
           csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
         },
         success:function (json) {
           $("#qqq").html(json.message);
           $('#check_text').attr("disabled", false);
 
-          $('#set_progress').replaceWith('<div id="set_progress" class="determinate red" style="width: 40%">40%</div>');
+          $('#set_progress').replaceWith('<div id="set_progress" class="determinate red" style="width: '+json.uniqu+'">'+json.unique+'</div>');
+          $('#modal_results').openModal();
+{#          $.each( function(){#}
+{#              $("#modal_results_content").append(this.url);#}
+{#            });#}
         }
       })
     })
@@ -202,3 +221,7 @@ function upload_img(input) {
 
 
 {% endblock %}
+
+{% block modal_results %}
+{% endblock %}
+
