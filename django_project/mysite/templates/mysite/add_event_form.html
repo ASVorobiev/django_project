@@ -130,16 +130,16 @@ function upload_img(input) {
         </div>
       </div>
     </div>
-
+    <div class="row" id="details_container">
+      <a href="#" id="text_ru_details">Подробнее...</a>
+    </div>
     <div class="row">
       <button class="btn waves-effect waves-light" form="main_form" type="submit" id="check_text">Проверить
         <i class="material-icons right">send</i>
       </button>
     </div>
 
-    <div class="row">
 
-    </div>
   </div>
   </div>
 
@@ -147,9 +147,8 @@ function upload_img(input) {
 <div id="modal_results" class="modal">
   <div class="modal-content">
     <h4>Результаты анализа описания мероприятия</h4>
-    <p>A bunch of text</p>
     <div id="modal_results_content">
-        {{ json }}
+
     </div>
   </div>
   <div class="modal-footer">
@@ -207,14 +206,43 @@ function upload_img(input) {
           csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
         },
         success:function (json) {
-          $("#qqq").html(json.message);
+          $("#modal_results_content").html(json.message);
           $('#check_text').attr("disabled", false);
 
-          $('#set_progress').replaceWith('<div id="set_progress" class="determinate red" style="width: '+json.uniqu+'">'+json.unique+'</div>');
+          $('#set_progress').replaceWith('<div id="set_progress" class="determinate red" style="width: '+json.result_json.unique+'">'+json.result_json.unique+'%</div>');
           $('#modal_results').openModal();
-          $.each( function(){
-              $("#modal_results_content").append(this.url);
-            });
+
+{#         Если есть ссылки плагиата #}
+          if (json.urls) {
+            var div1 = document.createElement('div');
+            div1.className = 'raw';
+
+            var h4 = document.createElement('h5');
+            h4.textContent = 'Данное описание уже было опубликовано здесь:';
+
+            div1.appendChild(h4);
+
+            $("#modal_results_content").append(div1);
+
+
+            for (i=0; i<json.urls.length; i++){
+              var a = document.createElement('a');
+              var linkText = document.createTextNode(json.urls[i].url);
+              a.appendChild(linkText);
+              a.title = json.urls[i].url;
+              a.href = json.urls[i].url;
+              a.target = "_blank";
+
+              var div = document.createElement('div');
+              div.className = 'raw';
+              div.appendChild(a);
+
+              $("#modal_results_content").append(div);
+            }
+          }
+
+{#          Добавим ссылку на детали проверки#}
+          $("#text_ru_details").href = 'asdasdadsd'
         }
       })
     })
