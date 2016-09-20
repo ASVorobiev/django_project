@@ -107,7 +107,7 @@ def advert(request):
                 print('Уникальность описания больше 30%')
         context['urls'] = urls
 
-        sleep(1)
+        sleep(0.1)
         return HttpResponse(json.dumps(context), content_type='application/json')
 
     # return render_to_response('text_ru.html',

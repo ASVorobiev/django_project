@@ -117,9 +117,25 @@ function upload_img(input) {
 {% endblock %}
 
 {% block pin %}
-  <div class="row pinned">
-  <div class="card-panel">
+  <script type="application/javascript">
+    $(document).ready(function(){
+    $('.tabs-wrapper .row').pushpin({ top: $('.tabs-wrapper').offset().top });
+  });
+
+  </script>
+
+  <div class="tabs-wrapper">
+
     <div class="row">
+      <h3 class="red lighten-1 white-text center-align" style="font-weight: bolder"><span class="container">
+        Внимание, АКЦИЯ!
+    </span></h3>
+  <div class="card-panel">
+      <span>Чем выше уникальности вашего мероприятия, тем больше скидка!</span><br>
+      <div class="teal lighten-2 white-text center-align">
+        <span>Публикуем 100% уникальные мероприятия <br></span>
+          <span class="white-text text-lighten-1 center-align" style="font-weight: bold; font-size: xx-large;" >БЕСПЛАТНО</span>
+      </div>
       <div id="wont">
         Хотите узнать, насколько Ваше мероприятие уникально?
       </div>
@@ -130,19 +146,18 @@ function upload_img(input) {
         </div>
       </div>
     </div>
-    <div class="row" id="details_container">
+
+      <button class="btn-large blue-grey lighten-1 waves-effect waves-light" form="main_form" type="submit" id="check_text" style="height: 100px; line-height: inherit; font-size: x-large; font-weight: bold">
+        Проверить на уникальность
+{#        <i class="material-icons right">send</i>#}
+      </button>
+
+    <div id="details_container">
       <a href="#" id="text_ru_details">Подробнее...</a>
     </div>
-    <div class="row">
-      <button class="btn waves-effect waves-light" form="main_form" type="submit" id="check_text">Проверить
-        <i class="material-icons right">send</i>
-      </button>
-    </div>
-
 
   </div>
-  </div>
-
+ </div>
 
 <div id="modal_results" class="modal">
   <div class="modal-content">
@@ -152,7 +167,7 @@ function upload_img(input) {
     </div>
   </div>
   <div class="modal-footer">
-    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Закрыть</a>
   </div>
 </div>
 
@@ -165,14 +180,13 @@ function upload_img(input) {
 
   <script type="application/javascript">
 
-      $('.datepicker').pickadate({
+
+  $(document).ready(function(){
+    $('.datepicker').pickadate({
       selectMonths: true, // Creates a dropdown to control month
       firstDay: 0,
       selectYears: 4 // Creates a dropdown of 15 years to control year
     });
-
-  $(document).ready(function(){
-
 
     $('.timepicker').pickatime({
       default: '',           // default time, 'now' or '13:14' e.g.
@@ -211,41 +225,50 @@ function upload_img(input) {
 
           $('#set_progress').replaceWith('<div id="set_progress" class="determinate red" style="width: '+json.result_json.unique+'">'+json.result_json.unique+'%</div>');
           $('#modal_results').openModal();
+          $('#modal_results_content').empty();
 
 {#         Если есть ссылки плагиата #}
           if (json.urls) {
-            var div1 = document.createElement('div');
-            div1.className = 'raw';
+            var mydiv = $('<div/>', {
+                id:     'mydiv',
+                class:  'raw'
+            });
+            $('#modal_results_content').append(mydiv);
 
-            var h4 = document.createElement('h5');
-            h4.textContent = 'Данное описание уже было опубликовано здесь:';
+            var h5 = $("<h5/>", {
+                class: 'red-text text-accent-2',
+                text: 'Уникальность вашего текста крайне низка.'
+            }).appendTo(mydiv);
 
-            div1.appendChild(h4);
+            var span1 = $("<span/>", {
+                text: 'Данное описание уже было опубликовано здесь:'
+            }).appendTo(mydiv);
 
-            $("#modal_results_content").append(div1);
-
-
+            var blockquote = $('<blockquote/>').appendTo(mydiv);
+            var ul = $('<ul/>').appendTo(blockquote);
             for (i=0; i<json.urls.length; i++){
-              var a = document.createElement('a');
-              var linkText = document.createTextNode(json.urls[i].url);
-              a.appendChild(linkText);
-              a.title = json.urls[i].url;
-              a.href = json.urls[i].url;
-              a.target = "_blank";
-
-              var div = document.createElement('div');
-              div.className = 'raw';
-              div.appendChild(a);
-
-              $("#modal_results_content").append(div);
-            }
+              var li = $('<li/>', {class: 'truncate'}).appendTo(ul);
+              $('<a/>', {
+                text: json.urls[i].url,
+                href: json.urls[i].url,
+                target: "_blank"
+              }).appendTo(li);
           }
 
+          var div3 = document.createElement('div');
+          div3.className = 'raw';
+
+          div3.textContent = 'Судя по всему Вы ранее публиковали данное описание на других ресурсах.' +
+                  'Если Вы хотите получить скидку или разместить ваше мероприятие бесплатно Вы можете:' +
+                  'Отредактировать описание вашего мероприятия, повысив его уникальность. Не забудьте обновить текст в нашей форме, когда он будет готов. Проверить текста на уникальность можно ТУТ.' +
+                  'В следующий раз публиковать Ваше мероприятие в первую очередь у нас на сайте БЕСПЛАТНО';
+          $("#modal_results_content").append(div3);
 {#          Добавим ссылку на детали проверки#}
           $("#text_ru_details").href = 'asdasdadsd'
         }
-      })
+      }
     })
+  })
   </script>
 
 
