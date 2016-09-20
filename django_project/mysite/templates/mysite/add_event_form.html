@@ -160,9 +160,10 @@ function upload_img(input) {
 {% endblock %}
 
 {% block scripts %}
-  <script type="text/javascript" src="{% static 'js/materialize.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/materialize.clockpicker.js' %}"></script>
   <link rel="stylesheet" href="{% static 'css/materialize.clockpicker.css' %}">
+  <script type="text/javascript" src="{% static 'js/materialize.js' %}"></script>
+
   <script type="application/javascript">
 
       $('.datepicker').pickadate({
@@ -211,9 +212,9 @@ function upload_img(input) {
 
           $('#set_progress').replaceWith('<div id="set_progress" class="determinate red" style="width: '+json.uniqu+'">'+json.unique+'</div>');
           $('#modal_results').openModal();
-{#          $.each( function(){#}
-{#              $("#modal_results_content").append(this.url);#}
-{#            });#}
+          $.each( function(){
+              $("#modal_results_content").append(this.url);
+            });
         }
       })
     })

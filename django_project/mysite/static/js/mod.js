@@ -3,10 +3,10 @@
  */
 $(document).ready(function() {
     $('select').material_select();
-    // $('.datepicker').pickadate({
-    // selectMonths: true, // Creates a dropdown to control month
-    // selectYears: 16 // Creates a dropdown of 15 years to control year
-    // });
+    $('.datepicker').pickadate({
+    selectMonths: true, // Creates a dropdown to control month
+    selectYears: 16 // Creates a dropdown of 15 years to control year
+    });
 
     // $(".button-collapse").sideNav();
     $('.materialboxed').materialbox();
@@ -21,10 +21,10 @@ $(document).ready(function() {
     );
     // $('.tabs-wrapper .row').pushpin({ top: $('.tabs-wrapper').offset().top }); // всё ломает
     $('ul.tabs').tabs();
-    $('.tabs-wrapper .row').pushpin({
-        top: $('.tabs-wrapper').offset().top,
-        bottom: 0,
-        offset: 200
-    });
+    // $('.tabs-wrapper .row').pushpin({
+    //     top: $('.tabs-wrapper').offset().top,
+    //     bottom: 0,
+    //     offset: 200
+    // });
 
 });
