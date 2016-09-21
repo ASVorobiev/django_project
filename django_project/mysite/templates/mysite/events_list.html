@@ -9,7 +9,9 @@
               {% for ev in priority_events %}
                 <li class="caption">
                   <a href="{% url 'event_details' ev.location.site_screen_name ev.id ev.title_translit|urlencode %}">
-                    <img src="{{ ev.image.url }}"/>
+                    {% if ev.image %}
+                        <img src="{{ ev.image.url }}"/>
+                    {% endif %}
                     <div class="caption right-align">
                       <h4>{{ ev.title }}</h4>
                       <h6 class="light grey-text text-lighten-3">{{ ev.start_date }}</h6>
@@ -44,7 +46,9 @@
                             </div>
                           </div>
                         </div>
-                        <img class="activator" src={{ event.image.url }}>
+                        {% if event.image %}
+                          <img class="activator" src={{ event.image.url }}>
+                        {% endif %}
                       </div>
                       <div class="card-content">
                           <span class="card-title activator grey-text text-darken-4">{{ event.title }}<i class="material-icons right">more_vert</i></span>
@@ -70,14 +74,23 @@
   </div>
 
   <ul class="pagination center-align">
-      <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-      <li class="active"><a href="#!">1</a></li>
-      <li class="waves-effect"><a href="#!">2</a></li>
-      <li class="waves-effect"><a href="#!">3</a></li>
-      <li class="waves-effect"><a href="#!">4</a></li>
-      <li class="waves-effect"><a href="#!">5</a></li>
-      <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+    {% if location_events.has_previous %}
+      <li class="disabled"><a href="?page={{ location_events.previous_page_number }}"><i class="material-icons">chevron_left</i></a></li>
+    {% endif %}
+
+    {% for page in location_events.paginator.page_range %}
+      {% if page == location_events.number  %}
+        <li class="active"><a href="?page={{ page }}">{{ page }}</a></li>
+      {% else %}
+        <li class="waves-effect"><a href="?page={{ page }}">{{ page }}</a></li>
+      {% endif %}
+    {% endfor %}
+
+    {% if location_events.has_next %}
+      <li class="waves-effect"><a href="?page={{ location_events.next_page_number }}"><i class="material-icons">chevron_right</i></a></li>
+    {% endif %}
   </ul>
+
 {% endblock %}
 
 
