@@ -63,10 +63,47 @@
             {% for sublist in available_backends|social_backends %}
               <div class="row">
                 {% for name, backend in sublist %}
+                  {% if name == 'facebook' %}
+                      <a class="col-md-2 btn btn-default" id="{{ name }}-button" style="width:100%; background: #3b5998;" name="{{ backend|backend_class }}" href="{% url "social:begin" backend=name %}">
+                        <i class="fa fa-{{ name|icon_name }}"></i>
+                        {{ name }}
+                      </a>
+                  {% elif name == 'twitter' %}
+                      <a class="col-md-2 btn btn-default" id="{{ name }}-button" style="width:100%; background: #00aced;" name="{{ backend|backend_class }}" href="{% url "social:begin" backend=name %}">
+                        <i class="fa fa-{{ name|icon_name }}"></i>
+                        {{ name }}
+                      </a>
+                  {% elif name == 'google-oauth2' %}
+                      <a class="col-md-2 btn btn-default" id="{{ name }}-button" style="width:100%; background: #dd4b39;" name="{{ backend|backend_class }}" href="{% url "social:begin" backend=name %}">
+                        <i class="fa fa-{{ name|icon_name }}"></i>
+                        google+
+                      </a>
+                  {% elif name == 'instagram' %}
+                      <a class="col-md-2 btn btn-default" id="{{ name }}-button" style="width:100%; background: #517fa4;" name="{{ backend|backend_class }}" href="{% url "social:begin" backend=name %}">
+                        <i class="fa fa-{{ name|icon_name }}"></i>
+                        instagram
+                      </a>
+                  {% elif name == 'vk-oauth2' %}
+                      <a class="col-md-2 btn btn-default" id="{{ name }}-button" style="width:100%; background: #45668e;" name="{{ backend|backend_class }}" href="{% url "social:begin" backend=name %}">
+                        <i class="fa fa-{{ name|icon_name }}"></i>
+                        vk
+                      </a>
+                  {% elif name == 'odnoklassniki-oauth2' %}
+                      <a class="col-md-2 btn btn-default" id="{{ name }}-button" style="width:100%; background: #ed812b;" name="{{ backend|backend_class }}" href="{% url "social:begin" backend=name %}">
+                        <i class="fa fa-{{ name|icon_name }}"></i>
+                        Одноклассники
+                      </a>
+                  {% elif name == 'yandex-oauth2' %}
+                      <a class="col-md-2 btn btn-default" id="{{ name }}-button" style="width:100%; background: #ffba00;" name="{{ backend|backend_class }}" href="{% url "social:begin" backend=name %}">
+                        <i class="fa fa-{{ name|icon_name }}"></i>
+                        Яндекс
+                      </a>
+                  {% else %}
                       <a class="col-md-2 btn btn-default" id="{{ name }}-button" style="width:100%;" name="{{ backend|backend_class }}" href="{% url "social:begin" backend=name %}">
                         <i class="fa fa-{{ name|icon_name }}"></i>
-                        {{ backend|backend_name }}
+                        {{ name }}
                       </a>
+                  {% endif %}
                 {% endfor %}
               </div>
             {% endfor %}
@@ -111,7 +148,7 @@
     {% endif %}
 
 
-    <a class="col l12 waves-effect waves-light btn modal-trigger" href="#email-required-modal">Email modal</a>
+{#    <a class="col l12 waves-effect waves-light btn modal-trigger" href="#email-required-modal">Email modal</a>#}
 
   </div>
 

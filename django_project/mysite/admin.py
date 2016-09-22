@@ -18,6 +18,7 @@ class AdminImageWidget(AdminFileWidget):
         output.append(super(AdminFileWidget, self).render(name, value, attrs))
         return mark_safe(u''.join(output))
 
+
 class ImageWidgetAdmin(admin.ModelAdmin):
     image_fields = []
 
@@ -28,8 +29,10 @@ class ImageWidgetAdmin(admin.ModelAdmin):
             return db_field.formfield(**kwargs)
         return super(ImageWidgetAdmin, self).formfield_for_dbfield(db_field, **kwargs)
 
+
 class IndividualBirdAdmin(ImageWidgetAdmin):
     image_fields = ['thumbNail', 'detailImage']
+
 
 class MyUpload(admin.ModelAdmin):
     list_display = ['pic']
@@ -41,7 +44,17 @@ class PersonsAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'image', 'image_small')
 
 
+
+
+
 class EventsAdmin(admin.ModelAdmin):
+    @classmethod
+    class AdminActions:
+        pass
+        @property
+        def button(self):
+            return mark_safe('<button>Добавить</button>')
+
     fieldsets = (
         (None, {
             'fields': ('location', 'title', 'description', 'image', 'start_date', 'start_time',)
@@ -55,18 +68,23 @@ class EventsAdmin(admin.ModelAdmin):
     )
     readonly_fields = ['modified', 'created']
     actions = ['is_active']
-    #exclude = ['thumb']
+    # exclude = ['thumb']
     search_fields = ['title', 'description']
     models = Events
 
+    # but = AdminActions().button
+
+    AdminActions.short_description = 'Action'
+    AdminActions.allow_tags = True
+
     def list_locations_name(self, obj):
         return obj.location.name
-    list_locations_name.admin_order_field = 'start_date'  #Allows column order sorting
+
+    list_locations_name.admin_order_field = 'start_date'  # Allows column order sorting
     list_locations_name.short_description = 'Город'  # Renames column head
 
-    list_display = ['image_small', 'title', 'list_locations_name',  'description', 'start_date', 'start_time', ]
+    list_display = ['image_small', 'title', 'list_locations_name', 'description', 'start_date', 'start_time', ]
     list_filter = ('start_date', 'location_id__name')
 
+
 admin.site.register(Events, EventsAdmin)
-
-

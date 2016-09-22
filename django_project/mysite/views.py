@@ -2,7 +2,6 @@ import json
 from datetime import date, timedelta
 from time import sleep
 
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.context_processors import csrf
@@ -10,7 +9,6 @@ from django.template.context_processors import csrf
 from django_project.mysite.forms import AddNewEvent
 from django_project.mysite.models import Events, Locations
 from transliterate import translit
-from digg_paginator import DiggPaginator
 
 today = date.today()
 
@@ -50,14 +48,16 @@ def events_list(request, site_screen_name=None):
                                                            'current_location': current_location})
 
 
-def events_details(request, site_screen_name, pk):
+def events_details(request, site_screen_name, pk, title_translit='dont_remove'):
     locations = Locations.objects.all()
     current_location = Locations.objects.get(site_screen_name=site_screen_name)
     event_data = Events.objects.get(id=pk)
     return render(request, 'mysite/event_details.html', {'event_data': event_data,
                                                          'current_location': current_location,
                                                          'locations': locations,
-                                                         'title_translit': 'text'})
+                                                         'title_translit': translit(event_data.title, 'ru',
+                                                                                    reversed=True).replace(' ', '_')
+                                                         })
 
 
 def add_event_form(request):
