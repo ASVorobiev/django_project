@@ -21,22 +21,8 @@ today = date.today()
 def home(request):
     return events_list(request)
 
-
-def paginator(request, events):
-    paginator = Paginator(events, 10)  # Show 25 events per page
-    page = request.GET.get('page')
-    try:
-        return paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        return paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        return paginator.page(paginator.num_pages)
-
 def events_list(request, site_screen_name=None):
-    all_events = Events.objects.exclude(start_date__lte=today).exclude(
-        start_date__gte=today + timedelta(days=45)).order_by('start_date')
+
     priority_events = Events.objects.exclude(start_date__lte=today).order_by('-priority', 'start_date')[:10]
     locations = Locations.objects.all()
 
@@ -49,14 +35,16 @@ def events_list(request, site_screen_name=None):
             start_date__lte=today).order_by('-priority', 'start_date')[:10]
         current_location = Locations.objects.get(id=location_id)
 
-        return render(request, 'mysite/events_list.html', {'location_events': paginator(request, location_events),
+        return render(request, 'mysite/events_list.html', {'location_events': location_events,
                                                            'priority_events': priority_events,
                                                            'locations': locations,
                                                            'current_location': current_location,
                                                            })
     else:
+        all_events = Events.objects.exclude(start_date__lte=today).exclude(
+            start_date__gte=today + timedelta(days=45)).order_by('start_date')
         current_location = 'Выберите ваш город'
-        return render(request, 'mysite/events_list.html', {'location_events': paginator(request, all_events),
+        return render(request, 'mysite/events_list.html', {'location_events': all_events,
                                                            'locations': locations,
                                                            'priority_events': priority_events,
                                                            'current_location': current_location})

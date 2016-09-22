@@ -1,0 +1,13 @@
+<ul class="pagination center">
+{% for page in pages %}
+  {% if page.is_current %}
+    <li class="active">
+        {{ page }}
+    </li>
+  {% else %}
+    <li class="waves-effect">
+        {{ page|default_if_none:'<a>...</a>' }}
+    </li>
+  {% endif %}
+{% endfor %}
+</ul>
