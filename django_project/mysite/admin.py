@@ -2,8 +2,11 @@
 
 from django.contrib import admin
 from django.contrib.admin.widgets import AdminFileWidget
+from django.core.exceptions import PermissionDenied
+from django.http import Http404
 from django.utils.safestring import mark_safe
 
+from django_project.mysite import models
 from django_project.mysite.models import Events
 
 
@@ -48,12 +51,11 @@ class PersonsAdmin(admin.ModelAdmin):
 
 
 class EventsAdmin(admin.ModelAdmin):
-    @classmethod
-    class AdminActions:
-        pass
-        @property
-        def button(self):
-            return mark_safe('<button>Добавить</button>')
+    def button(self, obj):
+        return mark_safe('<input type="button" id="set_priority" onclick="countRabbits(%s)" value="Нажми меня"/>' % obj.id)
+
+    button.short_description = 'Action'
+    button.allow_tags = True
 
     fieldsets = (
         (None, {
@@ -74,8 +76,7 @@ class EventsAdmin(admin.ModelAdmin):
 
     # but = AdminActions().button
 
-    AdminActions.short_description = 'Action'
-    AdminActions.allow_tags = True
+
 
     def list_locations_name(self, obj):
         return obj.location.name
@@ -83,8 +84,53 @@ class EventsAdmin(admin.ModelAdmin):
     list_locations_name.admin_order_field = 'start_date'  # Allows column order sorting
     list_locations_name.short_description = 'Город'  # Renames column head
 
-    list_display = ['image_small', 'title', 'list_locations_name', 'description', 'start_date', 'start_time', ]
-    list_filter = ('start_date', 'location_id__name')
+    list_display = ['image_small', 'title', 'list_locations_name', 'description', 'start_date', 'start_time', 'button']
+    list_filter = ('start_date', 'location_id__name', 'priority')
 
 
 admin.site.register(Events, EventsAdmin)
+
+
+# def delete(request, app_label, model_name):
+#     model = models.Events
+#     opts = model._meta
+#     if model is None:
+#         raise Http404("App %r, model %r, not found" % (app_label, model_name))
+#     if not request.user.has_perm(app_label + '.' + model._meta.get_change_permission()):
+#         raise PermissionDenied
+#
+#     try:
+#         cl = ChangeList(request, model)
+#     except IncorrectLookupParameters:
+#         if ERROR_FLAG in request.GET.keys():
+#             return render_to_response('admin/invalid_setup.html', {'title': _('Database error')})
+#         return HttpResponseRedirect(request.path + '?' + ERROR_FLAG + '=1')
+#
+#     if 'delete_selected' in request.POST and model_name in request.POST:
+#         deleted = []
+#         for obj in cl.get_query_set().filter(id__in=request.POST.getlist(model_name)):
+#             obj.delete()
+#             deleted.append('"%s"' % str(obj))
+#         request.user.message_set.create(
+#             message=_('The %(name)s %(obj)s were deleted successfully.') % {'name': opts.verbose_name_plural,
+#                                                                             'obj': ", ".join(deleted)})
+#
+#     if 'delete_shown' in request.POST and 'qs_obj' in request.POST:
+#         deleted = []
+#         for obj in cl.get_query_set().filter(id__in=request.POST.getlist('qs_obj')):
+#             obj.delete()
+#             deleted.append('"%s"' % str(obj))
+#         request.user.message_set.create(
+#             message=_('The %(name)s %(obj)s were deleted successfully.') % {'name': opts.verbose_name_plural,
+#                                                                             'obj': ", ".join(deleted)})
+#
+#     if 'delete_all' in request.POST and cl.get_query_set().count() > 0:
+#         for obj in cl.get_query_set():
+#             obj.delete()
+#         request.user.message_set.create(
+#             message=_('All %(name)s were deleted successfully.') % {'name': opts.verbose_name_plural})
+#
+#     return HttpResponseRedirect('..')
+#
+#
+# change_list = staff_member_required(never_cache(change_list))
