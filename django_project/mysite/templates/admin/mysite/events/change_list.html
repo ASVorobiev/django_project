@@ -1,0 +1,27 @@
+{% extends 'admin/change_list.html' %}
+{% load static %}
+
+{#{% block admin_changelist_form_document_ready %}#}
+
+{% block extrahead %}
+{{ block.super }}
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+{#<script type="application/javascript">#}
+{#  $(document).getElementById('set_priority').onclick = function() {#}
+{#    alert('Спасибо')#}
+
+{#  set_priority.onclick = function() {#}
+{#  document.getElementById('set_priority').onclick = function() {#}
+{#    alert( 'Спасибо' );#}
+{#  }#}
+{#  #}
+{#  document.getElementById('set_priority').addEventListener( "click" , function() {alert('Спасибо!')});#}
+{#</script>#}
+<script>
+    function countRabbits(id) {
+      console.log(id);
+    }
+</script>
+{% endblock %}
+
+
