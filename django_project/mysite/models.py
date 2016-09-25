@@ -47,17 +47,19 @@ class Events(models.Model):
     tags = models.CharField(max_length=255, blank=True, null=True)
     phone = models.CharField(max_length=255, blank=True, null=True)
     url = models.CharField(max_length=255, blank=True, null=True)
-    priority = models.IntegerField(choices=((0, 'Normal'),
-                                            (1, 'Proirity')), default=0)
-    is_active = models.IntegerField(choices=((0, 'No'), (1, 'Yes')), default=1)
-    export_vk = models.IntegerField(choices=((0, 'No'), (1, 'Yes')), default=1)
-    is_deleted = models.IntegerField(choices=((0, 'No'), (1, 'Yes')), default=0)
+    priority = models.IntegerField(choices=((0, 'Обычное'),
+                                            (1, 'Приоритетное')), default=0)
+    is_active = models.IntegerField(choices=((9, 'Не проверено'),
+                                             (0, 'Отклонено'),
+                                             (1, 'Одобрено')), default=9)
+    export_vk = models.IntegerField(choices=((0, 'Нет'), (1, 'Да')), default=1)
+    is_deleted = models.IntegerField(choices=((0, 'Нет'), (1, 'Да')), default=0)
     created = models.IntegerField(default=int(datetime.utcnow().timestamp()))
     modified = models.IntegerField(default=int(datetime.utcnow().timestamp()))
 
     def image_small(self):
         if self.image:
-            return mark_safe('<img src="%s" width="150" height="150" />' % self.image.url)
+            return mark_safe('<img src="%s" width="150" height="150" />' % self.image)
         else:
             return '(none)'
     image_small.short_description = 'Thumb'

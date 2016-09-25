@@ -1,27 +1,64 @@
 {% extends 'admin/change_list.html' %}
-{% load static %}
+{% load staticfiles %}
 
 {#{% block admin_changelist_form_document_ready %}#}
 
 {% block extrahead %}
 {{ block.super }}
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-{#<script type="application/javascript">#}
-{#  $(document).getElementById('set_priority').onclick = function() {#}
-{#    alert('Спасибо')#}
-
-{#  set_priority.onclick = function() {#}
-{#  document.getElementById('set_priority').onclick = function() {#}
-{#    alert( 'Спасибо' );#}
-{#  }#}
-{#  #}
-{#  document.getElementById('set_priority').addEventListener( "click" , function() {alert('Спасибо!')});#}
-{#</script>#}
-<script>
-    function countRabbits(id) {
+{#<script src="{% static 'js/admin_list.js' %}"></script>#}
+  <script>
+    function set_active(id) {
       console.log(id);
+      $.ajax({
+        type: 'POST',
+        url: {% url 'adm' %},
+        dateType: 'json',
+        data:{
+          event_id: id,
+          task: 'set_active',
+          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+        },
+        success:function (json) {
+          $("#set_active_"+id).parent().parent().attr("hidden", true);
+        }
+      })
     }
-</script>
+
+    function set_active_with_priority(id) {
+      console.log(id);
+      $.ajax({
+        type: 'POST',
+        url: {% url 'adm' %},
+        dateType: 'json',
+        data:{
+          event_id: id,
+          task: 'set_active_with_priority',
+          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+        },
+        success:function (json) {
+          $("#set_active_with_priority_"+id).parent().parent().attr("hidden", true);
+        }
+      })
+    }
+
+    function set_dismiss(id) {
+      console.log(id);
+      $.ajax({
+        type: 'POST',
+        url: {% url 'adm' %},
+        dateType: 'json',
+        data:{
+          event_id: id,
+          task: 'set_dismiss',
+          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+        },
+        success:function (json) {
+          $("#set_active_with_priority_"+id).parent().parent().attr("hidden", true);
+        }
+      })
+    }
+  </script>
 {% endblock %}
 
 

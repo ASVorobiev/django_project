@@ -131,13 +131,12 @@ function upload_img(input) {
         Внимание, АКЦИЯ!
     </span></h3>
   <div class="card-panel">
-      <span>Чем выше уникальности вашего мероприятия, тем больше скидка!</span><br>
       <div class="teal lighten-2 white-text center-align">
         <span>Публикуем 100% уникальные мероприятия <br></span>
           <span class="white-text text-lighten-1 center-align" style="font-weight: bold; font-size: xx-large;" >БЕСПЛАТНО</span>
       </div>
       <div id="wont">
-        Хотите узнать, насколько Ваше мероприятие уникально?
+        Хотите узнать, насколько Ваше мероприятие уникально? <span>Чем выше уникальности, тем больше скидка!</span><br>
       </div>
       <div id="uniq_bar" hidden>
         Уникальность вашего мероприятия:
@@ -203,7 +202,7 @@ function upload_img(input) {
   </script>
 
   <script type="application/javascript">
-    $(document).on('submit', '#main_form', function (e) {
+    $(document).on('#check_text', '#main_form', function (e) {
       e.preventDefault();
       $('#set_progress').replaceWith('<div id="set_progress" class="indeterminate"></div>');
 

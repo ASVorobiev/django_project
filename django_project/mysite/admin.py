@@ -52,14 +52,16 @@ class PersonsAdmin(admin.ModelAdmin):
 
 class EventsAdmin(admin.ModelAdmin):
     def button(self, obj):
-        return mark_safe('<input type="button" id="set_priority" onclick="countRabbits(%s)" value="Нажми меня"/>' % obj.id)
+        return mark_safe('<input type="button" id="set_active_%(id)s" onclick="set_active(%(id)s)" value="Активировать"/>'
+                         '<input type="button" id="set_active_with_priority_%(id)s" onclick="set_active_with_priority(%(id)s)" value="Активировать с приоритетом"/>'
+                         '<input type="button" id="set_dismiss_%(id)s" onclick="set_dismiss(%(id)s)" value="Отклонить"/>' % {'id':  obj.id})
 
     button.short_description = 'Action'
     button.allow_tags = True
 
     fieldsets = (
         (None, {
-            'fields': ('location', 'title', 'description', 'image', 'start_date', 'start_time',)
+            'fields': ('location', 'title', 'start_date', 'start_time', 'description', 'image', 'image_small')
         }),
         ('Advanced options', {
             'classes': ('collapse',),
@@ -68,7 +70,7 @@ class EventsAdmin(admin.ModelAdmin):
                        'export_vk', 'is_deleted', 'created', 'modified'),
         }),
     )
-    readonly_fields = ['modified', 'created']
+    readonly_fields = ['modified', 'created', 'image_small']
     actions = ['is_active']
     # exclude = ['thumb']
     search_fields = ['title', 'description']
@@ -85,7 +87,7 @@ class EventsAdmin(admin.ModelAdmin):
     list_locations_name.short_description = 'Город'  # Renames column head
 
     list_display = ['image_small', 'title', 'list_locations_name', 'description', 'start_date', 'start_time', 'button']
-    list_filter = ('start_date', 'location_id__name', 'priority')
+    list_filter = ('start_date', 'location_id__name', 'priority', 'is_active')
 
 
 admin.site.register(Events, EventsAdmin)
