@@ -4,8 +4,6 @@ import json
 import os
 from datetime import date, timedelta
 from io import BytesIO
-from io import StringIO
-from time import sleep
 
 
 from django.conf import settings
@@ -14,20 +12,24 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.context_processors import csrf
-from httplib2 import Response
+from django.contrib.staticfiles.templatetags.staticfiles import static
+from django.contrib.staticfiles import finders
 
 from django_project.mysite.forms import AddNewEvent
 from django_project.mysite.models import Events, Locations
 from transliterate import translit
 
+from PIL import Image
+from PIL import ImageFont
+from PIL import ImageDraw
+from PIL import ImageOps
+
 today = date.today()
-
-
-# Create your views here.
 
 
 def home(request):
     return events_list(request)
+
 
 def events_list(request, site_screen_name=None):
 
@@ -68,72 +70,52 @@ def events_details(request, site_screen_name, pk, title_translit='dont_remove'):
                                                          'title_translit': translit(event_data.title, 'ru',
                                                                                     reversed=True).replace(' ', '_')
                                                          })
-from PIL import Image
-from PIL import ImageFont
-from PIL import ImageDraw
-from PIL import ImageOps
 
 
 def pill(image_io):
     im = Image.open(image_io)
-    # im = Image.open(StringIO.StringIO(buffer))
-
+    logo = Image.open(finders.find('logo/vkalendare_logo_only.png'))
+    new_text = 'Информационная поддержка: "Афиша вКалендаре". Ещё больше мероприятий: www.vkalendare.com'
 
     # font = ImageFont.truetype(<font-file>, <font-size>)
     font = ImageFont.load_default()
-    # draw.text((x, y),"Sample Text",(r,g,b))
-    # draw.text((0, 0),"Sample Text",(255,255,255),font=font)
-    # draw.line((0, 10, 200, 200), fill=100, width=100)
-
     (width, height) = im.size
     p_height = int(height * 0.05)
     ltrb_border = (0, 0, 0, p_height)
-    im_with_border = ImageOps.expand(im, border=ltrb_border, fill='white')
+    im_with_border = ImageOps.expand(im, border=ltrb_border, fill='black')
+
+    print('border size:', width, p_height)
+
+    logo_size = int(p_height * 0.8), int(p_height * 0.8)
+    logo.thumbnail(logo_size, Image.ANTIALIAS)
+
+    ttf = finders.find('fonts/roboto/Roboto-Regular.ttf')
+    font = ImageFont.truetype(ttf, int(height * 0.025))
+    if font.getsize(new_text)[0] > (width*0.9):
+        q = width / font.getsize(new_text)[0]
+        print(q)
+        font = ImageFont.truetype(ttf, int(height * 0.022 * q))
 
     draw = ImageDraw.Draw(im_with_border)
-    # draw.text((10, height), "Информационная поддержка: Проект 'Афиша вКалендаре'", fill='black', font=font)
-    draw.text((10, height), "Support: vKalendare.com", fill='black', font=font)
-    # im_with_border.show()
+    print(font.getsize(new_text))
+    draw.text((width * 0.01 + p_height, height + (p_height / 2 - font.getsize(new_text)[1] / 2)), new_text,
+              fill='white', font=font)
 
+    im_with_border.paste(logo.convert('RGB'), (int(width * 0.01), int(height + p_height * 0.1)), logo)
 
-
+    max_size = 1920, 1080
     buffer = BytesIO()
-    # thumb.save(buffer, "PNG")
+    im_with_border.thumbnail(max_size, Image.ANTIALIAS)
     im_with_border.save(fp=buffer, format='JPEG')
-    s = buffer.getvalue()
-    im_file = ContentFile(s)
 
-
+    img = buffer.getvalue()
 
     size = 128, 128
-    # outfile = os.path.splitext(file_address)[0] + "_thumbnail.jpg"
     im.thumbnail(size, Image.ANTIALIAS)
     buffer2 = BytesIO()
     im.save(buffer2, "JPEG")
-    s2 = buffer2.getvalue()
-    thumb_file = ContentFile(s2)
-    return im_file, thumb_file
-
-
-def image_save(image):
-    md = hashlib.md5(image.file.getvalue()).hexdigest()
-    print(md)
-    n = 2
-    local_path = ''
-    for dr in [md[i:i+n] for i in range(0, len(md), n)]:
-        local_path = os.path.join(local_path, dr)
-
-    file_address = os.path.join(local_path, 'poster.jpg')
-    # tmp = 'C:\\tmp\\'
-    abs_file_path = os.path.join(settings.MEDIA_ROOT, file_address)
-    # file_address = os.path.join(tmp, file_address)
-    os.makedirs(os.path.dirname(abs_file_path), exist_ok=True)
-    import copy
-    im_copy = copy.deepcopy(image)
-    pth = pill(im_copy)
-    return os.path.join(local_path, pth[0]), os.path.join(local_path, pth[1])
-    # return '3f\\98\\ff\\1a\\aa\\37\\62\\c6\\89\\1e\\54\\e0\\d2\\68\\5f\\df\\poster.jpg', '3f\\98\\ff\\1a\\aa\\37\\62\\c6\\89\\1e\\54\\e0\\d2\\68\\5f\\df\\poster.jpg'
-
+    thumb = buffer2.getvalue()
+    return ContentFile(img), ContentFile(thumb)
 
 def add_event_form(request):
     if request.user.is_anonymous():
@@ -147,35 +129,21 @@ def add_event_form(request):
         new_event.title = request.POST['title']
         new_event.description = request.POST['description']
         new_event.location = request.POST['location']
-        pth = pill(request.FILES['image'])
-        # new_event.image = '3f\\98\\ff\\1a\\aa\\37\\62\\c6\\89\\1e\\54\\e0\\d2\\68\\5f\\df\\poster.jpg'
-        # new_event.thumb = '3f\\98\\ff\\1a\\aa\\37\\62\\c6\\89\\1e\\54\\e0\\d2\\68\\5f\\df\\poster.jpg'
-        # im_copy = copy.deepcopy(request.FILES['image'])
-        # pth = pill(im_copy)
-
-        # model_instance.image_field.save(model_instance.image_field.name,
-        #                                 ContentFile(f.getvalue()))
-        # new_event.image = ('im', ContentFile(pth[0]))
-        # new_event.image = pth[0]
-
-        # new_event.thumb = pth[1]
-        thumb_file = InMemoryUploadedFile(pth[0], None, 'foo.jpg', 'image/jpeg',
-                                          pth[0].tell, None)
+        p = pill(request.FILES['image'])
+        img_file = InMemoryUploadedFile(p[0], None, 'poster.jpg', 'image/jpeg', p[0].tell, None)
+        thumb_file = InMemoryUploadedFile(p[1], None, 'thumb.jpg', 'image/jpeg', p[1].tell, None)
 
         new_event.start_time = request.POST['start_time']
         new_event.start_date = request.POST['start_date']
         # old = request.FILES['image']
-        request.FILES['image'] = thumb_file
+        request.FILES['image'] = img_file
+        request.FILES['thumb'] = thumb_file
         new_event.image = request.FILES['image']
-        new_event.thumb = request.FILES['image']
+        new_event.thumb = request.FILES['thumb']
         # new_event.image = thumb_file
         # print('image', new_event.image)
         # print('thumb', new_event.thumb)
         res = new_event.save()
-        print(res)
-        # event.location.site_screen_name
-        # event.id
-        # event.title_translit | urlencode
         return redirect('event_details', site_screen_name=res.location.site_screen_name, pk=res.pk, title_translit='new')
     return render(request, 'mysite/add_event_form.html', context)
 

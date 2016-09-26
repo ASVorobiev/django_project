@@ -61,7 +61,7 @@ class EventsAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('location', 'title', 'start_date', 'start_time', 'description', 'image', 'image_small')
+            'fields': ('location', 'title', 'start_date', 'start_time', 'description', 'image', 'thumb', 'image_small')
         }),
         ('Advanced options', {
             'classes': ('collapse',),

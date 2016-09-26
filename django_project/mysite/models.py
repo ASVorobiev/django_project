@@ -1,3 +1,5 @@
+import hashlib
+import os
 import re
 from django.conf.urls import patterns
 from django.db import models
@@ -25,13 +27,27 @@ class Locations(models.Model):
     def __str__(self):
         return self.name
 
+def user_directory_path(instance, filename):
+    if instance.image.name == filename:
+        f = instance.image.file.file.file.getvalue()
+    else:
+        f = instance.thumb.file.file.file.getvalue()
+    md = hashlib.md5(f).hexdigest()
+    n = 2
+    local_path = ''
+    for dr in [md[i:i+n] for i in range(0, len(md), n)]:
+        local_path = os.path.join(local_path, dr)
+    local_path = os.path.join(local_path, filename)
+    return local_path
+
 
 class Events(models.Model):
     location = models.ForeignKey(Locations)
     title = models.CharField(max_length=255, verbose_name='заголовок')
     description = models.TextField(blank=True, verbose_name='описание')
-    image = models.ImageField(max_length=255, blank=True, null=True, verbose_name='афиша')
-    thumb = models.CharField(max_length=255, blank=True, null=True, verbose_name='предпросмотр афиши')
+    # 'events/%Y/%m/%d'
+    image = models.ImageField(max_length=255, blank=True, null=True, verbose_name='афиша', upload_to=user_directory_path)
+    thumb = models.ImageField(max_length=255, blank=True, null=True, verbose_name='предпросмотр афиши', upload_to=user_directory_path)
     category_id = models.IntegerField(blank=True, null=True)
     start_date = models.DateField(verbose_name='дата начала')
     start_time = models.TimeField(verbose_name='время начала')
@@ -59,22 +75,22 @@ class Events(models.Model):
 
     def image_small(self):
         if self.image:
-            return mark_safe('<img src="%s" width="150" height="150" />' % self.image)
+            return mark_safe('<img src="%s" width="150" height="150" />' % self.image.url)
         else:
             return '(none)'
-    image_small.short_description = 'Thumb'
+    image_small.short_description = 'Предпросмотр'
     image_small.allow_tags = True
 
-    def get_urls(self):
-        urls = super().get_urls()
-        my_urls = patterns('',
-                           (r'^(?P<pk>\d+)/events/$', self.admin_site.admin_view(self.do_evil_view))
-                           )
-        return my_urls + urls
-
-    def do_evil_view(self, request, pk):
-        print('doing evil with', Events.objects.get(pk=int(pk)))
-        return redirect('/admin/mysite/events/%s/' % pk)
+    # def get_urls(self):
+    #     urls = super().get_urls()
+    #     my_urls = patterns('',
+    #                        (r'^(?P<pk>\d+)/events/$', self.admin_site.admin_view(self.do_evil_view))
+    #                        )
+    #     return my_urls + urls
+    #
+    # def do_evil_view(self, request, pk):
+    #     print('doing evil with', Events.objects.get(pk=int(pk)))
+    #     return redirect('/admin/mysite/events/%s/' % pk)
 
     def title_translit(self):
         trans = translit(self.title.strip(), 'ru', reversed=True)
