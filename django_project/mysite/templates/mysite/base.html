@@ -39,10 +39,12 @@
             </li>
             <li>
               <a class="dropdown-button hide-on-med-and-down" data-activates="locations_ddown">{{ current_location }}
-                <i class="material-icons right">arrow_drop_down</i>
+                {% if current_location %}
+                  <i class="material-icons right">arrow_drop_down</i>
+                {% endif %}
               </a>
             </li>
-
+          </ul>
         </div>
       </div>
     </nav>

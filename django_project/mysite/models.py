@@ -1,12 +1,9 @@
 import hashlib
 import os
 import re
-from django.conf.urls import patterns
+from django_project.user_auth.models import CustomUser
 from django.db import models
 
-# Create your models here.
-from django.forms import ModelForm
-from django.shortcuts import redirect
 from django.utils.datetime_safe import datetime
 from django.utils.safestring import mark_safe
 from transliterate import translit
@@ -27,6 +24,7 @@ class Locations(models.Model):
     def __str__(self):
         return self.name
 
+
 def user_directory_path(instance, filename):
     if instance.image.name == filename:
         f = instance.image.file.file.file.getvalue()
@@ -42,7 +40,8 @@ def user_directory_path(instance, filename):
 
 
 class Events(models.Model):
-    location = models.ForeignKey(Locations)
+    owner = models.ForeignKey(CustomUser, blank=True, null=True, verbose_name='Создатель')
+    location = models.ForeignKey(Locations, verbose_name='Локация')
     title = models.CharField(max_length=255, verbose_name='заголовок')
     description = models.TextField(blank=True, verbose_name='описание')
     # 'events/%Y/%m/%d'
@@ -80,17 +79,6 @@ class Events(models.Model):
             return '(none)'
     image_small.short_description = 'Предпросмотр'
     image_small.allow_tags = True
-
-    # def get_urls(self):
-    #     urls = super().get_urls()
-    #     my_urls = patterns('',
-    #                        (r'^(?P<pk>\d+)/events/$', self.admin_site.admin_view(self.do_evil_view))
-    #                        )
-    #     return my_urls + urls
-    #
-    # def do_evil_view(self, request, pk):
-    #     print('doing evil with', Events.objects.get(pk=int(pk)))
-    #     return redirect('/admin/mysite/events/%s/' % pk)
 
     def title_translit(self):
         trans = translit(self.title.strip(), 'ru', reversed=True)

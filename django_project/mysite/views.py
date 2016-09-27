@@ -10,7 +10,8 @@ from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response
+from django.template import RequestContext
 from django.template.context_processors import csrf
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.contrib.staticfiles import finders
@@ -117,35 +118,41 @@ def pill(image_io):
     thumb = buffer2.getvalue()
     return ContentFile(img), ContentFile(thumb)
 
+
 def add_event_form(request):
     if request.user.is_anonymous():
         request.session['add_event_form_http_referer'] = 1
         return redirect('login',)
     context = {}
-    context['EventsMod'] = AddNewEvent
+    context['form'] = AddNewEvent(request.POST, request.FILES)
+    context['locations'] = Locations.objects.all()
     context.update(csrf(request))
     if request.POST:
-        new_event = AddNewEvent(request.POST, request.FILES)
-        new_event.title = request.POST['title']
-        new_event.description = request.POST['description']
-        new_event.location = request.POST['location']
+
         p = pill(request.FILES['image'])
         img_file = InMemoryUploadedFile(p[0], None, 'poster.jpg', 'image/jpeg', p[0].tell, None)
         thumb_file = InMemoryUploadedFile(p[1], None, 'thumb.jpg', 'image/jpeg', p[1].tell, None)
-
-        new_event.start_time = request.POST['start_time']
-        new_event.start_date = request.POST['start_date']
-        # old = request.FILES['image']
         request.FILES['image'] = img_file
         request.FILES['thumb'] = thumb_file
-        new_event.image = request.FILES['image']
-        new_event.thumb = request.FILES['thumb']
-        # new_event.image = thumb_file
-        # print('image', new_event.image)
-        # print('thumb', new_event.thumb)
-        res = new_event.save()
-        return redirect('event_details', site_screen_name=res.location.site_screen_name, pk=res.pk, title_translit='new')
-    return render(request, 'mysite/add_event_form.html', context)
+
+        new_event = AddNewEvent(request.POST, request.FILES)
+        if new_event.is_valid():
+            new_event.title = request.POST['title']
+            new_event.description = request.POST['description']
+            new_event.location = request.POST['location']
+            new_event.start_time = request.POST['start_time']
+            new_event.start_date = request.POST['start_date']
+            new_event.image = request.FILES['image']
+            new_event.thumb = request.FILES['thumb']
+            # res = new_event.save()
+            context['form'] = new_event
+            if new_event.is_valid():
+                res = new_event.save(commit=False)
+                res.owner = request.user
+                note = res.save()
+                return redirect('event_details', site_screen_name=res.location.site_screen_name, pk=res.pk, title_translit='new')
+    return render_to_response('mysite/add_event_form.html', context, context_instance=RequestContext(request))
+    # return render(request, 'mysite/add_event_form.html', context)
 
 
 def admin_list(request):
