@@ -126,13 +126,14 @@ function upload_img(input) {
   <div class="tabs-wrapper">
 
     <div class="row">
-      <h3 class="red lighten-1 white-text center-align" style="font-weight: bolder"><span class="container">
-        Внимание, АКЦИЯ!
-    </span></h3>
-  <div class="card-panel">
+      <h3 class="red lighten-1 white-text center-align flow-text" style="font-weight: bolder" >
+          Внимание, АКЦИЯ!
+      </h3>
+
+      <div class="card-panel">
       <div class="teal lighten-2 white-text center-align">
         <span>Публикуем 100% уникальные мероприятия <br></span>
-          <span class="white-text text-lighten-1 center-align" style="font-weight: bold; font-size: xx-large;" >БЕСПЛАТНО</span>
+          <span class="white-text text-lighten-1 center-align flow-text" style="font-weight: bolder" >БЕСПЛАТНО</span>
       </div>
       <div id="wont">
         Хотите узнать, насколько Ваше мероприятие уникально? <span>Чем выше уникальности, тем больше скидка!</span><br>
@@ -145,14 +146,24 @@ function upload_img(input) {
       </div>
     </div>
 
-      <button class="btn-large blue-grey lighten-1 waves-effect waves-light" form="main_form" type="submit" id="check_text" style="height: 100px; line-height: inherit; font-size: x-large; font-weight: bold">
-        Проверить на уникальность
-{#        <i class="material-icons right">send</i>#}
-      </button>
+      <a type="button" onclick="" class="blue-grey lighten-1 white-text waves-effect waves-light center-align flow-text" style="font-weight: bolder" id="check_text" name="check_text">
+          Проверить на уникальность
+          </a>
 
-    <div id="details_container">
-      <a href="#" id="text_ru_details">Подробнее...</a>
-    </div>
+
+{#      <button class="btn-large blue-grey lighten-1 waves-effect waves-light flow-text" form="main_form" type="submit" id="check_text">#}
+{##}
+{##}
+{##}
+{##}
+{#        <h3 class="flow-text">#}
+{#        <span class="container">Проверить на уникальность</span></h3>#}
+{#        <i class="material-icons right">send</i>#}
+{#      </button>#}
+
+{#    <div id="details_container">#}
+{#      <a href="#" id="text_ru_details">Подробнее...</a>#}
+{#    </div>#}
 
   </div>
  </div>
@@ -201,7 +212,9 @@ function upload_img(input) {
   </script>
 
   <script type="application/javascript">
-    $(document).on('#check_text', '#main_form', function (e) {
+
+  $(function(){
+    $("#check_text").click(function(e) {
       e.preventDefault();
       $('#set_progress').replaceWith('<div id="set_progress" class="indeterminate"></div>');
 
@@ -267,6 +280,7 @@ function upload_img(input) {
       }
     })
   })
+  });
   </script>
 
 

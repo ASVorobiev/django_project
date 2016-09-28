@@ -45,8 +45,12 @@ def done(request):
             request.session._session['add_event_form_http_referer'] = False
             return redirect('/add_event_form')
     except KeyError:
-        print ('add_event_form_http_referer no found')
-    return redirect(request.session._session['http_referer_foo'])
+        print('add_event_form_http_referer no found')
+    try:
+        return redirect(request.session._session['http_referer_foo'])
+    except TypeError:
+        return redirect(request.META.get('HTTP_REFERER'))
+
 
 
 @render_to('auth.html')
