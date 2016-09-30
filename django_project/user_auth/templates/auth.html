@@ -88,9 +88,12 @@
                 </div>
                 <div class="input-field col l12">
 {#                  <input placeholder="" id="password" type="password" name="password" class="validate" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" onchange="form.password.pattern = this.value;">#}
-                  <input placeholder="" class="validate" title="Пароль должен содержать не менее 6 символов, включая ВЕРХНИЙ/нижний регистр, а так же ЦИФРЫ" type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="password" onchange="
-                    this.setCustomValidity(this.validity.patternMismatch ? this.title : '');
-                    if(this.checkValidity()) form.password.pattern = this.value;">
+                  <input placeholder="" class="validate" title="Пароль должен содержать не менее 6 символов, включая ВЕРХНИЙ/нижний регистр, а так же ЦИФРЫ"
+                         type="password" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" name="password"
+{#                   onchange="#}
+{#                    this.setCustomValidity(this.validity.patternMismatch ? this.title : '');#}
+{#                    if(this.checkValidity()) form.password.pattern = this.value;"#}
+                  >
                   <label for="password">Пароль</label>
                 </div>
                 <div class="input-field col l12">

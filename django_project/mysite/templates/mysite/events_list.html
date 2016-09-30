@@ -48,7 +48,9 @@
                           </div>
                         </div>
                         {% if event.image %}
-                          <img class="activator" src={{ event.image.url }}>
+                          <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}">
+                            <img src={{ event.image.url }}>
+                          </a>
                         {% endif %}
                       </div>
                       <div class="card-content">
