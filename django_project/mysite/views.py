@@ -65,7 +65,13 @@ def events_details(request, site_screen_name, pk, title_translit='dont_remove'):
     locations = Locations.objects.all()
     current_location = Locations.objects.get(site_screen_name=site_screen_name)
     event_data = Events.objects.get(id=pk)
+    events_from_this_organizator = Events.objects.filter(location=event_data.location_id, organizer=event_data.organizer_id).exclude(id=event_data.id).exclude(start_date__lte=today).exclude(
+            start_date__gte=today + timedelta(days=45)).order_by('priority').order_by('start_date')
+    events_from_this_place = Events.objects.filter(location=event_data.location_id, organizer=event_data.place_id).exclude(start_date__lte=today).exclude(
+            start_date__gte=today + timedelta(days=45)).order_by('priority').order_by('start_date')
     return render(request, 'mysite/event_details.html', {'event_data': event_data,
+                                                         'events_from_this_organizator': events_from_this_organizator,
+                                                         'events_from_this_place': events_from_this_place,
                                                          'current_location': current_location,
                                                          'locations': locations,
                                                          'title_translit': translit(event_data.title, 'ru',
