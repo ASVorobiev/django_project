@@ -16,20 +16,6 @@ class MysiteCategories(models.Model):
         managed = False
         db_table = 'mysite_categories'
 
-class Locations(models.Model):
-    name = models.CharField(max_length=255)
-    vk_group_id = models.IntegerField(blank=True, null=True)
-    vk_screen_name = models.CharField(max_length=255, blank=True, null=True)
-    site_screen_name = models.CharField(max_length=255, blank=True, null=True)
-    vk_owner_id = models.IntegerField(blank=True, null=True)
-    vk_location_event_id = models.IntegerField(blank=True, null=True)
-    tz = models.IntegerField(blank=True, null=True)
-    is_deleted = models.IntegerField()
-    modified = models.IntegerField()
-    created = models.IntegerField()
-
-    def __str__(self):
-        return self.name
 
 class MysiteOrganizers(models.Model):
     vk_id = models.IntegerField(blank=True, null=True)
@@ -40,15 +26,18 @@ class MysiteOrganizers(models.Model):
     followers = models.IntegerField(blank=True, null=True)
     place_id = models.IntegerField(blank=True, null=True)
     is_place = models.BooleanField(default=False, blank=True)  # добавлен столбец
-    location = models.ForeignKey(Locations, blank=True, null=True, verbose_name='Локация')  # добавлен столбец, добавить индекс в Locations, изменить int(11), снять Unsigned
     confidence = models.IntegerField()
     is_deleted = models.IntegerField()
     modified = models.IntegerField()
     created = models.IntegerField()
 
     class Meta:
+        managed = False
         db_table = 'mysite_organizers'
         unique_together = (('vk_id', 'vk_type'),)
+
+    def __str__(self):
+        return self.name
 
 
 class MysitePlaces(models.Model):
@@ -64,7 +53,20 @@ class MysitePlaces(models.Model):
         managed = False
         db_table = 'mysite_places'
 
+class Locations(models.Model):
+    name = models.CharField(max_length=255)
+    vk_group_id = models.IntegerField(blank=True, null=True)
+    vk_screen_name = models.CharField(max_length=255, blank=True, null=True)
+    site_screen_name = models.CharField(max_length=255, blank=True, null=True)
+    vk_owner_id = models.IntegerField(blank=True, null=True)
+    vk_location_event_id = models.IntegerField(blank=True, null=True)
+    tz = models.IntegerField(blank=True, null=True)
+    is_deleted = models.IntegerField()
+    modified = models.IntegerField()
+    created = models.IntegerField()
 
+    def __str__(self):
+        return self.name
 
 
 def user_directory_path(instance, filename):

@@ -6,78 +6,86 @@
 {% endblock %}
 
 {% block content %}
-  <nav>
-    <div class="nav-wrapper">
-      <div class="col s12">
-        <a href="#!" class="breadcrumb">First</a>
-        <a href="#!" class="breadcrumb">Second</a>
-        <a href="#!" class="breadcrumb">Third</a>
-      </div>
+  <div class="row valign-wrapper ">
+    <div class="col s12 blue-grey darken-1">
+      <a href="{% url 'events_list' %}"  class="breadcrumb">Главная</a>
+      <a href="{% url 'location_events' current_location.site_screen_name  %}" class="breadcrumb">{{ current_location }}</a>
+      <a href="#!" class="breadcrumb">{{ event_data }}</a>
     </div>
-  </nav>
+  </div>
 
-<div class="card">
-    <div class="row">
-        <div class="col s12 l5">
-            <img class="materialboxed responsive-img" src={{ event_data.image.url }}>
-        </div>
-       <div class="col s12 l7">
-            <div class="row center-align">
-                <h3>{{ event_data.title }}</h3>
-            </div>
-           <div>
-               <a>{{ event_data.start_date }}</a><a>{{ event_data.start_time }}</a>
-           </div>
-            <div class="row">
-                <span class="black-text">{{ event_data.description }}</span>
-            </div>
-       </div>
-    </div>
-</div>
-
-<h4>Смотрите так же:</h4>
-{% if events_from_this_organizator %}
-  <style type="text/css">
-    .material-icons.md-14 { font-size: 14px; }
-  </style>
-  <h5>Другие мероприятия этого организатора</h5>
-            {% for event in events_from_this_organizator %}
-              <div class="col s12 m4 l3">
-                  <div class="card sticky-action medium z-depth-2">
-
-                      <div class="card-image waves-effect waves-block waves-light">
-                        <div class="" style="font-size: small;">
-                          <div class="">
-                            <i class="material-icons md-14">date_range</i>
-                            {{ event.start_date|date:"d.m.Y (D)"  }}
-                            <div class="right">
-                              <i class="material-icons md-14">access_time</i>
-                              {{ event.start_time }}
-                            </div>
-                          </div>
-                        </div>
-                        {% if event.image %}
-                          <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}">
-                            <img src={{ event.image.url }}>
-                          </a>
-                        {% endif %}
-                      </div>
-                      <div class="card-content">
-                          <span class="card-title activator grey-text text-darken-4">{{ event.title }}<i class="material-icons right">more_vert</i></span>
-                          <p>{{ event.description|linebreaksbr }}</p>
-                      </div>
-                      <div class="card-reveal">
-                          <span class="card-title grey-text text-darken-4">{{ event.title }}<i class="material-icons right">close</i></span>
-                          <p>{{ event.description|linebreaksbr }}</p>
-                      </div>
-                      <div class="card-action">
-                          <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span>Подробнее...</a>
-                      </div>
-                  </div>
+  <div class="card">
+      <div class="row">
+          <div class="col s12 l5">
+              <img class="materialboxed responsive-img" src={{ event_data.image.url }}>
+          </div>
+         <div class="col s12 l7">
+              <div class="row center-align">
+                  <h3>{{ event_data.title }}</h3>
               </div>
-          {% endfor %}
-{% endif %}
+             <div>
+                 <a>{{ event_data.start_date }}</a><a>{{ event_data.start_time }}</a>
+             </div>
+
+              <div class="row">
+                  <p class="black-text">{{ event_data.description }}</p>
+              </div>
+         </div>
+      </div>
+  </div>
 
 
 
+
+  {% if events_from_this_organizator %}
+  <h4>Смотрите так же:</h4>
+    <style type="text/css">
+      .material-icons.md-14 { font-size: 14px; }
+    </style>
+    <h5>Другие мероприятия этого организатора</h5>
+      {% for event in events_from_this_organizator %}
+        <div class="col s12 m4 l3">
+          <div class="card sticky-action medium z-depth-2">
+
+              <div class="card-image waves-effect waves-block waves-light">
+                <div class="" style="font-size: small;">
+                  <div class="">
+                    <i class="material-icons md-14">date_range</i>
+                    {{ event.start_date|date:"d.m.Y (D)"  }}
+                    <div class="right">
+                      <i class="material-icons md-14">access_time</i>
+                      {{ event.start_time }}
+                    </div>
+                  </div>
+                </div>
+                {% if event.image %}
+                  <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}">
+                    <img src={{ event.image.url }}>
+                  </a>
+                {% endif %}
+              </div>
+              <div class="card-content">
+                  <span class="card-title activator grey-text text-darken-4">{{ event.title }}<i class="material-icons right">more_vert</i></span>
+                  <p>{{ event.description|linebreaksbr }}</p>
+              </div>
+              <div class="card-reveal">
+                  <span class="card-title grey-text text-darken-4">{{ event.title }}<i class="material-icons right">close</i></span>
+                  <p>{{ event.description|linebreaksbr }}</p>
+              </div>
+              <div class="card-action">
+                  <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span>Подробнее...</a>
+              </div>
+          </div>
+        </div>
+    {% endfor %}
+  {% endif %}
 {% endblock %}
+
+  {% block pin %}
+     <div class="card-panel grey lighten-5 z-depth-1">
+                  <div class="row">
+                 Организатор: <a href="{{ event_data.organizer.url }}" target="_blank">{{ event_data.organizer }}
+                <img src="{{ event_data.organizer.logo }}" alt="" class="circle responsive-img"></a> <!-- notice the "circle" class -->
+              </div>
+    </div>
+  {% endblock %}
