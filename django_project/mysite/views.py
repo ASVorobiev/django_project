@@ -188,6 +188,13 @@ def admin_list(request):
 def jdata(request):
     if request.method == "POST":
         if request.POST['task'] == 'get_location_places':
-            places = MysiteOrganizers.objects.raw("SELECT * from mysite_organizers where id in (SELECT DISTINCT organizer_id from mysite_events WHERE location_id = 1) AND confidence > 1 AND vk_type = 'group' ORDER BY followers")
+            sql_query = "SELECT * from mysite_organizers where id in (SELECT DISTINCT organizer_id from mysite_events WHERE location_id = %s) AND confidence > 1 AND vk_type = 'group' ORDER BY followers" % request.POST['location_id']
+
+            places = MysiteOrganizers.objects.raw(sql_query)
             # places = Events.objects.get(pk=request.POST['location_id'])
-            return HttpResponse(json.dumps({'location_places': places}), content_type='application/json')
+            d = {}
+            for place in places:
+                d[place.id] = {'name': place.name,
+                               'logo': place.logo,
+                               'url': place.url}
+            return HttpResponse(json.dumps({'location_places': d}), content_type='application/json')

@@ -25,7 +25,7 @@ class MysiteOrganizers(models.Model):
     url = models.CharField(max_length=255, blank=True, null=True)
     followers = models.IntegerField(blank=True, null=True)
     place_id = models.IntegerField(blank=True, null=True)
-    is_place = models.BooleanField(default=False, blank=True)  # добавлен столбец
+    # is_place = models.BooleanField(default=False, blank=True)  # добавлен столбец
     confidence = models.IntegerField()
     is_deleted = models.IntegerField()
     modified = models.IntegerField()

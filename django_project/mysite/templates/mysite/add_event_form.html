@@ -32,26 +32,7 @@ function upload_img(input) {
 }
 </script>
 
-<script>
-  $(function() {
-    $( "#id_location" ).change(function() {
-      console.log( "Handler for .select() called." );
-      $.ajax({
-        type: 'POST',
-        url: {% url 'jdata' %},
-        dateType: 'json',
-        data:{
-          task: 'get_location_places',
-          location_id:$('#id_location').val(),
-          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
-        },
-        success:function (json) {
-          console.log(json.location_places);
-          }
-      })
-    });
-  });
-</script>
+
 
 <!-- Modal Structure -->
 <div id="modal2" class="modal row">
@@ -81,10 +62,23 @@ function upload_img(input) {
       </div>
     </div>
 
-    <div class="input-field col s12" id="location_select">
+    <div class="input-field col s12">
         {{ form.location }}
         <label>Город</label>
     </div>
+
+    <div class="row" hidden id="place_row">
+{#    <div class="input-field col s12" id="local_places">#}
+{#        {{ form.location }}#}
+{#        <label>Место</label>#}
+{#    </div>#}
+    <div class="input-field col s12">
+    <select id="local_places" class="icons">
+
+    </select>
+    <label>Место</label>
+  </div>
+      </div>
 
     <div class="col s10">
       <div class="file-field input-field file-upload">
@@ -253,7 +247,7 @@ function upload_img(input) {
           if (json.urls) {
             var mydiv = $('<div/>', {
                 id:     'mydiv',
-                class:  'raw'
+                class:  'row'
             });
             $('#modal_results_content').append(mydiv);
 
@@ -294,7 +288,34 @@ function upload_img(input) {
   });
   </script>
 
-
+<script>
+  $(function() {
+    $( "#id_location" ).change(function() {
+      console.log( "Handler for .select() called." );
+      $.ajax({
+        type: 'POST',
+        url: {% url 'jdata' %},
+        dateType: 'json',
+        data:{
+          task: 'get_location_places',
+          location_id:$('#id_location').val(),
+          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+        },
+        success:function (json) {
+            $('#local_places').empty();
+            var items = [];
+            items.push('<option value="" disabled selected>Выберите место проведения</option>');
+            $.each( json.location_places, function( key, val ) {
+              items.push( "<option data-icon='"+ val['logo'] +"' value='" + key + "' class='left circle'>" + val['name'] + "</option>" );
+            });
+            $('#local_places').append(items);
+            $('#local_places').material_select();
+            $('#place_row').show();
+          }
+      })
+    });
+  });
+</script>
 
 {% endblock %}
 
