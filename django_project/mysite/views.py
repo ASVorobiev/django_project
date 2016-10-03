@@ -17,7 +17,7 @@ from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.contrib.staticfiles import finders
 
 from django_project.mysite.forms import AddNewEvent
-from django_project.mysite.models import Events, Locations
+from django_project.mysite.models import Events, Locations, MysiteOrganizers
 from transliterate import translit
 
 from PIL import Image
@@ -184,3 +184,10 @@ def admin_list(request):
 
         context = {'unique': '0.00', 'seo_check': {'count_chars_with_space': 110, 'mixed_words': [], 'spam_percent': 22, 'list_keys': [{'count': 2, 'key_title': 'друг'}], 'count_words': 15, 'count_chars_without_space': 96, 'water_percent': 16, 'list_keys_group': [{'count': 2, 'sub_keys': [], 'key_title': 'друг'}]}, 'text_unique': '0.00', 'spell_check': [], 'result_json': {'clear_text': 'На основе одного шаблона генерируется множество статей с невысокой уникальностью очень похожих друг на друга', 'urls': [{'url': 'http://vk.com/wall-91072377', 'plagiat': 100, 'words': '0 1 2 3 4 5 6 7 8 9 10 11 12 13 14'}, {'url': 'http://pr-cy.ru/lib/seo/Kontent-sayta-SEO-kopirayting-Unikal-nost-kontenta', 'plagiat': 100, 'words': '0 1 2 3 4 5 6 7 8 9 10 11 12 13 14'}], 'unique': 0, 'mixed_words': '', 'date_check': '19.09.2016 19:58:30'}, 'text_uid': '57e0192d87fb8'}
         return HttpResponse(json.dumps(context), content_type='application/json')
+
+def jdata(request):
+    if request.method == "POST":
+        if request.POST['task'] == 'get_location_places':
+            places = MysiteOrganizers.objects.raw("SELECT * from mysite_organizers where id in (SELECT DISTINCT organizer_id from mysite_events WHERE location_id = 1) AND confidence > 1 AND vk_type = 'group' ORDER BY followers")
+            # places = Events.objects.get(pk=request.POST['location_id'])
+            return HttpResponse(json.dumps({'location_places': places}), content_type='application/json')

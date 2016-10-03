@@ -32,6 +32,27 @@ function upload_img(input) {
 }
 </script>
 
+<script>
+  $(function() {
+    $( "#id_location" ).change(function() {
+      console.log( "Handler for .select() called." );
+      $.ajax({
+        type: 'POST',
+        url: {% url 'jdata' %},
+        dateType: 'json',
+        data:{
+          task: 'get_location_places',
+          location_id:$('#id_location').val(),
+          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+        },
+        success:function (json) {
+          console.log(json.location_places);
+          }
+      })
+    });
+  });
+</script>
+
 <!-- Modal Structure -->
 <div id="modal2" class="modal row">
   <div class="modal-content">
@@ -49,50 +70,40 @@ function upload_img(input) {
   {% csrf_token %}
 <!-- Modal Trigger -->
 <a class="col l12 waves-effect waves-light btn modal-trigger" href="#modal2">Читать инструкцию</a>
-{#    <div class="row">#}
-      <div class="input-field col s12">
-        <input type="text" name="title" length="50" required>
-        <label for="title">Заголовок</label>
-      </div>
-{#    </div>#}
+    <div class="input-field col s12">
+      <input type="text" name="title" length="50" required>
+      <label for="title">Заголовок</label>
+    </div>
     <div class="row">
       <div class="input-field col s12">
         <textarea class="materialize-textarea" name="description" id="description" length="1000" required></textarea>
         <label for="textarea1">Описание мероприятия</label>
       </div>
     </div>
-{#      <div class="row">#}
-        <div class="input-field col s12">
-                {% for loc in form.location %}
-                    {{  loc }}
-                {% endfor %}
-            <label>Город</label>
+
+    <div class="input-field col s12" id="location_select">
+        {{ form.location }}
+        <label>Город</label>
+    </div>
+
+    <div class="col s10">
+      <div class="file-field input-field file-upload">
+        <div class="btn">
+          <span>Загрузить афишу</span>
+          <input type="file" name="image" onchange="upload_img(this);" />
         </div>
-{#      </div>#}
-
-{#      <div class="row">#}
-        <div class="col s10">
-          <div class="file-field input-field file-upload">
-            <div class="btn">
-              <span>Загрузить афишу</span>
-              <input type="file" name="image" onchange="upload_img(this);" />
-            </div>
-            <div class="file-path-wrapper">
-              <input class="file-path validate" type="text" placeholder="Загрузите афишу вашего мероприятия" required aria-disabled="true">
-            </div>
-          </div>
-          </div>
-        <div class="col s2 "><img id="img_id" class="materialboxed responsive-img" src="{% static 'placeHolder.png' %}" alt="Ваша афиша"/></div>
-
-{#      </div>#}
-
-{#      <div class="row">#}
-        <div class="input-field col s12">
-          <i class="material-icons prefix">textsms</i>
-          <input type="text" id="autocomplete-input" class="autocomplete">
-          <label for="autocomplete-input">Autocomplete</label>
+        <div class="file-path-wrapper">
+          <input class="file-path validate" type="text" placeholder="Загрузите афишу вашего мероприятия" required aria-disabled="true">
         </div>
-{#      </div>#}
+      </div>
+      </div>
+    <div class="col s2 "><img id="img_id" class="materialboxed responsive-img" src="{% static 'placeHolder.png' %}" alt="Ваша афиша"/></div>
+
+    <div class="input-field col s12">
+      <i class="material-icons prefix">textsms</i>
+      <input type="text" id="autocomplete-input" class="autocomplete">
+      <label for="autocomplete-input">Autocomplete</label>
+    </div>
 
     <div class="row">
         <div class="input-field col s5 offset-s1">
@@ -282,6 +293,7 @@ function upload_img(input) {
   })
   });
   </script>
+
 
 
 {% endblock %}
