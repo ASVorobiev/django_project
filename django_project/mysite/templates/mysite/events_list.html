@@ -2,6 +2,11 @@
 {% load staticfiles %}
 {% load el_pagination_tags %}
 
+{% block scripts %}
+  <script type="text/javascript" src="//vk.com/js/api/openapi.js?130"></script>
+
+{% endblock %}
+
 {% block slider %}
   <div class="card">
       <div class="slider">
@@ -80,8 +85,25 @@
 
 
 {% block pin %}
-<ul class="section table-of-contents pinned">
-  <li><a href="#" class="active">Sidebar</a></li>
-  <li><a href="#" class="">Toast</a></li>
-</ul>
+<div class="tabs-wrapper">
+{#<div class="card-panel">#}
+{#<ul class="section table-of-contents pinned">#}
+{#  <li><a href="#" class="active">Sidebar</a></li>#}
+{#  <li><a href="#" class="">Toast</a></li>#}
+{#</ul>#}
+{#</div>#}
+</div>
+
+{% if vk_group_id %}
+  <div class="row">
+  <div class="card-panel">
+    <!-- VK Widget -->
+    <div id="vk_groups"></div>
+      <script type="text/javascript">
+    VK.Widgets.Group("vk_groups", {mode: 3, width: "auto", height: "600", color1: 'FFFFFF', color2: '000000', color3: '5E81A8'}, {{ vk_group_id }});
+  </script>
+  </div>
+  </div>
+{% endif %}
+
 {% endblock %}

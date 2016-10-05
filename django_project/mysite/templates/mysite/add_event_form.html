@@ -2,6 +2,7 @@
 {% load staticfiles %}
 
 {% block content %}
+<script type="text/javascript" src="//vk.com/js/api/openapi.js?130"></script>
 <script type="text/javascript">
   $(document).ready(function(){
     // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
@@ -68,23 +69,19 @@ function upload_img(input) {
     </div>
 
     <div class="row" hidden id="place_row">
-{#    <div class="input-field col s12" id="local_places">#}
-{#        {{ form.location }}#}
-{#        <label>Место</label>#}
-{#    </div>#}
-    <div class="input-field col s12">
-    <select id="local_places" class="icons">
+      <div class="input-field col s12">
+        <select id="local_places" name="organizer" class="icons">
 
-    </select>
-    <label>Место</label>
-  </div>
+        </select>
+        <label>Место</label>
       </div>
+    </div>
 
     <div class="col s10">
       <div class="file-field input-field file-upload">
         <div class="btn">
           <span>Загрузить афишу</span>
-          <input type="file" name="image" onchange="upload_img(this);" />
+          <input type="file" name="image" onchange="upload_img(this);" accept="image/*,image/jpeg"/>
         </div>
         <div class="file-path-wrapper">
           <input class="file-path validate" type="text" placeholder="Загрузите афишу вашего мероприятия" required aria-disabled="true">
@@ -125,7 +122,6 @@ function upload_img(input) {
     $(document).ready(function(){
     $('.tabs-wrapper .row').pushpin({ top: $('.tabs-wrapper').offset().top });
   });
-
   </script>
 
   <div class="tabs-wrapper">
@@ -170,6 +166,15 @@ function upload_img(input) {
 {#      <a href="#" id="text_ru_details">Подробнее...</a>#}
 {#    </div>#}
 
+      <!-- VK Widget -->
+
+<div class="card-panel center-align">
+  Возникли вопросы?
+  <div id="vk_contact_us" class="center-align"></div>
+  <script type="text/javascript" class="center-align">
+    VK.Widgets.ContactUs("vk_contact_us", {height: 100}, 271252027);
+  </script>
+</div>
   </div>
  </div>
 
@@ -184,6 +189,10 @@ function upload_img(input) {
     <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Закрыть</a>
   </div>
 </div>
+
+
+
+
 
 {% endblock %}
 
@@ -306,7 +315,7 @@ function upload_img(input) {
             var items = [];
             items.push('<option value="" disabled selected>Выберите место проведения</option>');
             $.each( json.location_places, function( key, val ) {
-              items.push( "<option data-icon='"+ val['logo'] +"' value='" + key + "' class='left circle'>" + val['name'] + "</option>" );
+              items.push( "<option data-icon='"+ val['logo'] +"' value='" + key + "' class='left circle'F>" + val['name'] + "</option>" );
             });
             $('#local_places').append(items);
             $('#local_places').material_select();

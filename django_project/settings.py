@@ -37,6 +37,7 @@ USE_L10N = True
 USE_TZ = True
 MEDIA_ROOT = 'C:\\vKalendare\\storage'
 MEDIA_URL = '/storage/'
+DATE_FORMAT = 'd E Y'
 
 STATIC_ROOT = ''
 STATIC_URL = '/static/'

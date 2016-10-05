@@ -65,12 +65,12 @@ class EventsAdmin(admin.ModelAdmin):
         }),
         ('Advanced options', {
             'classes': ('collapse',),
-            'fields': ('category_id', 'duration', 'finish_date', 'is_perodic', 'shedule', 'place_id', 'place_comment',
-                       'organizer_id', 'is_free', 'tickets', 'tags', 'phone', 'url', 'priority', 'is_active',
+            'fields': ('category_id', 'duration', 'finish_date', 'is_perodic', 'shedule', 'place_comment',
+                       'local_organizer', 'place', 'is_free', 'tickets', 'tags', 'phone', 'url', 'priority', 'is_active',
                        'export_vk', 'is_deleted', 'created', 'modified'),
         }),
     )
-    readonly_fields = ['modified', 'created', 'image_small']
+    readonly_fields = ['modified', 'created', 'image_small', 'local_organizer']
     actions = ['is_active']
     # exclude = ['thumb']
     search_fields = ['title', 'description']

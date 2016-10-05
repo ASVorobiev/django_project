@@ -50,6 +50,7 @@ def events_list(request, site_screen_name=None):
                                                            'priority_events': priority_events,
                                                            'locations': locations,
                                                            'current_location': current_location,
+                                                           'vk_group_id': current_location.vk_group_id
                                                            })
     else:
         all_events = Events.objects.exclude(start_date__lte=today).exclude(
@@ -58,7 +59,8 @@ def events_list(request, site_screen_name=None):
         return render(request, 'mysite/events_list.html', {'location_events': all_events,
                                                            'locations': locations,
                                                            'priority_events': priority_events,
-                                                           'current_location': current_location})
+                                                           'current_location': current_location,
+                                                           'vk_group_id': None})
 
 
 def events_details(request, site_screen_name, pk, title_translit='dont_remove'):
@@ -148,6 +150,7 @@ def add_event_form(request):
             new_event.location = request.POST['location']
             new_event.start_time = request.POST['start_time']
             new_event.start_date = request.POST['start_date']
+            new_event.organizer = request.POST['organizer']
             new_event.image = request.FILES['image']
             new_event.thumb = request.FILES['thumb']
             # res = new_event.save()
@@ -191,6 +194,7 @@ def jdata(request):
             sql_query = "SELECT * from mysite_organizers where id in (SELECT DISTINCT organizer_id from mysite_events WHERE location_id = %s) AND confidence > 1 AND vk_type = 'group' ORDER BY followers" % request.POST['location_id']
 
             places = MysiteOrganizers.objects.raw(sql_query)
+            # places = Events.local_organizer(self)
             # places = Events.objects.get(pk=request.POST['location_id'])
             d = {}
             for place in places:
