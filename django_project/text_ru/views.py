@@ -95,10 +95,10 @@ def advert(request):
     if request.method == "POST":
         form = TextForm(request.POST)
         # if form.is_valid():
-        context = {'unique': '0.00', 'seo_check': {'count_chars_with_space': 110, 'mixed_words': [], 'spam_percent': 22, 'list_keys': [{'count': 2, 'key_title': 'друг'}], 'count_words': 15, 'count_chars_without_space': 96, 'water_percent': 16, 'list_keys_group': [{'count': 2, 'sub_keys': [], 'key_title': 'друг'}]}, 'text_unique': '0.00', 'spell_check': [], 'result_json': {'clear_text': 'На основе одного шаблона генерируется множество статей с невысокой уникальностью очень похожих друг на друга', 'urls': [{'url': 'http://vk.com/wall-91072377', 'plagiat': 100, 'words': '0 1 2 3 4 5 6 7 8 9 10 11 12 13 14'}, {'url': 'http://pr-cy.ru/lib/seo/Kontent-sayta-SEO-kopirayting-Unikal-nost-kontenta', 'plagiat': 100, 'words': '0 1 2 3 4 5 6 7 8 9 10 11 12 13 14'}], 'unique': 0, 'mixed_words': '', 'date_check': '19.09.2016 19:58:30'}, 'text_uid': '57e0192d87fb8'}
 
-        #context['text_ru'] = send_text(request.POST['description'])
-        # context['text_ru'] =
+        # context = {'unique': '0.00', 'seo_check': {'count_chars_with_space': 110, 'mixed_words': [], 'spam_percent': 22, 'list_keys': [{'count': 2, 'key_title': 'друг'}], 'count_words': 15, 'count_chars_without_space': 96, 'water_percent': 16, 'list_keys_group': [{'count': 2, 'sub_keys': [], 'key_title': 'друг'}]}, 'text_unique': '0.00', 'spell_check': [], 'result_json': {'clear_text': 'На основе одного шаблона генерируется множество статей с невысокой уникальностью очень похожих друг на друга', 'urls': [{'url': 'http://vk.com/wall-91072377', 'plagiat': 100, 'words': '0 1 2 3 4 5 6 7 8 9 10 11 12 13 14'}, {'url': 'http://pr-cy.ru/lib/seo/Kontent-sayta-SEO-kopirayting-Unikal-nost-kontenta', 'plagiat': 100, 'words': '0 1 2 3 4 5 6 7 8 9 10 11 12 13 14'}], 'unique': 0, 'mixed_words': '', 'date_check': '19.09.2016 19:58:30'}, 'text_uid': '57e0192d87fb8'}
+
+        context = send_text(request.POST['description'])
         urls = []
         for url in context['result_json']['urls']:
             if url['plagiat'] > 70:
@@ -107,7 +107,7 @@ def advert(request):
                 print('Уникальность описания больше 30%')
         context['urls'] = urls
 
-        sleep(0.1)
+        sleep(2)
         return HttpResponse(json.dumps(context), content_type='application/json')
 
     # return render_to_response('text_ru.html',

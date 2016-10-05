@@ -1,8 +1,11 @@
 import hashlib
 import os
 import re
+
+from django.db.models import Manager
+
 from django_project.user_auth.models import CustomUser
-from django.db import models
+from django.db import models, connection
 
 from django.utils.datetime_safe import datetime
 from django.utils.safestring import mark_safe
@@ -86,6 +89,20 @@ def user_directory_path(instance, filename):
     return local_path
 
 
+class MyManager(Manager):
+    def raw_as_qs(self, raw_query, params=()):
+        """Execute a raw query and return a QuerySet.  The first column in the
+        result set must be the id field for the model.
+        :type raw_query: str | unicode
+        :type params: tuple[T] | dict[str | unicode, T]
+        :rtype: django.db.models.query.QuerySet
+        """
+        cursor = connection.cursor()
+        try:
+            cursor.execute(raw_query, params)
+            return self.filter(id__in=(x[0] for x in cursor))
+        finally:
+            cursor.close()
 
 
 
@@ -93,7 +110,7 @@ class Events(models.Model):
     owner = models.ForeignKey(CustomUser, blank=True, null=True, verbose_name='Создатель')
     location = models.ForeignKey(Locations, verbose_name='Локация')
     title = models.CharField(max_length=255, verbose_name='Заголовок')
-    description = models.TextField(blank=True, verbose_name='Описание')
+    description = models.TextField(blank=True, verbose_name='Описание')  # strip=True
     # 'events/%Y/%m/%d'
     image = models.ImageField(max_length=255, blank=True, null=True, verbose_name='афиша', upload_to=user_directory_path)
     thumb = models.ImageField(max_length=255, blank=True, null=True, verbose_name='предпросмотр афиши', upload_to=user_directory_path)
@@ -124,6 +141,10 @@ class Events(models.Model):
     created = models.IntegerField(default=int(datetime.utcnow().timestamp()))
     modified = models.IntegerField(default=int(datetime.utcnow().timestamp()))
 
+    def clean(self):
+        if self.description:
+            return self.description.strip()
+
     def image_small(self):
         if self.image:
             return mark_safe('<img src="%s" width="150" height="150" />' % self.image.url)
@@ -136,28 +157,33 @@ class Events(models.Model):
         trans = translit(self.title.strip(), 'ru', reversed=True)
         return re.sub("[^.\w-]+", '_', trans)
 
-    # local_organizer = loc_org(organizer).local_organizer
+    class loc_org(models.Field):
+        #     description = "A hand of cards (bridge style)"
+        #     # local_organizer = models.ForeignKey
+        #     def __init__(self, *args, **kwargs):
+        #         kwargs['max_length'] = 104
+        #         super(Events, self).__init__(*args, **kwargs)
+        #
+        def local_organizer(self):
+            sql_query = "SELECT * from mysite_organizers where id in (SELECT DISTINCT organizer_id from mysite_events WHERE location_id = %s) AND confidence > 1 AND vk_type = 'group' ORDER BY followers" % 1
+            return MysiteOrganizers.objects.raw(sql_query)
+
+        def __str__(self):
+            return self.name
+
+    objects = MyManager()
+    local_organizer = loc_org().local_organizer()
     # local_organizer = loc_org().local_organizer(organizer)
-    def local_organizer(self):
-        sql_query = "SELECT * from mysite_organizers where id in (SELECT DISTINCT organizer_id from mysite_events WHERE location_id = %s) AND confidence > 1 AND vk_type = 'group' ORDER BY followers" % Events.organizer.id
-        return MysiteOrganizers.objects.raw(sql_query)
-    local_organizer.short_description = 'Организатор'
-    local_organizer.allow_tags = True
+    # def local_organizer(self):
+    #     sql_query = "SELECT * from mysite_organizers where id in (SELECT DISTINCT organizer_id from mysite_events WHERE location_id = %s) AND confidence > 1 AND vk_type = 'group' ORDER BY followers" % 1
+    #     return MysiteOrganizers.objects.raw(sql_query).model
+    # local_organizer.short_description = 'Организатор'
+    # local_organizer.allow_tags = True
 
     def __str__(self):
         return self.title
 
 
-# class loc_org(models.Model):
-#     description = "A hand of cards (bridge style)"
-#     # local_organizer = models.ForeignKey
-#     def __init__(self, *args, **kwargs):
-#         kwargs['max_length'] = 104
-#         super(Events, self).__init__(*args, **kwargs)
-#
-#     def local_organizer(self, organizer):
-#         sql_query = "SELECT * from mysite_organizers where id in (SELECT DISTINCT organizer_id from mysite_events WHERE location_id = %s) AND confidence > 1 AND vk_type = 'group' ORDER BY followers" % organizer
-#         return MysiteOrganizers.objects.raw(sql_query)
 
 
 

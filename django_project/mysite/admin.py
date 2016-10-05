@@ -59,6 +59,7 @@ class EventsAdmin(admin.ModelAdmin):
     button.short_description = 'Action'
     button.allow_tags = True
 
+
     fieldsets = (
         (None, {
             'fields': ('location', 'owner', 'title', 'start_date', 'start_time', 'description', 'image', 'thumb', 'image_small')
@@ -66,7 +67,7 @@ class EventsAdmin(admin.ModelAdmin):
         ('Advanced options', {
             'classes': ('collapse',),
             'fields': ('category_id', 'duration', 'finish_date', 'is_perodic', 'shedule', 'place_comment',
-                       'local_organizer', 'place', 'is_free', 'tickets', 'tags', 'phone', 'url', 'priority', 'is_active',
+                       'local_organizer', 'is_free', 'tickets', 'tags', 'phone', 'url', 'priority', 'is_active',
                        'export_vk', 'is_deleted', 'created', 'modified'),
         }),
     )

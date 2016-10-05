@@ -193,8 +193,8 @@ def jdata(request):
         if request.POST['task'] == 'get_location_places':
             sql_query = "SELECT * from mysite_organizers where id in (SELECT DISTINCT organizer_id from mysite_events WHERE location_id = %s) AND confidence > 1 AND vk_type = 'group' ORDER BY followers" % request.POST['location_id']
 
-            places = MysiteOrganizers.objects.raw(sql_query)
-            # places = Events.local_organizer(self)
+            # places = MysiteOrganizers.objects.raw(sql_query)
+            places = Events.local_organizer
             # places = Events.objects.get(pk=request.POST['location_id'])
             d = {}
             for place in places:

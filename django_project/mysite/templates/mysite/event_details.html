@@ -27,38 +27,44 @@
           <div class="col s12 l5">
               <img class="materialboxed responsive-img" src={{ event_data.image.url }}>
           </div>
-          <div class="col s12 l7">
-            <div class="row center-align">
-                <h3>{{ event_data.title }}</h3>
+          <div class="col s12 l7 section">
+            <div class=" center-align">
+                <h4>{{ event_data.title }}</h4>
             </div>
-            <div>
-                Начало:
+          <div class="divider"></div>
+            <div class="section">
+                <i class="tiny material-icons">schedule</i>
                 <a>{{ event_data.start_date }} {{ event_data.start_date|date:'(l)' }}</a> в
                 <a>{{ event_data.start_time }}</a> (через {{ event_data.start_date|timeuntil }})
             </div>
-
-            <div class="row">Описаниe:
-                <p class="black-text">{{ event_data.description|linebreaks }}</p>
+          <div class="divider"></div>
+            {% if event_data.description %}
+            <div class="section">
+            {% spaceless %}
+{#              {{ event_data.clean|urlize }}#}
+              {{ event_data.description|urlize|linebreaks }}
+            {% endspaceless %}
             </div>
-            <div class="row">
-              <div id="vk_like"></div>
-              <script type="text/javascript">
-                VK.Widgets.Like("vk_like", {type: "full", height: 30});
-              </script>
-            </div>
-
-             <script type="text/javascript"><!--
-                document.write(VK.Share.button(false,{type: "round_nocount", text: "Сохранить к себе"}));
-              --></script>
-
-          </div>
-          <div id="vk_comments"></div>
-          <script type="text/javascript">
-            VK.Widgets.Comments("vk_comments", {limit: 10, width: "665", attach: "*"});
-          </script>
+            {% endif %}
+{#            <div class="row">#}
+{#              <div id="vk_like"></div>#}
+{#              <script type="text/javascript">#}
+{#                VK.Widgets.Like("vk_like", {type: "full", height: 30});#}
+{#              </script>#}
+{#            </div>#}
+{##}
+{#             <script type="text/javascript"><!--#}
+{#                document.write(VK.Share.button(false,{type: "round_nocount", text: "Сохранить к себе"}));#}
+{#              --></script>#}
+{##}
+{#          </div>#}
+{#          <div id="vk_comments"></div>#}
+{#          <script type="text/javascript">#}
+{#            VK.Widgets.Comments("vk_comments", {limit: 10, width: "665", attach: "*"});#}
+{#          </script>#}
       </div>
   </div>
-
+</div>
 
 
 
@@ -95,7 +101,7 @@
               </div>
               <div class="card-reveal">
                   <span class="card-title grey-text text-darken-4">{{ event.title }}<i class="material-icons right">close</i></span>
-                  <p>{{ event.description|linebreaksbr }}</p>
+                  <p>{{ event.description|urlize|linebreaksbr }}</p>
               </div>
               <div class="card-action">
                   <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span>Подробнее...</a>

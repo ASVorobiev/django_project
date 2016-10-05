@@ -2805,7 +2805,7 @@ video.responsive-video {
 }
 
 .breadcrumb {
-  font-size: 18px;
+  font-size: 14px;
   color: rgba(255, 255, 255, 0.7);
 }
 
@@ -2825,7 +2825,7 @@ video.responsive-video {
   font-family: 'Material Icons';
   font-weight: normal;
   font-style: normal;
-  font-size: 25px;
+  font-size: 18px;
   margin: 1px 5px;
   -webkit-font-smoothing: antialiased;
 }
