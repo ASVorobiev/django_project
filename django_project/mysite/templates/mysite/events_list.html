@@ -35,11 +35,43 @@
   .material-icons.md-14 { font-size: 14px; }
   </style>
   <div class="">
+
+
+
+
+
       <div class="row">
 
+
+            <div class="row">
+      <div class="col s12 m5 l4">
+        <div class="card-panel teal">
+          <span class="white-text">I am a very simple card. I am good at containing small bits of information.
+          I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
+          </span>
+        </div>
+      </div>
+
+      <div class="col s12 m5 l4">
+        <div class="card-panel  red lighten-1">
+          <span class="white-text">I am a very simple card. I am good at containing small bits of information.
+          I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
+          </span>
+        </div>
+      </div>
+
+      <div class="col s12 m5 l4">
+        <div class="card-panel teal">
+          <span class="white-text">I am a very simple card. I am good at containing small bits of information.
+          I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
+          </span>
+        </div>
+      </div>
+    </div>
+
           {% for event in location_events %}
-              <div class="col s12 m4 l3">
-                  <div class="card sticky-action medium z-depth-2">
+              <div class="col s12 m4 l4">
+                  <div class="card large sticky-action z-depth-2">
 
                       <div class="card-image waves-effect waves-block waves-light">
                         <div class="" style="font-size: small;">
@@ -59,7 +91,7 @@
                         {% endif %}
                       </div>
                       <div class="card-content">
-                          <span class="card-title activator grey-text text-darken-4">{{ event.title }}<i class="material-icons right">more_vert</i></span>
+                          <span class="card-title activator grey-text text-darken-4"><p style="font-weight:600">{{ event.title }}</p><i class="material-icons right">more_vert</i></span>
                           <p>{{ event.description|linebreaksbr }}</p>
                       </div>
                       <div class="card-reveal">
