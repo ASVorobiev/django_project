@@ -4,7 +4,7 @@ import json
 import os
 from datetime import date, timedelta
 from io import BytesIO
-
+import random
 
 from django.conf import settings
 from django.core.files.base import ContentFile
@@ -33,17 +33,15 @@ def home(request):
 
 
 def events_list(request, site_screen_name=None):
-
-    priority_events = Events.objects.exclude(start_date__lte=today).order_by('-priority', 'start_date')[:10]
-    locations = Locations.objects.all()
-
+    locations = Locations.objects.exclude(created=0).order_by('name').all()
     if site_screen_name:
-        location = Locations.objects.get(site_screen_name=site_screen_name)
+        location = Locations.objects.exclude(created=0).get(site_screen_name=site_screen_name)
         location_id = location.id
         location_events = Events.objects.filter(location=location_id).exclude(start_date__lte=today).exclude(
-            start_date__gte=today + timedelta(days=45)).order_by('priority').order_by('start_date')
+            start_date__gte=today + timedelta(days=45)).order_by('-priority').order_by('start_date')
         priority_events = Events.objects.filter(location=location_id).exclude(
             start_date__lte=today).order_by('-priority', 'start_date')[:10]
+        # priority_events = random.shuffle(priority_events)
         current_location = Locations.objects.get(id=location_id)
 
         return render(request, 'mysite/events_list.html', {'location_events': location_events,
@@ -53,6 +51,8 @@ def events_list(request, site_screen_name=None):
                                                            'vk_group_id': current_location.vk_group_id
                                                            })
     else:
+        priority_events = Events.objects.exclude(start_date__lte=today).order_by('-priority', 'start_date', '?')[:25]
+        # priority_events = random.shuffle(priority_events)
         all_events = Events.objects.exclude(start_date__lte=today).exclude(
             start_date__gte=today + timedelta(days=45)).order_by('start_date')
         current_location = 'Выберите ваш город'
