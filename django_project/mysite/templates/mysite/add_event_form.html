@@ -90,11 +90,17 @@ function upload_img(input) {
       </div>
     <div class="col s2 "><img id="img_id" class="materialboxed responsive-img" src="{% static 'placeHolder.png' %}" alt="Ваша афиша"/></div>
 
+    <div class="row">
     <div class="input-field col s12">
       <i class="material-icons prefix">textsms</i>
       <input type="text" id="autocomplete-input" class="autocomplete">
       <label for="autocomplete-input">Autocomplete</label>
     </div>
+      </div>
+
+
+    <div class="chips-initial"></div>
+
 
     <div class="row">
         <div class="input-field col s5 offset-s1">
@@ -231,6 +237,10 @@ function upload_img(input) {
       vibrate: true,         // vibrate the device when dragging clock hand
       container: 'datepicker'          // default will append clock next to input
     });
+
+
+
+
   });
   </script>
 
@@ -334,6 +344,25 @@ function upload_img(input) {
     });
   });
 </script>
+
+  <script type="application/javascript">
+ $(document).ready(function () {
+   $('.chips').material_chip();
+  $('.chips-initial').material_chip({
+    data: [{
+      tag: 'Apple',
+    }, {
+      tag: 'Microsoft',
+    }, {
+      tag: 'Google',
+    }],
+  });
+  $('.chips-placeholder').material_chip({
+    placeholder: 'Enter a tag',
+    secondaryPlaceholder: '+Tag',
+  });
+ })
+  </script>
 
 {% endblock %}
 
