@@ -93,7 +93,8 @@ INSTALLED_APPS = (
     'django_project.user_auth',
     'django_project.mysite',
     'django_project.text_ru',
-    'el_pagination'
+    'el_pagination',
+    'taggit'
 )
 
 LOGGING = {

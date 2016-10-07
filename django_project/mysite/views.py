@@ -33,7 +33,7 @@ def home(request):
 
 
 def events_list(request, site_screen_name=None):
-    locations = Locations.objects.exclude(created=0).order_by('name').all()
+    locations = Locations.objects.exclude(created=0).order_by().all()
     if site_screen_name:
         location = Locations.objects.exclude(created=0).get(site_screen_name=site_screen_name)
         location_id = location.id
@@ -193,8 +193,8 @@ def jdata(request):
         if request.POST['task'] == 'get_location_places':
             sql_query = "SELECT * from mysite_organizers where id in (SELECT DISTINCT organizer_id from mysite_events WHERE location_id = %s) AND confidence > 1 AND vk_type = 'group' ORDER BY followers" % request.POST['location_id']
 
-            # places = MysiteOrganizers.objects.raw(sql_query)
-            places = Events.local_organizer
+            places = MysiteOrganizers.objects.raw(sql_query)
+            # places = Events.local_organizer
             # places = Events.objects.get(pk=request.POST['location_id'])
             d = {}
             for place in places:

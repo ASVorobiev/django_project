@@ -20,20 +20,16 @@
 
 <!-- Превью афиши -->
 <script type="text/javascript">
-function upload_img(input) {
+  function upload_img(input) {
     if (input.files && input.files[0]) {
-        var reader = new FileReader();
-
-        reader.onload = function (e) {
-            $('#img_id').attr('src', e.target.result);
-        }
-
-        reader.readAsDataURL(input.files[0]);
+      var reader = new FileReader();
+      reader.onload = function (e) {
+          $('#img_id').attr('src', e.target.result);
+      };
+      reader.readAsDataURL(input.files[0]);
     }
-}
+  }
 </script>
-
-
 
 <!-- Modal Structure -->
 <div id="modal2" class="modal row">
@@ -42,16 +38,15 @@ function upload_img(input) {
     <p>A bunch of text</p>
   </div>
   <div class="modal-footer">
-    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Согласен</a>
   </div>
 </div>
 
 <div class="">
-
   <form class="card-panel z-depth-3" action="{% url 'add_event_form'%}" method="post" id="main_form" name="main_form" enctype="multipart/form-data">
-  {% csrf_token %}
-<!-- Modal Trigger -->
-<a class="col l12 waves-effect waves-light btn modal-trigger" href="#modal2">Читать инструкцию</a>
+    {% csrf_token %}
+    <!-- Modal Trigger -->
+    <a class="col s12 m12 l12 waves-effect waves-light btn modal-trigger" href="#modal2">Читать инструкцию</a>
     <div class="input-field col s12">
       <input type="text" name="title" length="50" required>
       <label for="title">Заголовок</label>
@@ -90,32 +85,34 @@ function upload_img(input) {
       </div>
     <div class="col s2 "><img id="img_id" class="materialboxed responsive-img" src="{% static 'placeHolder.png' %}" alt="Ваша афиша"/></div>
 
-    <div class="input-field col s12">
-      <i class="material-icons prefix">textsms</i>
-      <input type="text" id="autocomplete-input" class="autocomplete">
-      <label for="autocomplete-input">Autocomplete</label>
+    <div class="row">
+      <div class="input-field col s12">
+        <i class="material-icons prefix">textsms</i>
+        <input type="text" id="autocomplete-input" class="autocomplete">
+        <label for="autocomplete-input">Autocomplete</label>
+      </div>
+    </div>
+
+    <div class="chips-initial"></div>
+
+    <div class="row">
+      <div class="input-field col s5 offset-s1">
+         <i for="date">Дата</i>
+         <input id="date" type="date" name="start_date" class="datepicker" value="2016-10-08">
+      </div>
+
+      <div class="input-field col s4 offset-s1">
+        <i for="time">Время</i>
+        <input type="time" id="time" name="start_time" class="timepicker" value="11:10">
+      </div>
     </div>
 
     <div class="row">
-        <div class="input-field col s5 offset-s1">
-              <i for="date">Дата</i>
-               <input id="date" type="date" name="start_date" class="datepicker" value="2016-10-08">
-        </div>
-
-        <div class="input-field col s4 offset-s1">
-            <i for="time">Время</i>
-               <input type="time" id="time" name="start_time" class="timepicker" value="11:10">
-        </div>
-    </div>
-
-
-
-    <div class="row">
-{#      <div class="col s4 hide-on-med-and-up">#}
-{#          <button type="button" onclick="" class="blue-grey lighten-1 white-text waves-effect waves-light center-align flow-text" style="font-weight: bold" id="check_text" name="check_text">#}
-{#          Проверить на уникальность#}
-{#           </button>#}
-{#      </div>#}
+  {#      <div class="col s4 hide-on-med-and-up">#}
+  {#          <button type="button" onclick="" class="blue-grey lighten-1 white-text waves-effect waves-light center-align flow-text" style="font-weight: bold" id="check_text" name="check_text">#}
+  {#          Проверить на уникальность#}
+  {#           </button>#}
+  {#      </div>#}
       <div class="col s8 m12 l12 right-align">
           <button class="waves-effect waves-light btn-large" type="submit" name="action">Отправить на модерацию
               <i class="material-icons right">send</i>
@@ -129,12 +126,11 @@ function upload_img(input) {
 {% block pin %}
   <script type="application/javascript">
     $(document).ready(function(){
-    $('.tabs-wrapper .row').pushpin({ top: $('.tabs-wrapper').offset().top });
-  });
+      $('.tabs-wrapper .row').pushpin({ top: $('.tabs-wrapper').offset().top });
+    });
   </script>
 
   <div class="tabs-wrapper">
-
     <div class="row">
       <h3 class="red lighten-1 white-text center-align flow-text" style="font-weight: bolder" >
           Внимание, АКЦИЯ!
@@ -156,10 +152,9 @@ function upload_img(input) {
       </div>
     </div>
 
-      <a type="button" onclick="" class="blue-grey lighten-1 white-text waves-effect waves-light center-align flow-text" style="font-weight: bolder" id="check_text" name="check_text">
-          Проверить на уникальность
-      </a>
-
+    <a type="button" onclick="" class="blue-grey lighten-1 white-text waves-effect waves-light center-align flow-text" style="font-weight: bolder" id="check_text" name="check_text">
+        Проверить на уникальность
+    </a>
 
 {#      <button class="btn-large blue-grey lighten-1 waves-effect waves-light flow-text" form="main_form" type="submit" id="check_text">#}
 {##}
@@ -175,17 +170,16 @@ function upload_img(input) {
 {#      <a href="#" id="text_ru_details">Подробнее...</a>#}
 {#    </div>#}
 
-      <!-- VK Widget -->
-
-<div class="card-panel center-align">
-  Возникли вопросы?
-  <div id="vk_contact_us" class="center-align"></div>
-  <script type="text/javascript" class="center-align">
-    VK.Widgets.ContactUs("vk_contact_us", {height: 100}, 271252027);
-  </script>
-</div>
+    <!-- VK Widget -->
+    <div class="card-panel center-align">
+      Возникли вопросы?
+      <div id="vk_contact_us" class="center-align"></div>
+      <script type="text/javascript" class="center-align">
+        VK.Widgets.ContactUs("vk_contact_us", {height: 100}, 271252027);
+      </script>
+    </div>
   </div>
- </div>
+</div>
 
 <div id="modal_results" class="modal">
   <div class="modal-content">
@@ -198,143 +192,155 @@ function upload_img(input) {
     <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Закрыть</a>
   </div>
 </div>
-
-
-
-
-
 {% endblock %}
 
 {% block scripts %}
   <script type="text/javascript" src="{% static 'js/materialize.clockpicker.js' %}"></script>
   <link rel="stylesheet" href="{% static 'css/materialize.clockpicker.css' %}">
-  <script type="text/javascript" src="{% static 'js/materialize.js' %}"></script>
+{#  <script type="text/javascript" src="{% static 'js/materialize.js' %}"></script>#}
 
   <script type="application/javascript">
+    $(document).ready(function(){
+      $('.datepicker').pickadate({
+        selectMonths: true, // Creates a dropdown to control month
+        firstDay: 0,
+        selectYears: 4 // Creates a dropdown of 15 years to control year
+      });
 
-
-  $(document).ready(function(){
-    $('.datepicker').pickadate({
-      selectMonths: true, // Creates a dropdown to control month
-      firstDay: 0,
-      selectYears: 4 // Creates a dropdown of 15 years to control year
+      $('.timepicker').pickatime({
+        default: '',           // default time, 'now' or '13:14' e.g.
+        fromnow: 0,            // set default time to * milliseconds from now
+        donetext: 'Применить',      // done button text
+        autoclose: true,      // auto close when minute is selected
+        ampmclickable: false,  // set am/pm button on itself
+        darktheme: false,      // set to dark theme
+        twelvehour: false,      // change to 12 hour AM/PM clock from 24 hour
+        vibrate: true,         // vibrate the device when dragging clock hand
+        container: 'datepicker'          // default will append clock next to input
+      });
     });
-
-    $('.timepicker').pickatime({
-      default: '',           // default time, 'now' or '13:14' e.g.
-      fromnow: 0,            // set default time to * milliseconds from now
-      donetext: 'Применить',      // done button text
-      autoclose: true,      // auto close when minute is selected
-      ampmclickable: false,  // set am/pm button on itself
-      darktheme: false,      // set to dark theme
-      twelvehour: false,      // change to 12 hour AM/PM clock from 24 hour
-      vibrate: true,         // vibrate the device when dragging clock hand
-      container: 'datepicker'          // default will append clock next to input
-    });
-  });
   </script>
 
   <script type="application/javascript">
+    $(function(){
+      $("#check_text").click(function(e) {
+        e.preventDefault();
+        $('#set_progress').replaceWith('<div id="set_progress" class="indeterminate"></div>');
 
-  $(function(){
-    $("#check_text").click(function(e) {
-      e.preventDefault();
-      $('#set_progress').replaceWith('<div id="set_progress" class="indeterminate"></div>');
+        $('#wont').hide();
+        $('#uniq_bar').show();
+        $('#check_text').attr("disabled", true);
 
-      $('#wont').hide();
-      $('#uniq_bar').show();
-      $('#check_text').attr("disabled", true);
+        $.ajax({
+          type: 'POST',
+          url: {% url 'jq' %},
+          dateType: 'json',
+          data:{
+            description:$('#description').val(),
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+          },
+          success:function (json) {
+            $("#modal_results_content").html(json.message);
+            $('#check_text').attr("disabled", false);
 
-      $.ajax({
-        type: 'POST',
-        url: {% url 'jq' %},
-        dateType: 'json',
-        data:{
-          description:$('#description').val(),
-          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
-        },
-        success:function (json) {
-          $("#modal_results_content").html(json.message);
-          $('#check_text').attr("disabled", false);
+            $('#set_progress').replaceWith('<div id="set_progress" class="determinate red" style="width: '+json.result_json.unique+'">'+json.result_json.unique+'%</div>');
+            $('#modal_results').openModal();
+            $('#modal_results_content').empty();
 
-          $('#set_progress').replaceWith('<div id="set_progress" class="determinate red" style="width: '+json.result_json.unique+'">'+json.result_json.unique+'%</div>');
-          $('#modal_results').openModal();
-          $('#modal_results_content').empty();
+  {#         Если есть ссылки плагиата #}
+            if (json.urls) {
+              var mydiv = $('<div/>', {
+                  id:     'mydiv',
+                  class:  'row'
+              });
+              $('#modal_results_content').append(mydiv);
 
-{#         Если есть ссылки плагиата #}
-          if (json.urls) {
-            var mydiv = $('<div/>', {
-                id:     'mydiv',
-                class:  'row'
-            });
-            $('#modal_results_content').append(mydiv);
+              var h5 = $("<h5/>", {
+                  class: 'red-text text-accent-2',
+                  text: 'Уникальность вашего текста крайне низка.'
+              }).appendTo(mydiv);
 
-            var h5 = $("<h5/>", {
-                class: 'red-text text-accent-2',
-                text: 'Уникальность вашего текста крайне низка.'
-            }).appendTo(mydiv);
+              var span1 = $("<span/>", {
+                  text: 'Данное описание уже было опубликовано здесь:'
+              }).appendTo(mydiv);
 
-            var span1 = $("<span/>", {
-                text: 'Данное описание уже было опубликовано здесь:'
-            }).appendTo(mydiv);
+              var blockquote = $('<blockquote/>').appendTo(mydiv);
+              var ul = $('<ul/>').appendTo(blockquote);
+              for (i=0; i<json.urls.length; i++){
+                var li = $('<li/>', {class: 'truncate'}).appendTo(ul);
+                $('<a/>', {
+                  text: json.urls[i].url,
+                  href: json.urls[i].url,
+                  target: "_blank"
+                }).appendTo(li);
+            }
 
-            var blockquote = $('<blockquote/>').appendTo(mydiv);
-            var ul = $('<ul/>').appendTo(blockquote);
-            for (i=0; i<json.urls.length; i++){
-              var li = $('<li/>', {class: 'truncate'}).appendTo(ul);
-              $('<a/>', {
-                text: json.urls[i].url,
-                href: json.urls[i].url,
-                target: "_blank"
-              }).appendTo(li);
+            var div3 = document.createElement('div');
+            div3.className = 'raw';
+
+            div3.textContent = 'Судя по всему Вы ранее публиковали данное описание на других ресурсах.' +
+                    'Если Вы хотите получить скидку или разместить ваше мероприятие бесплатно Вы можете:' +
+                    'Отредактировать описание вашего мероприятия, повысив его уникальность. Не забудьте обновить текст в нашей форме, когда он будет готов. Проверить текста на уникальность можно ТУТ.' +
+                    'В следующий раз публиковать Ваше мероприятие в первую очередь у нас на сайте БЕСПЛАТНО';
+            $("#modal_results_content").append(div3);
+  {#          Добавим ссылку на детали проверки#}
+            $("#text_ru_details").href = 'asdasdadsd'
           }
-
-          var div3 = document.createElement('div');
-          div3.className = 'raw';
-
-          div3.textContent = 'Судя по всему Вы ранее публиковали данное описание на других ресурсах.' +
-                  'Если Вы хотите получить скидку или разместить ваше мероприятие бесплатно Вы можете:' +
-                  'Отредактировать описание вашего мероприятия, повысив его уникальность. Не забудьте обновить текст в нашей форме, когда он будет готов. Проверить текста на уникальность можно ТУТ.' +
-                  'В следующий раз публиковать Ваше мероприятие в первую очередь у нас на сайте БЕСПЛАТНО';
-          $("#modal_results_content").append(div3);
-{#          Добавим ссылку на детали проверки#}
-          $("#text_ru_details").href = 'asdasdadsd'
         }
-      }
+      })
     })
-  })
-  });
+    });
   </script>
 
-<script>
-  $(function() {
-    $( "#id_location" ).change(function() {
-      console.log( "Handler for .select() called." );
-      $.ajax({
-        type: 'POST',
-        url: {% url 'jdata' %},
-        dateType: 'json',
-        data:{
-          task: 'get_location_places',
-          location_id:$('#id_location').val(),
-          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
-        },
-        success:function (json) {
-            $('#local_places').empty();
-            var items = [];
-            items.push('<option value="" disabled selected>Выберите место проведения</option>');
-            $.each( json.location_places, function( key, val ) {
-              items.push( "<option data-icon='"+ val['logo'] +"' value='" + key + "' class='left circle'F>" + val['name'] + "</option>" );
-            });
-            $('#local_places').append(items);
-            $('#local_places').material_select();
-            $('#place_row').show();
-          }
-      })
+  <script>
+    $(function() {
+      $( "#id_location" ).change(function() {
+        console.log( "Handler for .select() called." );
+        $.ajax({
+          type: 'POST',
+          url: {% url 'jdata' %},
+          dateType: 'json',
+          data:{
+            task: 'get_location_places',
+            location_id:$('#id_location').val(),
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+          },
+          success:function (json) {
+              $('#local_places').empty();
+              var items = [];
+              items.push('<option value="" disabled selected>Выберите место проведения</option>');
+              $.each( json.location_places, function( key, val ) {
+                items.push( "<option data-icon='"+ val['logo'] +"' value='" + key + "' class='left circle'F>" + val['name'] + "</option>" );
+              });
+              $('#local_places').append(items);
+              $('#local_places').material_select();
+              $('#place_row').show();
+            }
+        })
+      });
     });
-  });
-</script>
+  </script>
 
+  <script type="application/javascript">
+{#    var chip = {#}
+{#    tag: 'chip content',#}
+{#    image: '', //optional#}
+{#    id: 1, //optional#}
+{#  };#}
+    window.onload = function () {
+      $('.chips-initial').material_chip({
+        data: [{
+          tag: 'Apple'
+        }, {
+          tag: 'Microsoft'
+        }, {
+          tag: 'Google'
+        }],
+        placeholder: 'Добавьте теги',
+        secondaryPlaceholder: '+Tag'
+      });
+    }
+  </script>
 {% endblock %}
 
 {% block modal_results %}

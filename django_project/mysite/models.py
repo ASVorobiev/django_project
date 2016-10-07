@@ -3,6 +3,7 @@ import os
 import re
 
 from django.db.models import Manager
+from taggit.managers import TaggableManager
 
 from django_project.user_auth.models import CustomUser
 from django.db import models, connection
@@ -128,7 +129,7 @@ class Events(models.Model):
     organizer = models.ForeignKey(MysiteOrganizers, verbose_name='Организатор', blank=True, null=True)
     is_free = models.IntegerField(blank=True, null=True)
     tickets = models.TextField(blank=True, null=True)
-    tags = models.CharField(max_length=255, blank=True, null=True)
+    tags = TaggableManager()  # models.CharField(max_length=255, blank=True, null=True)
     phone = models.CharField(max_length=255, blank=True, null=True)
     url = models.CharField(max_length=255, blank=True, null=True)
     priority = models.IntegerField(choices=((0, 'Обычное'),
@@ -157,22 +158,23 @@ class Events(models.Model):
         trans = translit(self.title.strip(), 'ru', reversed=True)
         return re.sub("[^.\w-]+", '_', trans)
 
-    class loc_org(models.Field):
-        #     description = "A hand of cards (bridge style)"
-        #     # local_organizer = models.ForeignKey
-        #     def __init__(self, *args, **kwargs):
-        #         kwargs['max_length'] = 104
-        #         super(Events, self).__init__(*args, **kwargs)
-        #
-        def local_organizer(self):
-            sql_query = "SELECT * from mysite_organizers where id in (SELECT DISTINCT organizer_id from mysite_events WHERE location_id = %s) AND confidence > 1 AND vk_type = 'group' ORDER BY followers" % 1
-            return MysiteOrganizers.objects.raw(sql_query)
-
-        def __str__(self):
-            return self.name
-
-    objects = MyManager()
-    local_organizer = loc_org().local_organizer()
+    # class loc_org(models.Field):
+    #     #     description = "A hand of cards (bridge style)"
+    #     #     # local_organizer = models.ForeignKey
+    #     #     def __init__(self, *args, **kwargs):
+    #     #         kwargs['max_length'] = 104
+    #     #         super(Events, self).__init__(*args, **kwargs)
+    #     #
+    #     def local_organizer(self):
+    #         sql_query = "SELECT * from mysite_organizers where id in (SELECT DISTINCT organizer_id from mysite_events WHERE location_id = %s) AND confidence > 1 AND vk_type = 'group' ORDER BY followers" % 1
+    #         return MysiteOrganizers.objects.raw(sql_query)
+    #
+    #     def __str__(self):
+    #         return self.name
+    #
+    #
+    # local_organizer = loc_org().local_organizer()
+    # objects = MyManager()
     # local_organizer = loc_org().local_organizer(organizer)
     # def local_organizer(self):
     #     sql_query = "SELECT * from mysite_organizers where id in (SELECT DISTINCT organizer_id from mysite_events WHERE location_id = %s) AND confidence > 1 AND vk_type = 'group' ORDER BY followers" % 1
