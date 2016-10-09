@@ -1,11 +1,15 @@
-{% extends "mysite/base.html" %}
+{% extends "mysite/cards.html" %}
+
 {% load staticfiles %}
 {% load el_pagination_tags %}
 
+{% block title %}My amazing blog{% endblock %}
+
 {% block scripts %}
   <script type="text/javascript" src="//vk.com/js/api/openapi.js?130"></script>
-
 {% endblock %}
+
+
 
 {% block slider %}
   <div class="card">
@@ -39,72 +43,44 @@
   <div class="">
       <div class="row">
       <div class="row">
-      <div class="col s12 m5 l4">
+      <div class="col s12 m6 l4">
         <div class="card-panel teal">
-          <span class="white-text">I am a very simple card. I am good at containing small bits of information.
-          I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
-          </span>
+          <div class="card_circle">
+            <i class="material-icons large teal_icons">bubble_chart</i>
+          </div>
+                    <h5 class="white-text center">На этой неделе</h5>
+          <p class="white-text center">10 мероприятий</p>
+
         </div>
       </div>
 
-      <div class="col s12 m5 l4">
-        <div class="card-panel  red lighten-1">
-          <span class="white-text">I am a very simple card. I am good at containing small bits of information.
-          I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
-          </span>
+      <div class="col s12 m6 l4">
+        <div class="card-panel red lighten-1">
+          <div class="card_circle">
+            <i class="material-icons large red_l1_icons">transfer_within_a_station</i>
+          </div>
+          <h5 class="white-text center">Куда пойти в выходные</h5>
+          <p class="white-text center">10 мероприятий</p>
         </div>
       </div>
 
-      <div class="col s12 m5 l4">
+      <div class="col s12 m6 l4">
         <div class="card-panel teal">
-          <span class="white-text">I am a very simple card. I am good at containing small bits of information.
-          I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
-          </span>
+          <div class="card_circle">
+            <i class="material-icons large teal_icons">money_off</i>
+          </div>
+          <h5 class="white-text center">Бесплатно</h5>
+          <p class="white-text center">10 мероприятий</p>
         </div>
       </div>
     </div>
 
       {% for event in location_events %}
-        <div class="col s12 m6 l4">
-          <div class="card large sticky-action z-depth-2">
-
-            <div class="card-image">
-{#                      <div class="card-image waves-effect waves-block waves-light">#}
-              <div class="" style="font-size: small;">
-                <div class="card-content_padding">
-                  <i class="material-icons md-14">date_range</i>
-                  {{ event.start_date|date:"d.m.Y (D)"  }}
-                  <div class="right">
-                    <i class="material-icons md-14">access_time</i>
-                    {{ event.start_time }}
-                  </div>
-                </div>
-              </div>
-              {% if event.image %}
-
-                <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}">
-                <div class="container">
-                  <div class="image">
-                    <img src={{ event.image.url }}>
-                  </div>
-                </div>
-                </a>
-
-              {% endif %}
-            </div>
-            <div class="card-content">
-                <span class="card-title activator grey-text text-darken-4"><p style="font-weight:600">{{ event.title }}</p><i class="material-icons right">more_vert</i></span>
-                <p>{{ event.description|linebreaksbr }}</p>
-            </div>
-            <div class="card-reveal">
-                <span class="card-title grey-text text-darken-4">{{ event.title }}<i class="material-icons right">close</i></span>
-                <p>{{ event.description|linebreaksbr }}</p>
-            </div>
-            <div class="card-action">
-                <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span>Подробнее...</a>
-            </div>
+        {% block card_panel %}
+          <div class="col s12 m6 l4">
+            {{ block.super }}
           </div>
-        </div>
+        {% endblock %}
       {% endfor %}
       </div>
   </div>
@@ -139,5 +115,9 @@
   </div>
   </div>
 {% endif %}
+
+      {% block fixed_action_btn %}
+      {{ block.super }}
+    {% endblock %}
 
 {% endblock %}

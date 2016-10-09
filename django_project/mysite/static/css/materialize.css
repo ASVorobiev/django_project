@@ -4640,7 +4640,7 @@ small {
 
 .card.sticky-action .card-reveal {
   z-index: 1;
-  padding-bottom: 64px;
+  /*padding-bottom: 64px;*/
 }
 
 .card .card-image {
@@ -4685,13 +4685,13 @@ small {
   background-color: inherit;
   border-top: 1px solid rgba(160, 160, 160, 0.2);
   padding: 5px 15px 5px 15px;
+  text-align: right;
 }
 
 .card .card-action a:not(.btn):not(.btn-large):not(.btn-floating) {
-  color: #ffab40;
+  color: #3b5998;
   margin-right: 20px;
   transition: color .3s ease;
-  text-transform: uppercase;
 }
 
 .card .card-action a:not(.btn):not(.btn-large):not(.btn-floating):hover {
@@ -6504,8 +6504,8 @@ select {
   line-height: 3rem;
   width: 100%;
   font-size: 1rem;
-  margin: 0 0 20px 0;
-  padding: 0;
+  margin: 0 20px 20px 0;
+  padding: 0rem 0rem 0rem 1rem;
   display: block;
 }
 
@@ -6515,6 +6515,7 @@ select {
   right: 0;
   top: 16px;
   font-size: 10px;
+  padding: 0px 10px 0px 0px;
 }
 
 .select-wrapper span.caret.disabled {
@@ -6529,6 +6530,7 @@ select {
 
 select:disabled {
   color: rgba(0, 0, 0, 0.3);
+
 }
 
 .select-wrapper input.select-dropdown:disabled {
@@ -6541,6 +6543,7 @@ select:disabled {
   -ms-user-select: none;
   /* IE10+ */
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+
 }
 
 .select-wrapper i {
@@ -6586,6 +6589,8 @@ select:disabled {
 .select-dropdown li.optgroup ~ li.optgroup-option {
   padding-left: 1rem;
 }
+
+
 
 /* File Input
    ========================================================================== */
@@ -8511,5 +8516,33 @@ header, main, footer {
 }
 
 .card-content_padding {
-  padding: 3px 3px 0px 3px;
+  padding: 0.5rem 0.5rem 0.1rem 0.5rem;
 }
+
+.bgcolor{
+  background-color: rgb(238,238,238);
+}
+
+.card_circle {
+  width:120px;
+  height:120px;
+  display:block;
+  margin: 0px auto 10px auto;
+  border-radius:px;
+  -moz-border-radius:60px;
+  -webkit-border-radius:60px;
+  -khtml-border-radius:60px;
+  font-size:20px;
+  color:black;
+  vertical-align: inherit;
+  padding: 1rem 0;
+
+  line-height:6rem;
+  text-decoration:none;
+  text-align:center;
+  background:whitesmoke;
+
+ }
+
+.material-icons.teal_icons { color: teal; }
+.material-icons.red_l1_icons { color: #ef5350; }

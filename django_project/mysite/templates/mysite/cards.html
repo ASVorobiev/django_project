@@ -1,0 +1,66 @@
+{% extends "mysite/base.html" %}
+
+{% block card_panel %}
+
+          <div class="card large sticky-action z-depth-2">
+
+            <div class="card-image">
+{#                      <div class="card-image waves-effect waves-block waves-light">#}
+              <div class="" style="font-size: medium;">
+                <div class="card-content_padding">
+                  <i class="material-icons tiny">date_range</i>
+                  {{ event.start_date|date:"d.m.Y (D)"  }}
+                  <div class="right">
+                    <i class="material-icons tiny">access_time</i>
+                    {{ event.start_time }}
+                  </div>
+                </div>
+              </div>
+              {% if event.image %}
+
+                <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}">
+                <div class="container">
+                  <div class="image">
+                    <img src={{ event.image.url }}>
+                  </div>
+                </div>
+                </a>
+
+              {% endif %}
+            </div>
+            <div class="card-content">
+                <span class="card-title activator grey-text text-darken-4"><p style="font-weight:600">{{ event.title }}</p><i class="material-icons right">more_vert</i></span>
+                <p >{{ event.description|linebreaksbr }}</p>
+            </div>
+            <div class="card-reveal">
+                <span class="card-title grey-text text-darken-4">{{ event.title }}<i class="material-icons right">close</i></span>
+                <p class="truncate">{{ event.description|linebreaksbr }}</p>
+            </div>
+{#            <div class="card-action">#}
+{#                <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span>Подробнее...</a>#}
+{#            </div>#}
+          </div>
+
+{% endblock %}
+
+{% block fixed_action_btn %}
+  <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <a class="btn-floating btn-large waves-effect waves-light red lighten-1" href="{% url 'add_event_form' %}">
+      <i class="material-icons">add</i>
+    </a>
+  </div>
+
+
+
+  {#  <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">#}
+{#    <a class="btn-floating btn-large red lighten-1">#}
+{#      <i class="large material-icons">add</i>#}
+{#    </a>#}
+{#    <ul>#}
+{#      <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>#}
+{#      <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>#}
+{#      <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>#}
+{#      <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>#}
+{#    </ul>#}
+{#  </div>#}
+{% endblock %}
