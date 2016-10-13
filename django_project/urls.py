@@ -12,18 +12,22 @@ Class-based views
 Including another URLconf
     1. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf import settings
-from django.conf.urls import patterns, include, url
+
+
+from django.conf.urls import url, include
 from django.conf.urls.static import static
-from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-urlpatterns = patterns('',
-                       url(r'', include('django_project.user_auth.urls')),
-                       url(r'', include('django_project.text_ru.urls')),
-                       url(r'', include('social.apps.django_app.urls', namespace='social')),
-                       url(r'^admin/', include(admin.site.urls)),
-                       url(r'', include('django_project.mysite.urls')),
-                       )
+from django_project import settings
+from django_project.mysite import admin
+
+
+urlpatterns = [url(r'', include('django_project.user_auth.urls')),
+               url(r'', include('django_project.text_ru.urls')),
+               url(r'', include('social.apps.django_app.urls', namespace='social')),
+               # url(r'^admin/', include(admin.)),
+               url(r'', include('django_project.mysite.urls')),
+               ]
+
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

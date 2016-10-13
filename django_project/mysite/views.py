@@ -160,7 +160,7 @@ def add_event_form(request):
                 res.owner = request.user
                 note = res.save()
                 return redirect('event_details', site_screen_name=res.location.site_screen_name, pk=res.pk, title_translit='new')
-    return render_to_response('mysite/add_event_form.html', context, context_instance=RequestContext(request))
+    return render_to_response('add_event_form.html', context, context_instance=RequestContext(request))
     # return render(request, 'mysite/add_event_form.html', context)
 
 

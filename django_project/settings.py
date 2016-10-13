@@ -29,6 +29,17 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'vkalendare',
+#         'USER': 'postgres',
+#         'PASSWORD': 'Qwerty123',
+#         'HOST': '127.0.0.1',
+#         'PORT': '5432',
+#     }
+# }
+
 LANGUAGE_CODE = 'ru-RU'
 TIME_ZONE = 'UTC'
 SITE_ID = 1
@@ -77,9 +88,11 @@ ROOT_URLCONF = 'django_project.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'django_project.wsgi.application'
 
-TEMPLATE_DIRS = [os.path.join(ROOT_PATH, 'django_project/mysite/templates'),
-                 os.path.join(ROOT_PATH, 'django_project/user_auth/templates'),
-                 os.path.join(ROOT_PATH, 'django_project/text_ru/templates')]
+TEMPLATE_DIRS = [os.path.join(ROOT_PATH, 'django_project\\mysite\\templates'),
+                 os.path.join(ROOT_PATH, 'django_project\\user_auth\\templates'),
+                 os.path.join(ROOT_PATH, 'django_project\\text_ru\\templates'),
+                 os.path.join(ROOT_PATH, 'django_project'),
+                 r'C:\vKalendare\Github\django_project\django_project\mysite\templates\mysite']
 
 INSTALLED_APPS = (
     'django.contrib.auth',
