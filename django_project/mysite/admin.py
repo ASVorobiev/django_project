@@ -54,7 +54,8 @@ class EventsAdmin(admin.ModelAdmin):
     def button(self, obj):
         return mark_safe('<input type="button" id="set_active_%(id)s" onclick="set_active(%(id)s)" value="Активировать"/>'
                          '<input type="button" id="set_active_with_priority_%(id)s" onclick="set_active_with_priority(%(id)s)" value="Активировать с приоритетом"/>'
-                         '<input type="button" id="set_dismiss_%(id)s" onclick="set_dismiss(%(id)s)" value="Отклонить"/>' % {'id':  obj.id})
+                         '<input type="button" id="set_dismiss_%(id)s" onclick="set_dismiss(%(id)s)" value="Отклонить"/>'
+                         '<input type="button" id="set_active_%(id)s" onclick="tag_it(%(id)s)" value="Taggit"/>' % {'id':  obj.id})
 
     button.short_description = 'Action'
     button.allow_tags = True

@@ -6,6 +6,7 @@ from datetime import date, timedelta
 from io import BytesIO
 import random
 
+import re
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -24,6 +25,8 @@ from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
 from PIL import ImageOps
+
+from test_pymorphy2 import morph
 
 today = date.today()
 
@@ -202,3 +205,18 @@ def jdata(request):
                                'logo': place.logo,
                                'url': place.url}
             return HttpResponse(json.dumps({'location_places': d}), content_type='application/json')
+
+def set_tags(request):
+    events_for_taggit = Events.objects.filter(tag_it__isnull=True)
+    event_current = Events.objects.get(pk=request.POST['event_id'])
+    for w in re.sub(r'[^\w\s]', '', event_current.title).split(' '):
+        p = morph.parse(w)[0]
+        if 'NOUN' in p.tag:
+            print(p.normal_form)
+
+    # for event in event_current:
+    #     for w in re.sub(r'[^\w\s]', '', event).split(' '):
+    #         p = morph.parse(w)[0]
+    #         if 'NOUN' in p.tag:
+    #             print(p.normal_form)
+    return HttpResponse(json.dumps({'tags': True}), content_type='application/json')
