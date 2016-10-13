@@ -146,23 +146,23 @@ def add_event_form(request):
         request.FILES['image'] = img_file
         request.FILES['thumb'] = thumb_file
 
-        new_event = AddNewEvent(request.POST, request.FILES)
-        if new_event.is_valid():
-            new_event.title = request.POST['title']
-            new_event.description = request.POST['description']
-            new_event.location = request.POST['location']
-            new_event.start_time = request.POST['start_time']
-            new_event.start_date = request.POST['start_date']
-            new_event.organizer = request.POST['organizer']
-            new_event.image = request.FILES['image']
-            new_event.thumb = request.FILES['thumb']
+        new_event_form = AddNewEvent(request.POST, request.FILES)
+        if new_event_form.is_valid():
+            new_event_form.title = request.POST['title']
+            new_event_form.description = request.POST['description']
+            new_event_form.location = request.POST['location']
+            new_event_form.start_time = request.POST['start_time']
+            new_event_form.start_date = request.POST['start_date']
+            new_event_form.organizer = request.POST['organizer']
+            new_event_form.image = request.FILES['image']
+            new_event_form.thumb = request.FILES['thumb']
             # res = new_event.save()
-            context['form'] = new_event
-            if new_event.is_valid():
-                res = new_event.save(commit=False)
-                res.owner = request.user
-                note = res.save()
-                return redirect('event_details', site_screen_name=res.location.site_screen_name, pk=res.pk, title_translit='new')
+            context['form'] = new_event_form
+            if new_event_form.is_valid():
+                obj = new_event_form.save(commit=False)
+                obj.owner = request.user
+                obj.save_m2m()
+                return redirect('event_details', site_screen_name=obj.location.site_screen_name, pk=obj.pk, title_translit='new')
     return render_to_response('add_event_form.html', context, context_instance=RequestContext(request))
     # return render(request, 'mysite/add_event_form.html', context)
 
@@ -213,6 +213,7 @@ def set_tags(request):
         p = morph.parse(w)[0]
         if 'NOUN' in p.tag:
             print(p.normal_form)
+            event_current.tag_it.add(p.normal_form)
 
     # for event in event_current:
     #     for w in re.sub(r'[^\w\s]', '', event).split(' '):

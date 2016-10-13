@@ -79,7 +79,7 @@
       <div class="file-field input-field file-upload">
         <div class="btn">
           <span>Загрузить афишу</span>
-          <input type="file" name="image" onchange="upload_img(this);" accept="image/*,image/jpeg"/>
+          <input type="file" name="image" id="files" onchange="upload_img(this);" accept="image/*,image/jpeg"/>
         </div>
         <div class="file-path-wrapper">
           <input class="file-path validate" type="text" placeholder="Загрузите афишу вашего мероприятия" required aria-disabled="true">
@@ -117,12 +117,14 @@
   {#           </button>#}
   {#      </div>#}
       <div class="col s8 m12 l12 right-align">
-          <button class="waves-effect waves-light btn-large" type="submit" name="action">Отправить на модерацию
+          <button class="waves-effect waves-light btn-large" id="send-to-moderation" type="submit" name="action">Отправить на модерацию
               <i class="material-icons right">send</i>
           </button>
         </div>
     </div>
   </form>
+    <div id="success_div"></div>
+    <div id="message_div"></div>
 </div>
 {% endblock %}
 
@@ -324,26 +326,49 @@
     });
   </script>
 
-  <script type="application/javascript">
-{#    var chip = {#}
-{#    tag: 'chip content',#}
-{#    image: '', //optional#}
-{#    id: 1, //optional#}
-{#  };#}
-    window.onload = function () {
-      $('.chips-initial').material_chip({
-        data: [{
-          tag: 'Apple'
-        }, {
-          tag: 'Microsoft'
-        }, {
-          tag: 'Google'
-        }],
-        placeholder: 'Добавьте теги',
-        secondaryPlaceholder: '+Tag'
-      });
-    }
-  </script>
+
+    <script type="text/javascript">
+        $(function () {
+            var $frm = $('#main_form');
+            var frmNode = $frm.get(0);
+            var chipsObj = [];
+            var $btn = $frm.find('#send-to-moderation');
+              $('.chips-initial').on('chip.add', function(e, chip) {
+                  chipsObj.push(chip.tag);
+              }).on('chip.delete', function(e, chip) {
+                 chipsObj.splice(chipsObj.indexOf(chip.tag), 1);
+              }).material_chip({
+                placeholder: 'Добавьте теги',
+                secondaryPlaceholder: '+Tag'
+              });
+
+            $btn.on('click', function (e) {
+                e.preventDefault();
+                var formData = new FormData(frmNode);
+                var files = $('#files').get(0).files;
+
+                formData.append('chip', chipsObj.join(','));
+
+                if (files[0]) {
+                    formData.append('image', files[0]);
+                }
+
+                $.ajax({
+                    type: $frm.attr('method'),
+                    url: $frm.attr('action'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        $("#success_div").html(data);
+                    },
+                    error: function (data) {
+                        $("#message_div").html("Something went wrong!");
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock %}
 
 {% block modal_results %}
