@@ -129,7 +129,8 @@ class Events(models.Model):
     organizer = models.ForeignKey(MysiteOrganizers, verbose_name='Организатор', blank=True, null=True)
     is_free = models.IntegerField(blank=True, null=True)
     tickets = models.TextField(blank=True, null=True)
-    tags = TaggableManager()  # models.CharField(max_length=255, blank=True, null=True)
+    # tags = models.CharField(max_length=255, blank=True, null=True)
+    tag_it = TaggableManager()
     phone = models.CharField(max_length=255, blank=True, null=True)
     url = models.CharField(max_length=255, blank=True, null=True)
     priority = models.IntegerField(choices=((0, 'Обычное'),

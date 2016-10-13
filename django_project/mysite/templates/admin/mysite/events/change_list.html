@@ -58,6 +58,23 @@
         }
       })
     }
+
+     function tag_it(id) {
+      console.log(id);
+      $.ajax({
+        type: 'POST',
+        url: {% url 'tag_it' %},
+        dateType: 'json',
+        data:{
+          event_id: id,
+          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+        },
+        success:function (json) {
+        }
+      })
+    }
+
+
   </script>
 {% endblock %}
 
