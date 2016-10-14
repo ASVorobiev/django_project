@@ -96,12 +96,16 @@
       </div>
     </div>
 
-    <div class="chips-initial"></div>
+    <div class="row">
+      <div class="input-field col s12">
+        <div class="chips-initial"></div>
+      </div>
+    </div>
 
     <div class="row">
       <div class="input-field col s5 offset-s1">
          <i for="date">Дата</i>
-         <input id="date" type="date" name="start_date" class="datepicker" value="2016-10-08">
+         <input id="date" type="date" name="start_date" class="datepicker" value="2016-10-15">
       </div>
 
       <div class="input-field col s4 offset-s1">
@@ -347,7 +351,7 @@
                 var formData = new FormData(frmNode);
                 var files = $('#files').get(0).files;
 
-                formData.append('chip', chipsObj.join(','));
+                formData.append('tag_it', chipsObj.join(','));
 
                 if (files[0]) {
                     formData.append('image', files[0]);

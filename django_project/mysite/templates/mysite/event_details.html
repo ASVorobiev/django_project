@@ -7,11 +7,16 @@
   <script type="text/javascript">
     VK.init({apiId: 5618522, onlyWidgets: true});
   </script>
+{#  <script type="application/javascript">#}
+{#    function logArrayElements(element, index, array) {#}
+{#      console.log('a[' + index + '] = ' + element);#}
+{#    }#}
+{#    $(document).ready(function () {#}
+{#       $('.chips-initial').material_chip({data:{{event_tags|safe}}});#}
+{#    });#}
+{#    </script>#}
 {% endblock %}
 
-{% block nav %}
-
-{% endblock %}
 
 {% block content %}
   <div class="row valign-wrapper ">
@@ -46,6 +51,16 @@
             {% endspaceless %}
             </div>
             {% endif %}
+
+          <div class="row">
+          {% for tag in event_tags %}
+              <div class="chip">{{ tag }}</div>
+          {% endfor %}
+          </div>
+
+{#          {% if event_tags %}#}
+{#            <div class="chips-initial"></div>#}
+{#          {% endif %}#}
 {#            <div class="row">#}
 {#              <div id="vk_like"></div>#}
 {#              <script type="text/javascript">#}
@@ -95,3 +110,4 @@
       {{ block.super }}
     {% endblock %}
   {% endblock %}
+
