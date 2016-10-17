@@ -5,7 +5,6 @@ import os
 sys.path.insert(0, '../..')
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 ROOT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -17,15 +16,17 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'NAME': 'mysite',
+        # 'ENGINE': 'django.db.backends.mysql',
         'ENGINE': 'mysql.connector.django',
+        'NAME': 'mysite',
         'USER': 'root',
         'PASSWORD': 'Qwerty123',
         'HOST': '127.0.0.1',
         'PORT': '3306',
-        'OPTIONS': {
-          'autocommit': True,
-        },
+        # 'OPTIONS': {
+            # 'autocommit': True,
+            # 'read_default_file': 'C:/vKalendare/GitHub/django_project/django_project/my.cnf)',
+        # },
     }
 }
 
@@ -45,7 +46,7 @@ TIME_ZONE = 'UTC'
 SITE_ID = 1
 USE_I18N = True
 USE_L10N = True
-USE_TZ = True
+USE_TZ = False
 MEDIA_ROOT = 'C:\\vKalendare\\storage'
 MEDIA_URL = '/storage/'
 DATE_FORMAT = 'd E Y'
@@ -62,16 +63,10 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 SECRET_KEY = '#$5btppqih8=%ae^#&amp;7en#kyi!vh%he9rg=ed#hm6fnw9^=umc'
-
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
-)
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -88,11 +83,36 @@ ROOT_URLCONF = 'django_project.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'django_project.wsgi.application'
 
-TEMPLATE_DIRS = [os.path.join(ROOT_PATH, 'django_project\\mysite\\templates'),
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+
+        'DIRS': [join(ROOT_PATH, 'templates'),
+                 os.path.join(ROOT_PATH, 'django_project\\mysite\\templates'),
                  os.path.join(ROOT_PATH, 'django_project\\user_auth\\templates'),
                  os.path.join(ROOT_PATH, 'django_project\\text_ru\\templates'),
                  os.path.join(ROOT_PATH, 'django_project'),
-                 r'C:\vKalendare\Github\django_project\django_project\mysite\templates\mysite']
+                 r'C:\vKalendare\Github\django_project\django_project\mysite\templates\mysite'
+                 ],
+        # 'APP_DIRS': True,
+
+        'OPTIONS': {
+            'context_processors': ['django.contrib.auth.context_processors.auth',
+                                   # 'django.core.context_processors.debug',
+                                   # 'django.core.context_processors.i18n',
+                                   # 'django.core.context_processors.media',
+                                   'django.template.context_processors.request',
+                                   'django.contrib.messages.context_processors.messages',
+                                   'social.apps.django_app.context_processors.backends'],
+            'loaders': ['django.template.loaders.filesystem.Loader',
+                        'django.template.loaders.app_directories.Loader',
+                        #     'django.template.loaders.eggs.Loader',
+                        ],
+            'debug': DEBUG,
+            # ... some options here ...
+        },
+    },
+]
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -136,16 +156,6 @@ LOGGING = {
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.contrib.messages.context_processors.messages',
-    'social.apps.django_app.context_processors.backends',
-    'django.template.context_processors.request',
-)
-
 AUTHENTICATION_BACKENDS = (
     'social.backends.facebook.FacebookOAuth2',
     'social.backends.google.GoogleOAuth2',
@@ -172,7 +182,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH_SCOPE = [
 ]
 # SOCIAL_AUTH_EMAIL_FORM_URL = '/signup-email'
 SOCIAL_AUTH_EMAIL_FORM_HTML = 'email_signup.html'
-#SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = 'django_project.user_auth.mail.send_validation'
+# SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = 'django_project.user_auth.mail.send_validation'
 SOCIAL_AUTH_EMAIL_VALIDATION_URL = '/email-sent/'
 # SOCIAL_AUTH_USERNAME_FORM_URL = '/signup-username'
 SOCIAL_AUTH_USERNAME_FORM_HTML = 'username_signup.html'
@@ -187,7 +197,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.social_user',
     'social.pipeline.user.get_username',
     'django_project.user_auth.pipeline.require_email',
-    #'social.pipeline.mail.mail_validation',
+    # 'social.pipeline.mail.mail_validation',
     'social.pipeline.social_auth.associate_by_email',
     'social.pipeline.user.create_user',
     'social.pipeline.social_auth.associate_user',
@@ -225,8 +235,8 @@ SOCIAL_AUTH_FACEBOOK_KEY = '1656433434670180'
 SOCIAL_AUTH_FACEBOOK_SECRET = '48af44efd8a8fa7906ccf84fdf456d5c'
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
-  'locale': 'ru_RU',
-  'fields': 'id, name, email, age_range'
+    'locale': 'ru_RU',
+    'fields': 'id, name, email, age_range'
 }
 
 SOCIAL_AUTH_TWITTER_KEY = 'dQemFi4fKcnUauKqrkKOyb4oL'
