@@ -8,6 +8,7 @@ import random
 
 import re
 from django.conf import settings
+from django.contrib.admin.views.decorators import staff_member_required
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.http import HttpResponse
@@ -26,7 +27,7 @@ from PIL import ImageFont
 from PIL import ImageDraw
 from PIL import ImageOps
 
-from test_pymorphy2 import morph
+from tst_pymorphy2 import morph
 
 today = date.today()
 
@@ -165,7 +166,7 @@ def add_event_form(request):
                 obj.save()
                 new_event_form.save_m2m()
                 return redirect('event_details', site_screen_name=obj.location.site_screen_name, pk=obj.pk, title_translit='new')
-    return render_to_response('add_event_form.html', context, context_instance=RequestContext(request))
+    return render_to_response('add_event_form.html', context)
     # return render(request, 'mysite/add_event_form.html', context)
 
 
@@ -208,6 +209,7 @@ def jdata(request):
                                'url': place.url}
             return HttpResponse(json.dumps({'location_places': d}), content_type='application/json')
 
+
 def set_tags(request):
     events_for_taggit = Events.objects.filter(tag_it__isnull=True)
     event_current = Events.objects.get(pk=request.POST['event_id'])
@@ -223,3 +225,9 @@ def set_tags(request):
     #         if 'NOUN' in p.tag:
     #             print(p.normal_form)
     return HttpResponse(json.dumps({'tags': True}), content_type='application/json')
+
+
+@staff_member_required
+def my_admin_view(request):
+    # view codemin_view
+    return render_to_response(r'admin\mysite\events\admin_service.html')

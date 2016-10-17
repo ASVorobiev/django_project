@@ -1,0 +1,12 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block admin_change_form_document_ready %}
+{{ block.super }}
+  <script type="text/javascript" src="{% static 'js/admin_service.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+  <input type="button" id="set_tags_for_all" value="Adding tags for all remaining events">
+{% endblock %}
+

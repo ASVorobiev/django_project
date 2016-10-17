@@ -12,13 +12,14 @@ ADMINS = (
     ('dell', 'dell.oxl@gmail.com'),
 )
 
+
 MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.mysql',
-        'ENGINE': 'mysql.connector.django',
-        'NAME': 'mysite',
+        'ENGINE': 'django.db.backends.mysql',
+        # 'ENGINE': 'mysql.connector.django',
+        'NAME': 'local_server',
         'USER': 'root',
         'PASSWORD': 'Qwerty123',
         'HOST': '127.0.0.1',
@@ -127,7 +128,10 @@ INSTALLED_APPS = (
     'django_project.mysite',
     'django_project.text_ru',
     'el_pagination',
-    'taggit'
+    'taggit',
+    # 'xadmin',
+    # 'crispy_forms',
+    # 'reversion',
 )
 
 LOGGING = {
