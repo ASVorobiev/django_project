@@ -7,6 +7,8 @@ from io import BytesIO
 import random
 
 import re
+from time import sleep
+
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.files.base import ContentFile
@@ -17,6 +19,7 @@ from django.template import RequestContext
 from django.template.context_processors import csrf
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.contrib.staticfiles import finders
+from django.views.decorators.csrf import csrf_exempt
 
 from django_project.mysite.forms import AddNewEvent
 from django_project.mysite.models import Events, Locations, MysiteOrganizers
@@ -227,7 +230,12 @@ def set_tags(request):
     return HttpResponse(json.dumps({'tags': True}), content_type='application/json')
 
 
+@csrf_exempt
+def jservice(request):
+    sleep(1)
+    return HttpResponse(json.dumps({'result': True}), content_type='application/json')
+
+
 @staff_member_required
 def my_admin_view(request):
-    # view codemin_view
     return render_to_response(r'admin\mysite\events\admin_service.html')

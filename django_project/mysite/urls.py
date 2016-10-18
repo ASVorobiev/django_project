@@ -6,7 +6,7 @@ from . import views
 urlpatterns = [url(r'^admin/service/$', views.my_admin_view),
                        url(r'^$', views.events_list, name='events_list'),
                        url(r'^adm/$', views.admin_list, name='adm'),
-                        url(r'^adm/jserv/$', views.my_admin_view, name='service'),
+                        url(r'^adm/jserv/$', views.jservice, name='jservice'),
                        url(r'^jdata/$', views.jdata, name='jdata'),
                         url(r'^tag/$', views.set_tags, name='tag_it'),
                        url(r'^(?P<site_screen_name>[a-z]+)/$', views.events_list, name='location_events'),

@@ -1,12 +1,47 @@
 {% extends "admin/base_site.html" %}
 {% load static %}
 
-{% block admin_change_form_document_ready %}
+{#{% block admin_change_form_document_ready %}#}
+{#{{ block.super }}#}
+{#  <script type="text/javascript" src="{% static 'js/admin_service.js' %}"></script>#}
+{#{% endblock %}#}
+
+{% block extrahead %}
 {{ block.super }}
-  <script type="text/javascript" src="{% static 'js/admin_service.js' %}"></script>
+  <link type="text/css" rel="stylesheet" href="{% static 'css/materialize.css' %}"  media="screen,projection"/>
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
+
+  <script type="application/javascript">
+    function set_active(id) {
+      $('#pbar').show();
+      $.ajax({
+          type: 'GET',
+          url: '{% url 'jservice' %}',
+          data: {csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()},
+          success: function (data) {
+            $('#pbar').hide();
+            alert(data['result']);
+          },
+          error: function (data) {
+            $('#pbar').hide();
+            alert('error');
+          }
+      });
+{#      alert('asdf');#}
+    }
+  </script>
 {% endblock %}
 
 {% block content %}
-  <input type="button" id="set_tags_for_all" value="Adding tags for all remaining events">
+  <button class="button" type="button" id="set_tags_for_all" onclick="set_active('1')">
+  Adding tags for all remaining events
+    <div id="pbar" hidden>
+      <div class="progress">
+        <div class="indeterminate"></div>
+      </div>
+    </div>
+  </button>
+
 {% endblock %}
 

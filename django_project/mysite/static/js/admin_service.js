@@ -4,15 +4,10 @@
 // django.jQuery(document).find('#set_tags_for_all').onclick( function(event, $row, formsetName) {
 // alert("button");
 // });
+var jQuery = django.jQuery, $ = jQuery;
 
-(function($) {
-    $(document).on('formset:added', function(event, $row, formsetName) {
-        if (formsetName == 'author_set') {
-            // Do something
-        }
-    });
-
-    $(document).on('formset:removed', function(event, $row, formsetName) {
-        // Row removed
-    });
+(function() {
+    $('#set_tags_for_all').onclick(function () {
+        alert('qwr')
+    })
 })(django.jQuery);
