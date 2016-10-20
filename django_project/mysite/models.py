@@ -67,6 +67,7 @@ class Locations(models.Model):
     site_screen_name = models.CharField(max_length=255, blank=True, null=True)
     vk_owner_id = models.IntegerField(blank=True, null=True)
     vk_location_event_id = models.IntegerField(blank=True, null=True)
+    instagram_id = models.CharField(max_length=255, blank=True, null=True)
     tz = models.IntegerField(blank=True, null=True)
     is_deleted = models.IntegerField()
     modified = models.IntegerField()
@@ -130,7 +131,7 @@ class Events(models.Model):
     is_free = models.IntegerField(blank=True, null=True)
     tickets = models.TextField(blank=True, null=True)
     # tags = models.CharField(max_length=255, blank=True, null=True)
-    tag_it = TaggableManager()
+    tag_it = TaggableManager(blank=True)
     phone = models.CharField(max_length=255, blank=True, null=True)
     url = models.CharField(max_length=255, blank=True, null=True)
     priority = models.IntegerField(choices=((0, 'Обычное'),
@@ -187,13 +188,15 @@ class Events(models.Model):
         return self.title
 
 
-
-
-
 class LocationCities(models.Model):
     vk_city_id = models.IntegerField(primary_key=True)
     location_id = models.IntegerField()
     vk_city_name = models.CharField(max_length=255)
 
 
-
+class Instagram(models.Model):
+    insta_id = models.IntegerField(primary_key=True)
+    event = models.ForeignKey(Events, verbose_name='Events')
+    is_deleted = models.IntegerField(choices=((0, 'Нет'), (1, 'Да')), default=0)
+    created = models.IntegerField(default=int(datetime.utcnow().timestamp()))
+    modified = models.IntegerField(default=int(datetime.utcnow().timestamp()))

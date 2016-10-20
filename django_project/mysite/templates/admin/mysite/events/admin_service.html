@@ -13,29 +13,41 @@
   <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
 
   <script type="application/javascript">
-    function set_active(id) {
+    function set_active(input_task) {
       $('#pbar').show();
       $.ajax({
           type: 'GET',
-          url: '{% url 'jservice' %}',
-          data: {csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()},
+          url: '{% url 'tag_it' %}',
+          dateType: 'json',
+          data: {
+            task: input_task,
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+          },
           success: function (data) {
             $('#pbar').hide();
-            alert(data['result']);
+            alert(data.tags);
           },
           error: function (data) {
             $('#pbar').hide();
             alert('error');
           }
       });
-{#      alert('asdf');#}
     }
   </script>
 {% endblock %}
 
 {% block content %}
-  <button class="button" type="button" id="set_tags_for_all" onclick="set_active('1')">
-  Adding tags for all remaining events
+  <button class="button" type="button" id="set_tags_for_all" onclick="set_active('all')">
+  Adding tags for all events
+    <div id="pbar" hidden>
+      <div class="progress">
+        <div class="indeterminate"></div>
+      </div>
+    </div>
+  </button>
+
+  <button class="button" type="button" id="set_tags_for_all" onclick="set_active('empty')">
+  Adding tags for remaining events
     <div id="pbar" hidden>
       <div class="progress">
         <div class="indeterminate"></div>

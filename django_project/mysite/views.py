@@ -14,11 +14,13 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, render_to_response
 from django.template import RequestContext
 from django.template.context_processors import csrf
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.contrib.staticfiles import finders
+from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from django_project.mysite.forms import AddNewEvent
@@ -30,7 +32,7 @@ from PIL import ImageFont
 from PIL import ImageDraw
 from PIL import ImageOps
 
-from tst_pymorphy2 import morph
+import pymorphy2
 
 today = date.today()
 
@@ -168,9 +170,23 @@ def add_event_form(request):
                 obj.owner = request.user
                 obj.save()
                 new_event_form.save_m2m()
-                return redirect('event_details', site_screen_name=obj.location.site_screen_name, pk=obj.pk, title_translit='new')
+                response = {'redirect': added_successfully}
+                return HttpResponseRedirect(reverse('added_successfully'))
+                # return redirect(added_successfully)
+                # response = {'status': 0,
+                #             'site_screen_name': obj.location.site_screen_name,
+                #             'pk': obj.pk,
+                #             'title_translit': 'new',
+                #             'url': 'event_details'}
+                # return HttpResponse(json.dumps(response), content_type='application/json')
+                #return redirect('event_details', site_screen_name=obj.location.site_screen_name, pk=obj.pk, title_translit='new')
     return render_to_response('add_event_form.html', context)
     # return render(request, 'mysite/add_event_form.html', context)
+
+
+def added_successfully(request):
+    return render(request, 'added_successfully.html')
+
 
 
 def admin_list(request):
@@ -213,24 +229,40 @@ def jdata(request):
             return HttpResponse(json.dumps({'location_places': d}), content_type='application/json')
 
 
-def set_tags(request):
-    events_for_taggit = Events.objects.filter(tag_it__isnull=True)
-    event_current = Events.objects.get(pk=request.POST['event_id'])
-    for w in re.sub(r'[^\w\s]', '', event_current.title).split(' '):
-        p = morph.parse(w)[0]
-        if 'NOUN' in p.tag:
-            print(p.normal_form)
-            event_current.tag_it.add(p.normal_form)
-
-    # for event in event_current:
-    #     for w in re.sub(r'[^\w\s]', '', event).split(' '):
-    #         p = morph.parse(w)[0]
-    #         if 'NOUN' in p.tag:
-    #             print(p.normal_form)
-    return HttpResponse(json.dumps({'tags': True}), content_type='application/json')
+def add_tags_for_event(event_obj):
+    print(event_obj)
+    morph = pymorphy2.MorphAnalyzer()
+    tags = []
+    for w in re.sub('[^а-яА-Я]', ' ', event_obj.title).strip().split(' '):
+        if len(w) > 2:
+            p = morph.parse(w)[0]
+            if 'NOUN' in p.tag:
+                print(p.normal_form)
+                tags.append(p.normal_form)
+                event_obj.tag_it.add(p.normal_form)
+    return ','.join(tags)
 
 
 @csrf_exempt
+def set_tags(request):
+    if isinstance(request.GET['task'], int):
+        events_for_taggit = Events.objects.filter(pk=request.POST['event_id'])
+    elif request.GET['task'] == 'all':
+        events_for_taggit = Events.objects.exclude(start_date__lte=today).exclude(
+            start_date__gte=today + timedelta(days=90))
+    elif request.GET['task'] == 'empty':
+        events_for_taggit = Events.objects.filter(tag_it__isnull=True)[:100]
+    else:
+        return HttpResponse(json.dumps({'tags': False}), content_type='application/json')
+
+    tags = ''
+    for event in events_for_taggit:
+        tags = add_tags_for_event(event)
+    # Events.tag_it.most_common().values_list()
+    # Events.objects.filter(tag_it__name__in=["рок"])
+    return HttpResponse(json.dumps({'tags': tags}), content_type='application/json')
+
+
 def jservice(request):
     sleep(1)
     return HttpResponse(json.dumps({'result': True}), content_type='application/json')

@@ -364,7 +364,8 @@
                     processData: false,
                     contentType: false,
                     success: function (data) {
-                        $("#success_div").html(data);
+                        window.location.href = data.redirect;
+{#                        $().html(data);#}
                     },
                     error: function (data) {
                         $("#message_div").html("Something went wrong!");

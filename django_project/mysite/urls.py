@@ -11,5 +11,6 @@ urlpatterns = [url(r'^admin/service/$', views.my_admin_view),
                         url(r'^tag/$', views.set_tags, name='tag_it'),
                        url(r'^(?P<site_screen_name>[a-z]+)/$', views.events_list, name='location_events'),
                        url(r'^add_event_form/$', views.add_event_form, name='add_event_form'),
+                        url(r'^added_successfully/$', views.added_successfully, name='added_successfully'),
                        url(r'^(?P<site_screen_name>[a-z]+)/event(?P<pk>[0-9]+)/(?P<title_translit>[\w\-.%]+)$', views.events_details, name='event_details'),
                        ]
