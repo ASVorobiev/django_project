@@ -7,5 +7,5 @@ class AddNewEvent(forms.ModelForm):
         model = Events
         # required = True
         fields = ('owner', 'title', 'description', 'image', 'thumb', 'location', 'start_date', 'start_time',
-                  'organizer', 'tag_it')
+                  'organizer', 'tag_it', 'is_free')
 

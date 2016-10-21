@@ -56,7 +56,13 @@
         <textarea class="materialize-textarea" name="description" id="description" length="1000" required></textarea>
         <label for="textarea1">Описание мероприятия</label>
       </div>
+      <div class="col s12">
+        <input type="checkbox" class="filled-in" id="filled-in-box" name="is_free" value="1"/>
+        <label for="filled-in-box">Бесплатный вход</label>
     </div>
+    </div>
+
+
 
 {#            <i class="material-icons">location_city</i>#}
     <div class="input-field col s12">
@@ -88,13 +94,15 @@
       </div>
     <div class="col s2 "><img id="img_id" class="materialboxed responsive-img" src="{% static 'placeHolder.png' %}" alt="Ваша афиша"/></div>
 
-    <div class="row">
-      <div class="input-field col s12">
-        <i class="material-icons prefix">textsms</i>
-        <input type="text" id="autocomplete-input" class="autocomplete">
-        <label for="autocomplete-input">Autocomplete</label>
-      </div>
-    </div>
+{#    <div class="row">#}
+{#      <div class="input-field col s12">#}
+{#        <i class="material-icons prefix">textsms</i>#}
+{#        <input type="text" id="autocomplete-input" class="autocomplete">#}
+{#        <label for="autocomplete-input">Autocomplete</label>#}
+{#      </div>#}
+{#    </div>#}
+
+
 
     <div class="row">
       <div class="input-field col s12">
@@ -333,6 +341,7 @@
 
     <script type="text/javascript">
         $(function () {
+          if($("form")[0].checkValidity()) {
             var $frm = $('#main_form');
             var frmNode = $frm.get(0);
             var chipsObj = [];
@@ -372,6 +381,7 @@
                     }
                 });
             });
+          }
         });
     </script>
 {% endblock %}

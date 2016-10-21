@@ -4667,7 +4667,7 @@ small {
 }
 
 .card .card-content {
-  padding: 20px;
+  padding: 10px 20px 0 20px;
   border-radius: 0 0 2px 2px;
 }
 

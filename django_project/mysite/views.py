@@ -163,6 +163,10 @@ def add_event_form(request):
             new_event_form.organizer = request.POST['organizer']
             new_event_form.image = request.FILES['image']
             new_event_form.thumb = request.FILES['thumb']
+            if 'is_free' in request.POST:
+                new_event_form.is_free = 1
+            else:
+                new_event_form.is_free = 0
             # res = new_event.save()
             context['form'] = new_event_form
             if new_event_form.is_valid():
@@ -170,18 +174,17 @@ def add_event_form(request):
                 obj.owner = request.user
                 obj.save()
                 new_event_form.save_m2m()
-                response = {'redirect': added_successfully}
-                return HttpResponseRedirect(reverse('added_successfully'))
+                response = {'redirect': request.build_absolute_uri(reverse('added_successfully'))}
+                # return HttpResponseRedirect(request.build_absolute_uri(reverse('added_successfully')))
                 # return redirect(added_successfully)
                 # response = {'status': 0,
                 #             'site_screen_name': obj.location.site_screen_name,
                 #             'pk': obj.pk,
                 #             'title_translit': 'new',
                 #             'url': 'event_details'}
-                # return HttpResponse(json.dumps(response), content_type='application/json')
+                return HttpResponse(json.dumps(response), content_type='application/json')
                 #return redirect('event_details', site_screen_name=obj.location.site_screen_name, pk=obj.pk, title_translit='new')
     return render_to_response('add_event_form.html', context)
-    # return render(request, 'mysite/add_event_form.html', context)
 
 
 def added_successfully(request):

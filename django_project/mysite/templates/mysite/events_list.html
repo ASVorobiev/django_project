@@ -19,7 +19,7 @@
                 <li class="caption">
                   <a href="{% url 'event_details' ev.location.site_screen_name ev.id ev.title_translit|urlencode %}">
                     {% if ev.image %}
-                      <div class="blur">
+                      <div class="">
                         <img src="{{ ev.image.url }}"/>
                       </div>
                     {% endif %}
