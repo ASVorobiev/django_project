@@ -7,6 +7,15 @@
 
 {% block scripts %}
   <script type="text/javascript" src="//vk.com/js/api/openapi.js?130"></script>
+  <script type="application/javascript">
+  {% if need_location %}
+    $(document).ready(function(){
+      // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+      $('.modal-trigger').leanModal();
+      $('#modal1').openModal();
+    });
+  {% endif %}
+  </script>
 {% endblock %}
 
 
@@ -36,6 +45,17 @@
 {% endblock %}
 
 {% block content %}
+  <!-- Modal Structure -->
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4>Выберите ваш город</h4>
+      {% for loc in locations %}
+      <li value={{ loc.site_screen_name }}><a href="{% url 'location_events' loc.site_screen_name %}">{{ loc.name }}</a></li>
+      {% endfor %}
+    </div>
+  </div>
+
+
 {% paginate 24 location_events %}
   <style type="text/css">
   .material-icons.md-14 { font-size: 14px; }
@@ -106,13 +126,13 @@
 
 {% if vk_group_id %}
   <div class="row">
-  <div class="card-panel">
+    <div class="card-panel">
     <!-- VK Widget -->
-    <div id="vk_groups"></div>
+      <div id="vk_groups"></div>
       <script type="text/javascript">
-    VK.Widgets.Group("vk_groups", {mode: 3, width: "auto", height: "600", color1: 'FFFFFF', color2: '000000', color3: '5E81A8'}, {{ vk_group_id }});
-  </script>
-  </div>
+        VK.Widgets.Group("vk_groups", {mode: 3, width: "auto", height: "600", color1: 'FFFFFF', color2: '000000', color3: '5E81A8'}, {{ vk_group_id }});
+      </script>
+    </div>
   </div>
 {% endif %}
 

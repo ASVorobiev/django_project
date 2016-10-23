@@ -42,7 +42,10 @@ def home(request):
 
 
 def events_list(request, site_screen_name=None):
-    locations = Locations.objects.exclude(created=0).order_by().all()
+    locations = Locations.objects.exclude(created=0).order_by('name').all()
+    if not request.user.is_anonymous and not site_screen_name and request.user.location_id:
+        location = Locations.objects.get(pk=request.user.location_id)
+        site_screen_name = location.site_screen_name
     if site_screen_name:
         location = Locations.objects.exclude(created=0).get(site_screen_name=site_screen_name)
         location_id = location.id
@@ -57,7 +60,8 @@ def events_list(request, site_screen_name=None):
                                                            'priority_events': priority_events,
                                                            'locations': locations,
                                                            'current_location': current_location,
-                                                           'vk_group_id': current_location.vk_group_id
+                                                           'vk_group_id': current_location.vk_group_id,
+                                                           'need_location': False
                                                            })
     else:
         priority_events = Events.objects.exclude(start_date__lte=today).order_by('-priority', 'start_date', '?')[:25]
@@ -69,7 +73,8 @@ def events_list(request, site_screen_name=None):
                                                            'locations': locations,
                                                            'priority_events': priority_events,
                                                            'current_location': current_location,
-                                                           'vk_group_id': None})
+                                                           'vk_group_id': None,
+                                                           'need_location': True})
 
 
 def events_details(request, site_screen_name, pk, title_translit='dont_remove'):

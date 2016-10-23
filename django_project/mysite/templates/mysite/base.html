@@ -83,6 +83,7 @@
         {% if user.is_authenticated %}
           <div class="user-details center-align">
             Вы вошли как <code>{{ user.first_name }}</code>!
+            Город: {{ user.location_id.name }}
           </div>
         {% endif %}
       </li>
