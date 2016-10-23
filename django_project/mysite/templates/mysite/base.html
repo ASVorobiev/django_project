@@ -82,8 +82,7 @@
       <li class="bold">
         {% if user.is_authenticated %}
           <div class="user-details center-align">
-            Вы вошли как <code>{{ user.first_name }}</code>!
-            Город: {{ user.location_id.name }}
+            Вы вошли как <code>{{ user.first_name }}</code>! <br>
           </div>
         {% endif %}
       </li>
@@ -127,7 +126,20 @@
         </ul>
       </li>
 
-      <li class="bold"><a href="#" class="waves-effect waves-teal">Примеры сайтов</a></li>
+      <li class="no-padding">
+        <ul class="collapsible collapsible-accordion">
+          <li class="bold"><a class="collapsible-header  waves-effect waves-teal">Персонализация</a>
+            <div class="collapsible-body" style="">
+              <ul>
+                <li>
+                  {%  block user_location %}
+                  {% endblock %}
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </li>
     <div class="divider"></div>
       {% if user.is_authenticated %}
         <li class="bold"><a href="{% url 'logout' %}" class="waves-effect waves-teal">Выйти</a></li></ul>

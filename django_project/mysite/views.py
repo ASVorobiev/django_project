@@ -279,3 +279,14 @@ def jservice(request):
 @staff_member_required
 def my_admin_view(request):
     return render_to_response(r'admin\mysite\events\admin_service.html')
+
+
+@csrf_exempt
+def set_user_location(reguest):
+    if 'id' in reguest.POST and reguest.user.is_authenticated:
+        usr = reguest.user
+        usr.location_id = reguest.POST['id']
+        usr.save()
+        return HttpResponse(json.dumps({'status': True}), content_type='application/json')
+    # request.user
+    return HttpResponse(json.dumps({'status': False}), content_type='application/json')
