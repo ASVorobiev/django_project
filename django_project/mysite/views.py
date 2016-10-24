@@ -24,7 +24,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from django_project.mysite.forms import AddNewEvent
-from django_project.mysite.models import Events, Locations, MysiteOrganizers
+from django_project.mysite.models import Events, Locations, MysiteOrganizers, MysiteCategories, TaggedCategories
 from transliterate import translit
 
 from PIL import Image
@@ -43,6 +43,10 @@ def home(request):
 
 def events_list(request, site_screen_name=None):
     locations = Locations.objects.exclude(created=0).order_by('name').all()
+    Events.tag_it.most_common().values_list()
+    # Events.objects.filter(tag_it__name__in=["рок"])
+    # Events.tag_it.most_common().filter(events__location=location_id).exclude(events__start_date__lte=today).exclude(events__start_date__gte=today + timedelta(days=45))
+    # Events.objects.filter(location__id=6, tag_it__id__in=TaggedCategories.objects.filter(category_id__name='Клубы').values('tag_id'))
     if not request.user.is_anonymous and not site_screen_name and request.user.location_id:
         location = Locations.objects.get(pk=request.user.location_id)
         site_screen_name = location.site_screen_name

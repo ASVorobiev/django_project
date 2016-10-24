@@ -365,18 +365,21 @@
                 if (files[0]) {
                     formData.append('image', files[0]);
                 }
-
+                console.log('111');
                 $.ajax({
                     type: $frm.attr('method'),
                     url: $frm.attr('action'),
                     data: formData,
                     processData: false,
                     contentType: false,
+                    dataType: 'JSON',
                     success: function (data) {
+                        alert(data.redirect);
                         window.location.href = data.redirect;
 {#                        $().html(data);#}
                     },
                     error: function (data) {
+                        alert('asdffs');
                         $("#message_div").html("Something went wrong!");
                     }
                 });

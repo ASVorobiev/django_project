@@ -4,6 +4,7 @@ import re
 
 from django.db.models import Manager
 from taggit.managers import TaggableManager
+from taggit.models import TaggedItemBase
 
 from django_project.user_auth.models import CustomUser
 from django.db import models, connection
@@ -19,6 +20,9 @@ class MysiteCategories(models.Model):
     class Meta:
         managed = False
         db_table = 'mysite_categories'
+
+    def __str__(self):
+        return self.name
 
 
 class MysiteOrganizers(models.Model):
@@ -200,3 +204,10 @@ class Instagram(models.Model):
     is_deleted = models.IntegerField(choices=((0, 'Нет'), (1, 'Да')), default=0)
     created = models.IntegerField(default=int(datetime.utcnow().timestamp()))
     modified = models.IntegerField(default=int(datetime.utcnow().timestamp()))
+
+
+class TaggedCategories(TaggedItemBase):
+    category = models.ForeignKey(MysiteCategories)
+
+    def __str__(self):
+        return self.tag.name
