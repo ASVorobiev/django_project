@@ -48,6 +48,25 @@
   <a href="#!" onclick="open_modal1()">Ваш город: {{ user.location }}</a>
 {% endblock %}
 
+{% block category %}
+  {% if categories %}
+    <li class="no-padding">
+      <ul class="collapsible collapsible-accordion">
+        <li class="bold"><a class="collapsible-header  waves-effect waves-teal active">Категории</a>
+          <div class="collapsible-body" style="">
+            <ul>
+              {% for ctg in categories %}
+{#                <a href="{% url 'location_events' loc.site_screen_name %}" onclick="set_user_location({{ loc.id }})">{{ loc.name }}</a>#}
+                <li><a href="{% url 'location_events' current_location.site_screen_name %}?category={{ ctg | urlencode}}">{{ ctg }}<span class="badge">{{ categories|get_item:ctg|get_item:'count' }}</span></a></li>
+
+              {% endfor %}
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </li>
+  {% endif %}
+{% endblock %}
 
 {% block slider %}
   <div class="card">

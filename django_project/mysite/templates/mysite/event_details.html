@@ -54,7 +54,7 @@
 
           <div class="row">
           {% for tag in event_tags %}
-              <div class="chip">{{ tag }}</div>
+              <div class="chip"><a href="{% url 'location_events' current_location.site_screen_name %}?tag={{ tag | urlencode}}">{{ tag }}</a></div>
           {% endfor %}
           </div>
 

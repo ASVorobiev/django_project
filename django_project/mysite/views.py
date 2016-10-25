@@ -26,6 +26,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django_project.mysite.forms import AddNewEvent
 from django_project.mysite.models import Events, Locations, MysiteOrganizers, MysiteCategories, TaggedCategories
 from transliterate import translit
+from django.template.defaulttags import register
 
 from PIL import Image
 from PIL import ImageFont
@@ -41,6 +42,11 @@ def home(request):
     return events_list(request)
 
 
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)
+
+
 def events_list(request, site_screen_name=None):
     locations = Locations.objects.exclude(created=0).order_by('name').all()
     Events.tag_it.most_common().values_list()
@@ -50,22 +56,44 @@ def events_list(request, site_screen_name=None):
     if not request.user.is_anonymous and not site_screen_name and request.user.location_id:
         location = Locations.objects.get(pk=request.user.location_id)
         site_screen_name = location.site_screen_name
+
+    category = request.GET.get('category', '')
+    tag = request.GET.get('tag', '')
+    free = request.GET.get('free', '')
+    from_date = request.GET.get('from_date', '')  # 2015-01-09
+    to_date = request.GET.get('to_date', '')
     if site_screen_name:
         location = Locations.objects.exclude(created=0).get(site_screen_name=site_screen_name)
         location_id = location.id
-        location_events = Events.objects.filter(location=location_id).exclude(start_date__lte=today).exclude(
-            start_date__gte=today + timedelta(days=45)).order_by('-priority').order_by('start_date')
+        if category:
+            location_events = Events.objects.filter(location__id=location_id, tag_it__id__in=TaggedCategories.objects.filter(category_id__name=category).values('tag_id'))
+            location_events = location_events.exclude(start_date__lte=today).exclude(start_date__gte=today + timedelta(days=45))
+        elif tag:
+            location_events = Events.objects.filter(location__id=location_id, tag_it__name=tag)
+            location_events = location_events.exclude(start_date__lte=today).exclude(start_date__gte=today + timedelta(days=45))
+        else:
+            location_events = Events.objects.filter(location=location_id).exclude(start_date__lte=today).exclude(
+                start_date__gte=today + timedelta(days=45)).order_by('-priority').order_by('start_date')
+
         priority_events = Events.objects.filter(location=location_id).exclude(
             start_date__lte=today).order_by('-priority', 'start_date')[:10]
         # priority_events = random.shuffle(priority_events)
         current_location = Locations.objects.get(id=location_id)
+        category_obj = {}
+        for ctgory in MysiteCategories.objects.all():
+            category_events = Events.objects.exclude(start_date__lte=today).exclude(
+                start_date__gte=today + timedelta(days=45)).filter(location__id=location_id, tag_it__id__in=ctgory.taggedcategories_set.values('tag_id'))
+            # category_events = location_events.filter(tag_it__id__in=ctgory.taggedcategories_set.values('tag_id'))
+            if category_events:
+                category_obj[ctgory.name.capitalize()] = {'count': len(category_events)}
 
         return render(request, 'mysite/events_list.html', {'location_events': location_events,
                                                            'priority_events': priority_events,
                                                            'locations': locations,
                                                            'current_location': current_location,
                                                            'vk_group_id': current_location.vk_group_id,
-                                                           'need_location': False
+                                                           'need_location': False,
+                                                           'categories': category_obj
                                                            })
     else:
         priority_events = Events.objects.exclude(start_date__lte=today).order_by('-priority', 'start_date', '?')[:25]
