@@ -8,6 +8,16 @@ https://docs.djangoproject.com/en/1.8/howto/deployment/wsgi/
 """
 
 import os
+import sys
+import pymysql
+
+path = '/home/www/vkalendare.com/django_project/'
+if path not in sys.path:
+    sys.path.append(path)
+    
+
+pymysql.install_as_MySQLdb()
+
 
 from django.core.wsgi import get_wsgi_application
 

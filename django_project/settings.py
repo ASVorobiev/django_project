@@ -19,9 +19,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         # 'ENGINE': 'mysql.connector.django',
-        'NAME': 'local_server',
+        'NAME': 'vkalendare_site',
         'USER': 'root',
-        'PASSWORD': 'Qwerty123',
+        'PASSWORD': '123',
         'HOST': '127.0.0.1',
         'PORT': '3306',
         # 'OPTIONS': {
@@ -48,7 +48,8 @@ SITE_ID = 1
 USE_I18N = True
 USE_L10N = True
 USE_TZ = False
-MEDIA_ROOT = 'C:\\vKalendare\\storage'
+# MEDIA_ROOT = 'C:\\vKalendare\\storage'
+MEDIA_ROOT = '/home/www/vkalendare.net/mod/storage'
 MEDIA_URL = '/storage/'
 DATE_FORMAT = 'd E Y'
 
@@ -89,14 +90,15 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
 
         'DIRS': [join(ROOT_PATH, 'templates'),
-                 os.path.join(ROOT_PATH, 'django_project\\mysite\\templates'),
-                 os.path.join(ROOT_PATH, 'django_project\\user_auth\\templates'),
-                 os.path.join(ROOT_PATH, 'django_project\\text_ru\\templates'),
+                 os.path.join(ROOT_PATH, 'django_project', 'mysite', 'templates', 'mysite'),
+                 os.path.join(ROOT_PATH, 'django_project', 'mysite', 'templates', 'admin', 'mysite', 'events'),
+                 os.path.join(ROOT_PATH, 'django_project', 'mysite', 'templates', 'el_pagination'),
+                 os.path.join(ROOT_PATH, 'django_project', 'user_auth', 'templates'),
+                 os.path.join(ROOT_PATH, 'django_project', 'text_ru', 'templates'),
                  os.path.join(ROOT_PATH, 'django_project'),
                  r'C:\vKalendare\Github\django_project\django_project\mysite\templates\mysite'
                  ],
-        # 'APP_DIRS': True,
-
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': ['django.contrib.auth.context_processors.auth',
                                    # 'django.core.context_processors.debug',
@@ -105,10 +107,10 @@ TEMPLATES = [
                                    'django.template.context_processors.request',
                                    'django.contrib.messages.context_processors.messages',
                                    'social.apps.django_app.context_processors.backends'],
-            'loaders': ['django.template.loaders.filesystem.Loader',
-                        'django.template.loaders.app_directories.Loader',
+            #'loaders': [#'django.template.loaders.filesystem.Loader',
+                        #'django.template.loaders.app_directories.Loader',
                         #     'django.template.loaders.eggs.Loader',
-                        ],
+            #            ],
             'debug': DEBUG,
             # ... some options here ...
         },

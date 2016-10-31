@@ -310,7 +310,7 @@ def jservice(request):
 
 @staff_member_required
 def my_admin_view(request):
-    return render_to_response(r'admin\mysite\events\admin_service.html')
+    return render_to_response(r'admin/mysite/events/admin_service.html')
 
 
 @csrf_exempt
