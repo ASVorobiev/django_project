@@ -9,6 +9,7 @@ import random
 import re
 from time import sleep
 
+import nltk
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.files.base import ContentFile
@@ -219,8 +220,10 @@ def add_event_form(request):
                 #             'pk': obj.pk,
                 #             'title_translit': 'new',
                 #             'url': 'event_details'}
-                return HttpResponse(json.dumps(response), content_type='application/json')
-                #return redirect('event_details', site_screen_name=obj.location.site_screen_name, pk=obj.pk, title_translit='new')
+                # return HttpResponse(json.dumps({'error_code': 0}), content_type='application/json')
+                # return HttpResponse(json.dumps(response), content_type='application/json')
+                return redirect('added_successfully')
+                # return redirect('event_details', site_screen_name=obj.location.site_screen_name, pk=obj.pk, title_translit='new')
     return render_to_response('add_event_form.html', context)
 
 
@@ -235,7 +238,7 @@ def admin_list(request):
             event = Events.objects.get(pk=request.POST['event_id'])
             event.is_active = 1
             event.save()
-            return HttpResponse(json.dumps({'error_code': 0}), content_type='application/json')
+            json
 
         if request.POST['task'] == 'set_active_with_priority':
             event = Events.objects.get(pk=request.POST['event_id'])
@@ -277,17 +280,24 @@ def add_tags_for_event(event_obj):
         if len(w) > 2:
             p = morph.parse(w)[0]
             if 'NOUN' in p.tag:
-                print(p.normal_form)
                 tags.append(p.normal_form)
                 event_obj.tag_it.add(p.normal_form)
+
+    from nltk import PorterStemmer
+    from nltk import pos_tag
+    stemmer = PorterStemmer()
+    text = nltk.word_tokenize(re.sub('[^a-zA-Z]', ' ', event_obj.title))
+    [tags.append(stemmer.stem(w).lower()) for (w, b) in pos_tag(text) if b.startswith('NN') or b.startswith('JJ')]
+
+    print(tags)
     return ','.join(tags)
 
 
 @csrf_exempt
 def set_tags(request):
-    if isinstance(request.GET['task'], int):
-        events_for_taggit = Events.objects.filter(pk=request.POST['event_id'])
-    elif request.GET['task'] == 'all':
+    if request.GET['task'].isdigit():
+        events_for_taggit = Events.objects.filter(pk=request.GET['task'])
+    elif request.GET['task'] == 'all_future':
         events_for_taggit = Events.objects.exclude(start_date__lte=today).exclude(
             start_date__gte=today + timedelta(days=90))
     elif request.GET['task'] == 'empty':

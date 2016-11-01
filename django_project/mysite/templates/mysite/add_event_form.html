@@ -8,13 +8,6 @@
     // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
     $('.modal-trigger').leanModal();
 
-    $('input.autocomplete').autocomplete({
-      data: {
-        "Apple": null,
-        "Microsoft": null,
-        "Google": 'http://placehold.it/250x250'
-      }
-    });
   });
 </script>
 
@@ -74,7 +67,7 @@
 
     <div class="row" hidden id="place_row">
       <div class="input-field col s12">
-        <select id="local_places" name="organizer" class="icons">
+        <select id="local_places" name="organizer" class="icons" required>
 
         </select>
         <label>Место</label>
@@ -339,54 +332,56 @@
   </script>
 
 
-    <script type="text/javascript">
-        $(function () {
-          if($("form")[0].checkValidity()) {
-            var $frm = $('#main_form');
-            var frmNode = $frm.get(0);
-            var chipsObj = [];
-            var $btn = $frm.find('#send-to-moderation');
-              $('.chips-initial').on('chip.add', function(e, chip) {
-                  chipsObj.push(chip.tag);
-              }).on('chip.delete', function(e, chip) {
-                 chipsObj.splice(chipsObj.indexOf(chip.tag), 1);
-              }).material_chip({
-                placeholder: 'Добавьте теги',
-                secondaryPlaceholder: '+Tag'
-              });
+  <script type="text/javascript">
+      $(function () {
 
-            $btn.on('click', function (e) {
-                e.preventDefault();
-                var formData = new FormData(frmNode);
-                var files = $('#files').get(0).files;
-
-                formData.append('tag_it', chipsObj.join(','));
-
-                if (files[0]) {
-                    formData.append('image', files[0]);
-                }
-                console.log('111');
-                $.ajax({
-                    type: $frm.attr('method'),
-                    url: $frm.attr('action'),
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    dataType: 'JSON',
-                    success: function (data) {
-                        alert(data.redirect);
-                        window.location.href = data.redirect;
-{#                        $().html(data);#}
-                    },
-                    error: function (data) {
-                        alert('asdffs');
-                        $("#message_div").html("Something went wrong!");
-                    }
-                });
+          var $frm = $('#main_form');
+          var frmNode = $frm.get(0);
+          var chipsObj = [];
+          var $btn = $frm.find('#send-to-moderation');
+            $('.chips-initial').on('chip.add', function(e, chip) {
+                chipsObj.push(chip.tag);
+            }).on('chip.delete', function(e, chip) {
+               chipsObj.splice(chipsObj.indexOf(chip.tag), 1);
+            }).material_chip({
+              placeholder: 'Добавьте теги',
+{#                Напишите ключевое слово для поиска и нажмите Enter#}
+              secondaryPlaceholder: 'Добавьте теги'
             });
-          }
-        });
-    </script>
+
+        if($("form")[0].checkValidity()) {
+          $btn.on('click', function (e1) {
+              e1.preventDefault();
+              var formData = new FormData(frmNode);
+              var files = $('#files').get(0).files;
+
+              formData.append('tag_it', chipsObj.join(','));
+
+              if (files[0]) {
+                  formData.append('image', files[0]);
+              }
+              console.log('111');
+              $.ajax({
+                  type: $frm.attr('method'),
+                  url: $frm.attr('action'),
+                  headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                  data: formData,
+                  dataType: 'json',
+                  contentType: "application/json;charset=utf-8",
+                  success: function (data) {
+                      alert(data);
+{#                        window.location.href = data.redirect;#}
+{#                        $().html(data);#}
+                  },
+                  error: function (data) {
+                      alert('asdffs');
+                      $("#message_div").html("Something went wrong!");
+                  }
+              });
+          });
+        }
+      });
+  </script>
 {% endblock %}
 
 {% block modal_results %}

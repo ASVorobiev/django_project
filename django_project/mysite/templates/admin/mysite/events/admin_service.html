@@ -37,8 +37,8 @@
 {% endblock %}
 
 {% block content %}
-  <button class="button" type="button" id="set_tags_for_all" onclick="set_active('all')">
-  Adding tags for all events
+  <button class="button" type="button" id="set_tags_for_all" onclick="set_active('all_future')">
+  Adding tags for all future events
     <div id="pbar" hidden>
       <div class="progress">
         <div class="indeterminate"></div>
@@ -47,7 +47,7 @@
   </button>
 
   <button class="button" type="button" id="set_tags_for_all" onclick="set_active('empty')">
-  Adding tags for remaining events
+  Adding tags for future not tagged events
     <div id="pbar" hidden>
       <div class="progress">
         <div class="indeterminate"></div>

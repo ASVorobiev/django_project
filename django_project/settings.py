@@ -1,6 +1,8 @@
 import sys
+from sys import platform as _platform
 from os.path import abspath, dirname, join
 import os
+
 
 sys.path.insert(0, '../..')
 
@@ -14,22 +16,31 @@ ADMINS = (
 
 
 MANAGERS = ADMINS
+ALLOWED_HOSTS = ['vkalendare.net', 'vkalendare.com']
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        # 'ENGINE': 'mysql.connector.django',
-        'NAME': 'vkalendare_site',
-        'USER': 'root',
-        'PASSWORD': '123',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-        # 'OPTIONS': {
-            # 'autocommit': True,
-            # 'read_default_file': 'C:/vKalendare/GitHub/django_project/django_project/my.cnf)',
-        # },
+if _platform == "linux" or _platform == "linux2":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'vkalendare_site',
+            'USER': 'root',
+            'PASSWORD': '123',
+            'HOST': '127.0.0.1',
+            'PORT': '3306',
+        }
     }
-}
+elif _platform == "win32":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'local_server',
+            'USER': 'root',
+            'PASSWORD': 'Qwerty123',
+            'HOST': '127.0.0.1',
+            'PORT': '3306',
+
+        }
+    }
 
 # DATABASES = {
 #     'default': {
@@ -223,6 +234,7 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 # except ImportError:
 #     pass
 
+# https://vk.com/editapp?id=5618522&section=options
 SOCIAL_AUTH_VK_OAUTH2_KEY = '5618522'
 SOCIAL_AUTH_VK_OAUTH2_SECRET = 'QaEBvN2GbCRdHdSr1PhU'
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email', 'groups']
@@ -245,6 +257,7 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id, name, email, age_range'
 }
 
+# https://apps.twitter.com/app/12803288/settings
 SOCIAL_AUTH_TWITTER_KEY = 'dQemFi4fKcnUauKqrkKOyb4oL'
 SOCIAL_AUTH_TWITTER_SECRET = 'RSJmTueWBzCgeK9reZ0ViE0sZXKMgi5pgiQoUfcLVCWkCM8vWU'
 
