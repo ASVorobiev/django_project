@@ -18,17 +18,19 @@ ADMINS = (
 MANAGERS = ADMINS
 ALLOWED_HOSTS = ['vkalendare.net', 'vkalendare.com']
 
-if _platform == "linux" or _platform == "linux2":
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'vkalendare_site',
-            'USER': 'root',
-            'PASSWORD': '123',
-            'HOST': '127.0.0.1',
-            'PORT': '3306',
-        }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'vkalendare_site',
+        'USER': 'root',
+        'PASSWORD': '123',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
+}
+if _platform == "linux" or _platform == "linux2":
+    pass
 elif _platform == "win32":
     DATABASES = {
         'default': {
