@@ -281,7 +281,6 @@ def add_tags_for_event(event_obj):
             p = morph.parse(w)[0]
             if 'NOUN' in p.tag:
                 tags.append(p.normal_form)
-                # event_obj.tag_it.add(p.normal_form)
 
     from nltk import PorterStemmer
     from nltk import pos_tag
@@ -289,8 +288,10 @@ def add_tags_for_event(event_obj):
     text = nltk.word_tokenize(re.sub('[^a-zA-Z]', ' ', event_obj.title))
     [tags.append(stemmer.stem(w).lower()) for (w, b) in pos_tag(text) if b.startswith('NN') or b.startswith('JJ')]
 
+    for tag in tags:
+        event_obj.tag_it.add(tag)
+
     print(tags)
-    event_obj.tag_it.add(tags)
     return ','.join(tags)
 
 
