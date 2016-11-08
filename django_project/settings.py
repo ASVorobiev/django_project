@@ -16,7 +16,7 @@ ADMINS = (
 
 
 MANAGERS = ADMINS
-ALLOWED_HOSTS = ['vkalendare.net', 'vkalendare.com']
+ALLOWED_HOSTS = ['vkalendare.net', 'vkalendare.com', 'www.vkalendare.com']
 
 
 DATABASES = {
@@ -66,13 +66,12 @@ MEDIA_ROOT = '/home/www/vkalendare.net/mod/storage'
 MEDIA_URL = '/storage/'
 DATE_FORMAT = 'd E Y'
 
-STATIC_ROOT = ''
+STATIC_ROOT = os.path.join(ROOT_PATH, 'django_project/mysite/static')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    'C:/vKalendare/GitHub/django_project/django_project/mysite/static',
 )
 
 STATICFILES_FINDERS = (
