@@ -41,12 +41,12 @@
     <!-- Modal Trigger -->
     <a class="col s12 m12 l12 waves-effect waves-light btn modal-trigger" href="#modal2">Читать инструкцию</a>
     <div class="input-field col s12">
-      <input type="text" name="title" length="50" required>
+      <input type="text" name="title" length="50" class="validate" required>
       <label for="title">Заголовок</label>
     </div>
     <div class="row">
       <div class="input-field col s12">
-        <textarea class="materialize-textarea" name="description" id="description" length="1000" required></textarea>
+        <textarea class="materialize-textarea validate" name="description" id="description" length="1000" required></textarea>
         <label for="textarea1">Описание мероприятия</label>
       </div>
       <div class="col s12">
@@ -67,7 +67,7 @@
 
     <div class="row" hidden id="place_row">
       <div class="input-field col s12">
-        <select id="local_places" name="organizer" class="icons" required>
+        <select id="local_places" name="organizer" class="icons validate">
 
         </select>
         <label>Место</label>
@@ -78,10 +78,10 @@
       <div class="file-field input-field file-upload">
         <div class="btn">
           <span>Загрузить афишу</span>
-          <input type="file" name="image" id="files" onchange="upload_img(this);" accept="image/*,image/jpeg"/>
+          <input type="file" name="image" id="files" onchange="upload_img(this);" accept="image/*,image/jpeg" required/>
         </div>
         <div class="file-path-wrapper">
-          <input class="file-path validate" type="text" placeholder="Загрузите афишу вашего мероприятия" required aria-disabled="true">
+          <input class="file-path validate" type="text" placeholder="Загрузите афишу вашего мероприятия" aria-disabled="true" required>
         </div>
       </div>
       </div>
@@ -349,37 +349,35 @@
               secondaryPlaceholder: 'Добавьте теги'
             });
 
-        if($("form")[0].checkValidity()) {
-          $btn.on('click', function (e1) {
-              e1.preventDefault();
-              var formData = new FormData(frmNode);
-              var files = $('#files').get(0).files;
 
-              formData.append('tag_it', chipsObj.join(','));
+            $frm.on('submit', function (e1) {
+              if(1 || $("form")[0].checkValidity()) {
+                e1.preventDefault();
+                var formData = new FormData(frmNode);
+                var files = $('#files').get(0).files;
 
-              if (files[0]) {
-                  formData.append('image', files[0]);
+                formData.append('tag_it', chipsObj.join(','));
+
+                if (files[0]) {
+                    formData.append('image', files[0]);
+                }
+                console.log('111');
+                $.ajax({
+                    type: $frm.attr('method'),
+                    url: $frm.attr('action'),
+                    headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                          window.location.href = data['redirect'];
+                    }
+                });
               }
-              console.log('111');
-              $.ajax({
-                  type: $frm.attr('method'),
-                  url: $frm.attr('action'),
-                  headers: {'X-CSRFToken': '{{ csrf_token }}'},
-                  data: formData,
-                  dataType: 'json',
-                  contentType: "application/json;charset=utf-8",
-                  success: function (data) {
-                      alert(data);
-{#                        window.location.href = data.redirect;#}
-{#                        $().html(data);#}
-                  },
-                  error: function (data) {
-                      alert('asdffs');
-                      $("#message_div").html("Something went wrong!");
-                  }
-              });
-          });
-        }
+              else {
+                  alert("Bad submit");
+              }
+            });
       });
   </script>
 {% endblock %}

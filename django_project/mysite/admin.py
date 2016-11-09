@@ -7,18 +7,10 @@ from django.http import Http404
 from django.utils.safestring import mark_safe
 
 from django_project.mysite import models
-from django_project.mysite.models import Events
+from django_project.mysite.models import Events, MysiteOrganizers, Locations
 
-# class FooAdmin(admin.ModelAdmin):
-#     # regular stuff
-#     class Media:
-#         js = (
-#             'https://code.jquery.com/jquery-2.2.4.min.js',  # jquery
-#             # 'js/myscript.js',       # project static folder
-#             # 'app/js/myscript.js',   # app static folder
-#         )
-#
-# admin.site.register(FooAdmin)
+
+admin.site.register(MysiteOrganizers)
 
 class AdminImageWidget(AdminFileWidget):
     def render(self, name, value, attrs=None):
@@ -57,9 +49,6 @@ class PersonsAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'image', 'image_small')
 
 
-
-
-
 class EventsAdmin(admin.ModelAdmin):
     def button(self, obj):
         return mark_safe('<input type="button" id="set_active_%(id)s" onclick="set_active(%(id)s)" value="Активировать"/>'
@@ -70,6 +59,8 @@ class EventsAdmin(admin.ModelAdmin):
     button.short_description = 'Action'
     button.allow_tags = True
 
+    def org(self, obj):
+        return obj.organizator
 
     fieldsets = (
         (None, {
@@ -82,6 +73,8 @@ class EventsAdmin(admin.ModelAdmin):
                        'export_vk', 'is_deleted', 'created', 'modified'),
         }),
     )
+
+
     readonly_fields = ['modified', 'created', 'image_small']
     actions = ['is_active']
     # exclude = ['thumb']

@@ -15,6 +15,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.http import HttpResponse
+from django.http import HttpResponseBadRequest
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, render_to_response
 from django.template import RequestContext
@@ -198,7 +199,8 @@ def add_event_form(request):
             new_event_form.location = request.POST['location']
             new_event_form.start_time = request.POST['start_time']
             new_event_form.start_date = request.POST['start_date']
-            new_event_form.organizer = request.POST['organizer']
+            if 'organizer' in request.POST:
+                new_event_form.organizer = request.POST['organizer']
             new_event_form.image = request.FILES['image']
             new_event_form.thumb = request.FILES['thumb']
             if 'is_free' in request.POST:
@@ -213,6 +215,7 @@ def add_event_form(request):
                 obj.save()
                 new_event_form.save_m2m()
                 response = {'redirect': request.build_absolute_uri(reverse('added_successfully'))}
+                return HttpResponse(json.dumps(response), content_type='application/json')
                 # return HttpResponseRedirect(request.build_absolute_uri(reverse('added_successfully')))
                 # return redirect(added_successfully)
                 # response = {'status': 0,
@@ -222,7 +225,9 @@ def add_event_form(request):
                 #             'url': 'event_details'}
                 # return HttpResponse(json.dumps({'error_code': 0}), content_type='application/json')
                 # return HttpResponse(json.dumps(response), content_type='application/json')
-                return redirect('added_successfully')
+                # return redirect('added_successfully')
+            else:
+                return HttpResponseBadRequest
                 # return redirect('event_details', site_screen_name=obj.location.site_screen_name, pk=obj.pk, title_translit='new')
     return render_to_response('add_event_form.html', context)
 

@@ -33,11 +33,11 @@ class MysiteOrganizers(models.Model):
     url = models.CharField(max_length=255, blank=True, null=True)
     followers = models.IntegerField(blank=True, null=True)
     place_id = models.IntegerField(blank=True, null=True)
-    # is_place = models.BooleanField(default=False, blank=True)  # добавлен столбец
-    confidence = models.IntegerField()
-    is_deleted = models.IntegerField()
-    modified = models.IntegerField()
-    created = models.IntegerField()
+    is_place = models.BooleanField(default=False, blank=True)  # добавлен столбец
+    confidence = models.IntegerField(default=0)
+    is_deleted = models.IntegerField(default=0)
+    modified = models.IntegerField(default=int(datetime.utcnow().timestamp()))
+    created = models.IntegerField(default=int(datetime.utcnow().timestamp()))
 
     class Meta:
         managed = False
@@ -143,10 +143,12 @@ class Events(models.Model):
     is_active = models.IntegerField(choices=((9, 'Не проверено'),
                                              (0, 'Отклонено'),
                                              (1, 'Одобрено')), default=9)
-    export_vk = models.IntegerField(choices=((0, 'Нет'), (1, 'Да')), default=1)
+    export_vk = models.IntegerField(choices=((0, 'Нет'), (1, 'Да')), default=0)
     is_deleted = models.IntegerField(choices=((0, 'Нет'), (1, 'Да')), default=0)
     created = models.IntegerField(default=int(datetime.utcnow().timestamp()))
     modified = models.IntegerField(default=int(datetime.utcnow().timestamp()))
+
+
 
     def clean(self):
         if self.description:
