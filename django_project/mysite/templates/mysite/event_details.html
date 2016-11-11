@@ -4,6 +4,7 @@
 {% block scripts %}
   <script type="text/javascript" src="//vk.com/js/api/openapi.js?130"></script>
   <script type="text/javascript" src="http://vk.com/js/api/share.js?94" charset="windows-1251"></script>
+  <script src="https://vk.com/js/api/openapi.js?136" type="text/javascript"></script>
   <script type="text/javascript">
     VK.init({apiId: 5618522, onlyWidgets: true});
   </script>
@@ -61,24 +62,29 @@
 {#          {% if event_tags %}#}
 {#            <div class="chips-initial"></div>#}
 {#          {% endif %}#}
-{#            <div class="row">#}
-{#              <div id="vk_like"></div>#}
-{#              <script type="text/javascript">#}
-{#                VK.Widgets.Like("vk_like", {type: "full", height: 30});#}
-{#              </script>#}
-{#            </div>#}
-{##}
-{#             <script type="text/javascript"><!--#}
-{#                document.write(VK.Share.button(false,{type: "round_nocount", text: "Сохранить к себе"}));#}
-{#              --></script>#}
-{##}
-{#          </div>#}
-{#          <div id="vk_comments"></div>#}
-{#          <script type="text/javascript">#}
-{#            VK.Widgets.Comments("vk_comments", {limit: 10, width: "665", attach: "*"});#}
-{#          </script>#}
-      </div>
+
+            <div class="row">
+            <div class="col s2 offset-s9">
+              <div class="right-align" id="vk_like"></div>
+              <script type="text/javascript">
+                VK.Widgets.Like("vk_like", {type: "full", height: 40});
+              </script>  
+              
+                {# <script type="text/javascript">#}
+                {#     document.write(VK.Share.button(false,{type: "link", text: "Сохранить к себе"}));#}
+                {# </script>#}
+            </div>
+
   </div>
+  </div>
+  <div class="row">
+          <div class="col s12 l12">
+    <div class="center-align" id="vk_comments"></div>
+      <script type="text/javascript">
+        VK.Widgets.Comments("vk_comments", {limit: 10, attach: "*"});
+      </script>
+        </div>
+          </div></div>
 </div>
 
 
