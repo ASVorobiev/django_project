@@ -10,7 +10,7 @@ from django_project.mysite import models
 from django_project.mysite.models import Events, MysiteOrganizers, Locations
 
 
-admin.site.register(MysiteOrganizers)
+
 
 class AdminImageWidget(AdminFileWidget):
     def render(self, name, value, attrs=None):
@@ -93,10 +93,12 @@ class EventsAdmin(admin.ModelAdmin):
 
     list_display = ['image_small', 'title', 'list_locations_name', 'description', 'start_date', 'start_time', 'button']
     list_filter = ('start_date', 'location_id__name', 'priority', 'is_active')
-
-
 admin.site.register(Events, EventsAdmin)
 
+class OrganizersAdmin(admin.ModelAdmin):
+    search_fields = ['name']
+    models = MysiteOrganizers
+admin.site.register(MysiteOrganizers, OrganizersAdmin)
 
 # def delete(request, app_label, model_name):
 #     model = models.Events

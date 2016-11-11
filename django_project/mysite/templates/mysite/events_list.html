@@ -27,6 +27,7 @@
         },
         success: function (data) {
           if (data['status']) {
+            $('#user_default_location').text('Ваш город: ' + data['city']);
             console.log('user default city saved')}
           else {
             console.log('Не удалось сохранить ваш город')}
@@ -45,7 +46,19 @@
 {% endblock %}
 
 {% block user_location %}
-  <a href="#!" onclick="open_modal1()">Ваш город: {{ user.location }}</a>
+  <li class="no-padding">
+    <ul class="collapsible collapsible-accordion">
+      <li class="bold"><a class="collapsible-header  waves-effect waves-teal">Персонализация</a>
+        <div class="collapsible-body" style="">
+          <ul>
+            <li>
+              <a id='user_default_location' href="#!" onclick="open_modal1()">Ваш город: {{ user.location }}</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </li>
 {% endblock %}
 
 {% block category %}

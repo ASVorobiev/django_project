@@ -1,7 +1,6 @@
 {% extends "mysite/base.html" %}
 
 {% block card_panel %}
-
           <div class="card large sticky-action z-depth-1">
 
             <div class="card-image">
@@ -16,8 +15,8 @@
                   </div>
                 </div>
               </div>
-              {% if event.image %}
 
+              {% if event.image %}
                 <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}">
                 <div class="container">
                   <div class="image">
@@ -25,16 +24,37 @@
                   </div>
                 </div>
                 </a>
-
               {% endif %}
+
             </div>
             <div class="card-content">
-                <span class="card-title activator grey-text text-darken-4"><p style="font-weight:600">{{ event.title }}</p><i class="material-icons right">more_vert</i></span>
-                <p >{{ event.description|linebreaksbr }}</p>
+              <span class="card-title activator grey-text text-darken-4">
+                <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}">
+                  <p style="font-weight:600">
+                    <span class="grey-text text-darken-3">
+                      {{ event.title }}
+                    </span>
+                  </p>
+                </a>
+                <i class="material-icons right">more_vert</i>
+              </span>
+              <span class="black-text">
+                <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}">
+                  <p>
+
+                    <span class="grey-text text-darken-3">
+                      {{ event.description|linebreaksbr }}
+                    </span>
+                  </p>
+                </a>
+              </span>
             </div>
             <div class="card-reveal">
-                <span class="card-title grey-text text-darken-4">{{ event.title }}<i class="material-icons right">close</i></span>
-                <p class="truncate">{{ event.description|linebreaksbr }}</p>
+              <span class="card-title grey-text text-darken-4">
+                {{ event.title }}
+                <i class="material-icons right">close</i>
+              </span>
+              <p class="truncate">{{ event.description|linebreaksbr }}</p>
             </div>
 {#            <div class="card-action">#}
 {#                <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span>Подробнее...</a>#}

@@ -25,7 +25,7 @@ from django.contrib.staticfiles import finders
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from django_project.mysite.forms import AddNewEvent
+from django_project.mysite.forms import AddNewEvent, AddNewOrganizer
 from django_project.mysite.models import Events, Locations, MysiteOrganizers, MysiteCategories, TaggedCategories
 from transliterate import translit
 from django.template.defaulttags import register
@@ -321,8 +321,10 @@ def set_tags(request):
 
 
 def jservice(request):
-    sleep(1)
-    return HttpResponse(json.dumps({'result': True}), content_type='application/json')
+    if request.GET['task'] == 'set_custom_places':
+        events_for_taggit = Events.objects.exclude(start_date__lte=today).exclude(
+            start_date__gte=today + timedelta(days=90))
+        return HttpResponse(json.dumps({'result': True}), content_type='application/json')
 
 
 @staff_member_required
@@ -336,6 +338,34 @@ def set_user_location(reguest):
         usr = reguest.user
         usr.location_id = reguest.POST['id']
         usr.save()
-        return HttpResponse(json.dumps({'status': True}), content_type='application/json')
+        return HttpResponse(json.dumps({'status': True, 'city': Locations.objects.get(id=usr.location_id).name}), content_type='application/json')
     # request.user
     return HttpResponse(json.dumps({'status': False}), content_type='application/json')
+
+
+def create_organizer(request):
+    if request.user.is_anonymous():
+        request.session['add_event_form_http_referer'] = 1
+        return redirect('login',)
+    context = {}
+    context['form'] = AddNewOrganizer(request.POST, request.FILES)
+    context.update(csrf(request))
+    if request.POST:
+        new_event_form = AddNewOrganizer(request.POST)
+        if new_event_form.is_valid():
+            new_event_form.vk_id = request.POST['vk_id']
+            new_event_form.vk_type = request.POST['vk_type']
+            new_event_form.name = request.POST['name']
+            new_event_form.logo = request.POST['logo']
+            new_event_form.url = request.POST['url']
+            new_event_form.followers = request.POST['followers']
+            new_event_form.place_id = request.POST['place_id']
+
+            # context['form'] = new_event_form
+            if new_event_form.is_valid():
+                obj = new_event_form.save(commit=False)
+                obj.owner = request.user
+                obj.save()
+                new_event_form.save_m2m()
+                response = {'redirect': request.build_absolute_uri(reverse('added_successfully'))}
+                return HttpResponse(json.dumps(response), content_type='application/json')

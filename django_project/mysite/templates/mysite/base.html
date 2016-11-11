@@ -116,20 +116,8 @@
       <li class="bold"><a href="#" class="waves-effect waves-teal">Введение</a></li>
       {% block category %}
       {% endblock %}
-      <li class="no-padding">
-        <ul class="collapsible collapsible-accordion">
-          <li class="bold"><a class="collapsible-header  waves-effect waves-teal">Персонализация</a>
-            <div class="collapsible-body" style="">
-              <ul>
-                <li>
-                  {%  block user_location %}
-                  {% endblock %}
-                </li>
-              </ul>
-            </div>
-          </li>
-        </ul>
-      </li>
+      {%  block user_location %}
+      {% endblock %}
     <div class="divider"></div>
       {% if user.is_authenticated %}
         <li class="bold"><a href="{% url 'logout' %}" class="waves-effect waves-teal">Выйти</a></li></ul>

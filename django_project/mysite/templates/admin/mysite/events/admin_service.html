@@ -13,7 +13,7 @@
   <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
 
   <script type="application/javascript">
-    function set_active(input_task) {
+    function tag_it(input_task) {
       $('#pbar').show();
       $.ajax({
           type: 'GET',
@@ -33,11 +33,32 @@
           }
       });
     }
+
+   function tag_it(input_task) {
+    $('#pbar').show();
+    $.ajax({
+        type: 'GET',
+        url: '{% url 'jservice' %}',
+        dateType: 'json',
+        data: {
+          task: input_task,
+          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+        },
+        success: function (data) {
+          $('#pbar').hide();
+          alert(data.tags);
+        },
+        error: function (data) {
+          $('#pbar').hide();
+          alert('error');
+        }
+    });
+  }
   </script>
 {% endblock %}
 
 {% block content %}
-  <button class="button" type="button" id="set_tags_for_all" onclick="set_active('all_future')">
+  <button class="button" type="button" id="set_tags_for_all" onclick="tag_it('all_future')">
   Adding tags for all future events
     <div id="pbar" hidden>
       <div class="progress">
@@ -46,8 +67,17 @@
     </div>
   </button>
 
-  <button class="button" type="button" id="set_tags_for_all" onclick="set_active('empty')">
+  <button class="button" type="button" id="set_tags_for_all" onclick="tag_it('empty')">
   Adding tags for future not tagged events
+    <div id="pbar" hidden>
+      <div class="progress">
+        <div class="indeterminate"></div>
+      </div>
+    </div>
+  </button>
+
+    <button class="button" type="button" id="copy_places_from_organizers" onclick="tag_it('places')">
+  Copy places from organizers
     <div id="pbar" hidden>
       <div class="progress">
         <div class="indeterminate"></div>
