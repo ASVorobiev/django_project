@@ -3,7 +3,13 @@
 {% load staticfiles %}
 {% load el_pagination_tags %}
 
-{% block title %}My amazing blog{% endblock %}
+{% block title %}
+  {% if user.location  %}
+    Афиша {{ user.location }} вКалендаре
+  {% else %}
+    Афиша твоего города вКалендаре
+  {% endif %}
+{% endblock %}
 
 {% block scripts %}
   <script type="text/javascript" src="//vk.com/js/api/openapi.js?130"></script>

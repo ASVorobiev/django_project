@@ -58,6 +58,11 @@ def events_list(request, site_screen_name=None):
     if not request.user.is_anonymous and not site_screen_name and request.user.location_id:
         location = Locations.objects.get(pk=request.user.location_id)
         site_screen_name = location.site_screen_name
+    elif 'user_location' in request.session and not site_screen_name:
+        location = Locations.objects.get(pk=request.session['user_location'])
+        site_screen_name = location.site_screen_name
+        request.user.location = location.name
+
 
     category = request.GET.get('category', '')
     tag = request.GET.get('tag', '')
@@ -333,13 +338,17 @@ def my_admin_view(request):
 
 
 @csrf_exempt
-def set_user_location(reguest):
-    if 'id' in reguest.POST and reguest.user.is_authenticated:
-        usr = reguest.user
-        usr.location_id = reguest.POST['id']
-        usr.save()
-        return HttpResponse(json.dumps({'status': True, 'city': Locations.objects.get(id=usr.location_id).name}), content_type='application/json')
-    # request.user
+def set_user_location(request):
+    if 'id' in request.POST:
+        request.session['user_location'] = request.POST['id']
+        request.session.modified = True
+        if request.user.is_authenticated:
+            usr = request.user
+            usr.location_id = request.POST['id']
+            usr.save()
+            return HttpResponse(json.dumps({'status': True, 'city': Locations.objects.get(id=usr.location_id).name}), content_type='application/json')
+        # request.user
+
     return HttpResponse(json.dumps({'status': False}), content_type='application/json')
 
 
