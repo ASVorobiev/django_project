@@ -188,6 +188,10 @@ def add_event_form(request):
     context = {}
     context['form'] = AddNewEvent(request.POST, request.FILES)
     context['locations'] = Locations.objects.all()
+    org_data = {'vk_id': '', 'vk_type': '', 'name': '', 'logo': '', 'url': ''}
+    form = AddNewOrganizer(data=org_data, )
+    context['org_form'] = form
+    context['org_form']['name'].css_classes('foo bar')
     context.update(csrf(request))
     if request.POST:
 

@@ -14,4 +14,5 @@ class AddNewOrganizer(forms.ModelForm):
     class Meta:
         model = MysiteOrganizers
         # required = True
-        fields = ('vk_id', 'vk_type', 'name', 'logo', 'url', 'followers', 'place_id')
+        # fields = ('vk_id', 'vk_type', 'name', 'logo', 'url', 'followers', 'place_id')
+        exclude = ('followers', 'place_id', 'modified', 'created', 'is_deleted', 'confidence')

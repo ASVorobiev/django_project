@@ -24,11 +24,33 @@
   }
 </script>
 
-<!-- Modal Structure -->
+<!-- Modal help Structure -->
 <div id="modal2" class="modal row">
   <div class="modal-content">
     <h4>Modal Header</h4>
     <p>A bunch of text</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Согласен</a>
+  </div>
+</div>
+
+<!-- Modal org Structure -->
+<div id="modal_org" class="modal row">
+  <div class="modal-content">
+    <h4>Modal Header</h4>
+      <form>
+    {% csrf_token %}
+    {% for field in org_form %}
+        <div class="input-field">
+
+
+          {{ field }}
+          {{ field.label_tag }}
+        </div>
+    {% endfor %}
+    </form>
+{#    <p>A bunch of text</p>#}
   </div>
   <div class="modal-footer">
     <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Согласен</a>
@@ -66,11 +88,18 @@
     </div>
 
     <div class="row" hidden id="place_row">
-      <div class="input-field col s12">
+      <div class="input-field col s11">
         <select id="local_places" name="organizer" class="icons validate">
 
         </select>
         <label>Место</label>
+      </div>
+      <div class="valign-wrapper col s1">
+        <a class="valign center-align btn-large modal-trigger" href="#modal_org">
+          <i class="valign center-align medium material-icons">
+            playlist_add
+          </i>
+        </a>
       </div>
     </div>
 
@@ -380,6 +409,14 @@
             });
       });
   </script>
+{#  #}
+{#  <script type="application/javascript">#}
+{#    $(function () {#}
+{#      $('#open_org_form').click(function () {#}
+{#        $('#modal_org').show();#}
+{#      });#}
+{#    })#}
+{#  </script>#}
 {% endblock %}
 
 {% block modal_results %}
