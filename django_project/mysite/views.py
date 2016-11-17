@@ -193,7 +193,7 @@ def add_event_form(request):
     #context['org_form']['name'].css_classes('foo bar')
     context.update(csrf(request))
     if request.POST:
-        new_org_form = AddNewOrganizer(request.POST['event_form'])
+        new_org_form = AddNewOrganizer(request.POST)
         if new_org_form.is_valid():
             pass
 

@@ -371,7 +371,8 @@
 
   <script type="text/javascript">
       $(function () {
-
+{#          $('#org_form :input').not(':submit').clone().hide().appendTo('#main_form');#}
+{#          $('#main_form, #org_form').serialize();#}
           var $frm = $('#main_form');
           var frmNode = $frm.get(0);
           var chipsObj = [];
@@ -400,20 +401,42 @@
                 }
                 console.log('111');
 
-                var OrgformData = new FormData($('#org_form').get(0));
-                var dataString = $("#main_form, #org_form").serialize();
+                var OrgformData = $('#org_form');
+                var OrgFormDataSerialize = OrgformData.serializeArray();
+{#                var dataString = $("#main_form, #org_form").serialize();#}
 
+{#                var frm = $.extend(formData, OrgformData);#}
+
+                $.each(OrgFormDataSerialize, function(index, value){
+                      console.log("INDEX: " + value['name'] + " VALUE: " +value['value']);
+                      formData.append(value['name'], value['value']);
+                  });
+
+{#                formData.append(OrgformData.serialize());#}
+
+{#                $.ajax({#}
+{#                    type: $frm.attr('method'),#}
+{#                    url: $frm.attr('action'),#}
+{#                    headers: {'X-CSRFToken': '{{ csrf_token }}'},#}
+{#                    data: formData,#}
+{#                    processData: false,#}
+{#                    contentType: false,#}
+{#                    success: function (data) {#}
+{#                          window.location.href = data['redirect'];#}
+{#                    }#}
+{#                });#}
                 $.ajax({
-                    type: $frm.attr('method'),
-                    url: $frm.attr('action'),
-                    headers: {'X-CSRFToken': '{{ csrf_token }}'},
-                    data: dataString,
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-                          window.location.href = data['redirect'];
-                    }
-                });
+                  type: 'POST',
+                  url: {% url 'add_event_form'%},
+                  headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                  data: formData,
+                  processData: false,
+                  contentType: false,
+                  success: function(data) {
+                      console.log(data);
+                  }
+                })
+
               }
               else {
                   alert(("form")[0].error);
