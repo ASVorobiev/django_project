@@ -1,5 +1,6 @@
 {% extends "mysite/base.html" %}
 {% load staticfiles %}
+{% load myfilters %}
 
 {% block content %}
 <script type="text/javascript" src="//vk.com/js/api/openapi.js?130"></script>
@@ -39,21 +40,22 @@
 <div id="modal_org" class="modal row">
   <div class="modal-content">
     <h4>Modal Header</h4>
-      <form>
-    {% csrf_token %}
-    {% for field in org_form %}
-        <div class="input-field">
-
-
-          {{ field }}
-          {{ field.label_tag }}
-        </div>
-    {% endfor %}
+    <form method="post" id="org_form" name="org_form" >
+      {% csrf_token %}
+     {{ form.non_field_errors }}
+      {% for field in org_form %}
+          <div class="input-field">
+{#            {{ field.errors }}#}
+            {{ field|addcss:'validate' }}
+            {{ field.label_tag }}
+          </div>
+      {% endfor %}
     </form>
 {#    <p>A bunch of text</p>#}
   </div>
   <div class="modal-footer">
-    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Согласен</a>
+    <button class="modal-action waves-effect waves-light btn" id="save_org" type="submit" name="org_action">Сохранить
+{#    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Согласен</a>#}
   </div>
 </div>
 
@@ -79,23 +81,29 @@
 
 
 
-{#            <i class="material-icons">location_city</i>#}
+    {#            <i class="material-icons">location_city</i>#}
+    <div class="row">
     <div class="input-field col s12">
 
-        {{ form.location }}
+      {{ form.location }}
 
-        <label>Город</label>
+      <label>Город</label>
+    </div>
     </div>
 
     <div class="row" hidden id="place_row">
-      <div class="input-field col s11">
+      <div class="input-field col s10" id="place_selector">
         <select id="local_places" name="organizer" class="icons validate">
 
         </select>
         <label>Место</label>
       </div>
-      <div class="valign-wrapper col s1">
-        <a class="valign center-align btn-large modal-trigger" href="#modal_org">
+      <div class="input-field col s10" id="new_org" hidden>
+          <input disabled value="" id="new_org_input" type="text" class="validate">
+          <label for="disabled">Добавлено новое место</label>
+      </div>
+      <div class="col s1">
+        <a class="center-align btn-flat modal-trigger" href="#modal_org">
           <i class="valign center-align medium material-icons">
             playlist_add
           </i>
@@ -380,8 +388,8 @@
 
 
             $frm.on('submit', function (e1) {
-              if(1 || $("form")[0].checkValidity()) {
-                e1.preventDefault();
+              e1.preventDefault();
+              if($("form")[0].checkValidity()) {
                 var formData = new FormData(frmNode);
                 var files = $('#files').get(0).files;
 
@@ -391,11 +399,15 @@
                     formData.append('image', files[0]);
                 }
                 console.log('111');
+
+                var OrgformData = new FormData($('#org_form').get(0));
+                var dataString = $("#main_form, #org_form").serialize();
+
                 $.ajax({
                     type: $frm.attr('method'),
                     url: $frm.attr('action'),
                     headers: {'X-CSRFToken': '{{ csrf_token }}'},
-                    data: formData,
+                    data: dataString,
                     processData: false,
                     contentType: false,
                     success: function (data) {
@@ -404,10 +416,30 @@
                 });
               }
               else {
-                  alert("Bad submit");
+                  alert(("form")[0].error);
+
               }
             });
       });
+  </script>
+
+  <script type="application/javascript">
+  $(function () {
+    $('#save_org').on('click', function (org) {
+      console.log('org_form submit');
+{#      $("#org_form").validate;#}
+      if ($("#org_form")[0].checkValidity()) {
+        org.preventDefault();
+        $('#modal_org').closeModal();
+        $('#place_selector').hide();
+        $('#new_org_input').val(
+                $('#id_new_org-name').val()
+        );
+        Materialize.updateTextFields();
+        $('#new_org').show();
+      }
+    })
+  });
   </script>
 {#  #}
 {#  <script type="application/javascript">#}

@@ -189,18 +189,20 @@ def add_event_form(request):
     context['form'] = AddNewEvent(request.POST, request.FILES)
     context['locations'] = Locations.objects.all()
     org_data = {'vk_id': '', 'vk_type': '', 'name': '', 'logo': '', 'url': ''}
-    form = AddNewOrganizer(data=org_data, )
-    context['org_form'] = form
-    context['org_form']['name'].css_classes('foo bar')
+    context['org_form'] = AddNewOrganizer(data=org_data, prefix='new_org')
+    #context['org_form']['name'].css_classes('foo bar')
     context.update(csrf(request))
     if request.POST:
+        new_org_form = AddNewOrganizer(request.POST['event_form'])
+        if new_org_form.is_valid():
+            pass
+
 
         p = pill(request.FILES['image'])
         img_file = InMemoryUploadedFile(p[0], None, 'poster.jpg', 'image/jpeg', p[0].tell, None)
         thumb_file = InMemoryUploadedFile(p[1], None, 'thumb.jpg', 'image/jpeg', p[1].tell, None)
         request.FILES['image'] = img_file
         request.FILES['thumb'] = thumb_file
-
         new_event_form = AddNewEvent(request.POST, request.FILES)
         if new_event_form.is_valid():
             new_event_form.title = request.POST['title']

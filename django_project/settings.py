@@ -105,6 +105,7 @@ TEMPLATES = [
                  os.path.join(ROOT_PATH, 'django_project', 'mysite', 'templates', 'mysite'),
                  os.path.join(ROOT_PATH, 'django_project', 'mysite', 'templates', 'admin', 'mysite', 'events'),
                  os.path.join(ROOT_PATH, 'django_project', 'mysite', 'templates', 'el_pagination'),
+                 os.path.join(ROOT_PATH, 'django_project', 'mysite', 'templatetags'),
                  os.path.join(ROOT_PATH, 'django_project', 'user_auth', 'templates'),
                  os.path.join(ROOT_PATH, 'django_project', 'text_ru', 'templates'),
                  os.path.join(ROOT_PATH, 'django_project'),
@@ -143,6 +144,7 @@ INSTALLED_APPS = (
     'django_project.text_ru',
     'el_pagination',
     'taggit',
+    'django_project.mysite.templatetags.myfilters'
     # 'xadmin',
     # 'crispy_forms',
     # 'reversion',
