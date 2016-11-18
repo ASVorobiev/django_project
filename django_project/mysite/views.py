@@ -25,8 +25,9 @@ from django.contrib.staticfiles import finders
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from django_project.mysite.forms import AddNewEvent, AddNewOrganizer
-from django_project.mysite.models import Events, Locations, MysiteOrganizers, MysiteCategories, TaggedCategories
+from django_project.mysite.forms import AddNewEvent, CustomPlacesForm
+from django_project.mysite.models import Events, Locations, MysiteOrganizers, MysiteCategories, TaggedCategories, \
+    Customplaces
 from transliterate import translit
 from django.template.defaulttags import register
 
@@ -189,11 +190,11 @@ def add_event_form(request):
     context['form'] = AddNewEvent(request.POST, request.FILES)
     context['locations'] = Locations.objects.all()
     org_data = {'vk_id': '', 'vk_type': '', 'name': '', 'logo': '', 'url': ''}
-    context['org_form'] = AddNewOrganizer(data=org_data, prefix='new_org')
+    context['org_form'] = CustomPlacesForm(data=org_data, prefix='new_org')
     #context['org_form']['name'].css_classes('foo bar')
     context.update(csrf(request))
     if request.POST:
-        new_org_form = AddNewOrganizer(request.POST)
+        new_org_form = CustomPlacesForm(request.POST)
         if new_org_form.is_valid():
             pass
 
@@ -337,6 +338,27 @@ def jservice(request):
             start_date__gte=today + timedelta(days=90))
         return HttpResponse(json.dumps({'result': True}), content_type='application/json')
 
+    if request.GET['task'] == 'orgs_to_places':
+        location_id = 1
+        sql_query = "SELECT * from mysite_organizers where id in (SELECT DISTINCT organizer_id from mysite_events WHERE location_id = %s) AND confidence > 1 AND vk_type = 'group' ORDER BY followers" % location_id
+        places = MysiteOrganizers.objects.raw(sql_query)
+
+        # data['location'] = location_id
+
+        for place in places:
+            if not Customplaces.objects.filter(org_parent=place.id).count():
+                data = {'location': location_id,
+                        'name': place.name,
+                        'logo': place.logo,
+                        'url': place.url,
+                        'status': place.confidence,
+                        'org_parent': place.id}
+                CustomPlacesFormObj = CustomPlacesForm(data)
+                if CustomPlacesFormObj.is_valid():
+                    obj = CustomPlacesFormObj.save()
+                    pass
+        return HttpResponse(json.dumps({'result': True}), content_type='application/json')
+
 
 @staff_member_required
 def my_admin_view(request):
@@ -363,10 +385,10 @@ def create_organizer(request):
         request.session['add_event_form_http_referer'] = 1
         return redirect('login',)
     context = {}
-    context['form'] = AddNewOrganizer(request.POST, request.FILES)
+    context['form'] = CustomPlacesForm(request.POST, request.FILES)
     context.update(csrf(request))
     if request.POST:
-        new_event_form = AddNewOrganizer(request.POST)
+        new_event_form = CustomPlacesForm(request.POST)
         if new_event_form.is_valid():
             new_event_form.vk_id = request.POST['vk_id']
             new_event_form.vk_type = request.POST['vk_type']

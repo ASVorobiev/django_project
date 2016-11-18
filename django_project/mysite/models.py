@@ -213,3 +213,20 @@ class TaggedCategories(TaggedItemBase):
 
     def __str__(self):
         return self.tag.name
+
+class Customplaces(models.Model):
+    location = models.ForeignKey(Locations)
+    name = models.CharField(max_length=255)
+    logo = models.CharField(max_length=255, blank=True, null=True)
+    url = models.CharField(max_length=255, blank=True, null=True)
+    status = models.IntegerField(blank=True, null=True)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+    org_parent = models.ForeignKey(MysiteOrganizers, blank=True, null=True)
+    is_deleted = models.IntegerField(choices=((0, 'Нет'), (1, 'Да')), default=0)
+    modified = models.IntegerField(default=int(datetime.utcnow().timestamp()))
+    created = models.IntegerField(default=int(datetime.utcnow().timestamp()))
+
+    def __str__(self):
+        return self.name
+

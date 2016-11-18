@@ -1,5 +1,5 @@
 from django import forms
-from .models import Events, MysiteOrganizers
+from .models import Events, MysiteOrganizers, Customplaces
 
 
 class AddNewEvent(forms.ModelForm):
@@ -10,9 +10,9 @@ class AddNewEvent(forms.ModelForm):
                   'organizer', 'tag_it', 'is_free')
 
 
-class AddNewOrganizer(forms.ModelForm):
+class CustomPlacesForm(forms.ModelForm):
     class Meta:
-        model = MysiteOrganizers
+        model = Customplaces
         # required = True
         # fields = ('vk_id', 'vk_type', 'name', 'logo', 'url', 'followers', 'place_id')
-        exclude = ('followers', 'place_id', 'modified', 'created', 'is_deleted', 'confidence')
+        exclude = ('modified', 'created', 'is_deleted')

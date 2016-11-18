@@ -34,8 +34,8 @@
       });
     }
 
-   function tag_it(input_task) {
-    $('#pbar').show();
+   function jservice(input_task) {
+    $('#j_bar').show();
     $.ajax({
         type: 'GET',
         url: '{% url 'jservice' %}',
@@ -45,11 +45,11 @@
           csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
         },
         success: function (data) {
-          $('#pbar').hide();
-          alert(data.tags);
+          $('#j_bar').hide();
+          alert(data['result']);
         },
         error: function (data) {
-          $('#pbar').hide();
+          $('#j_bar').hide();
           alert('error');
         }
     });
@@ -76,9 +76,18 @@
     </div>
   </button>
 
-    <button class="button" type="button" id="copy_places_from_organizers" onclick="tag_it('places')">
+{#  <button class="button" type="button" id="copy_places_from_organizers" onclick="tag_it('places')">#}
+{#  Copy places from organizers#}
+{#    <div id="pbar" hidden>#}
+{#      <div class="progress">#}
+{#        <div class="indeterminate"></div>#}
+{#      </div>#}
+{#    </div>#}
+{#  </button>#}
+
+  <button class="button" type="button" id="copy_places_from_organizers" onclick="jservice('orgs_to_places')">
   Copy places from organizers
-    <div id="pbar" hidden>
+    <div id="j_bar" hidden>
       <div class="progress">
         <div class="indeterminate"></div>
       </div>
