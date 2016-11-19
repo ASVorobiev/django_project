@@ -216,16 +216,19 @@ class TaggedCategories(TaggedItemBase):
 
 class Customplaces(models.Model):
     location = models.ForeignKey(Locations)
-    name = models.CharField(max_length=255)
-    logo = models.CharField(max_length=255, blank=True, null=True)
-    url = models.CharField(max_length=255, blank=True, null=True)
-    status = models.IntegerField(blank=True, null=True)
+    name = models.CharField(max_length=255, verbose_name='Название места(обязательно)')
+    logo = models.CharField(max_length=255, blank=True, null=True, verbose_name='Ссылка на логотип')
+    url = models.CharField(max_length=255, blank=True, null=True, verbose_name='Ссылка на сайт')
+    status = models.IntegerField(blank=True, null=True, verbose_name='Статус модерации')
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
-    org_parent = models.ForeignKey(MysiteOrganizers, blank=True, null=True)
+    org_parent = models.ForeignKey(MysiteOrganizers, blank=True, null=True, verbose_name='Создано "оранизатором"')
     is_deleted = models.IntegerField(choices=((0, 'Нет'), (1, 'Да')), default=0)
     modified = models.IntegerField(default=int(datetime.utcnow().timestamp()))
     created = models.IntegerField(default=int(datetime.utcnow().timestamp()))
+
+    class Meta:
+        ordering = ['name']
 
     def __str__(self):
         return self.name

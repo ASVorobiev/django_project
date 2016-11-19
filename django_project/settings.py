@@ -16,7 +16,8 @@ ADMINS = (
 
 
 MANAGERS = ADMINS
-ALLOWED_HOSTS = ['vkalendare.net', 'vkalendare.com', 'www.vkalendare.com']
+# noinspection PyPackageRequirements
+ALLOWED_HOSTS = ['vkalendare.net', 'vkalendare.com', 'www.vkalendare.com', '127.0.0.1']
 
 
 DATABASES = {
@@ -267,3 +268,8 @@ SOCIAL_AUTH_TWITTER_SECRET = 'RSJmTueWBzCgeK9reZ0ViE0sZXKMgi5pgiQoUfcLVCWkCM8vWU
 # https://oauth.yandex.com/
 SOCIAL_AUTH_YANDEX_OAUTH2_KEY = '04d32f775cc04084b4c63ba53c763bcd'
 SOCIAL_AUTH_YANDEX_OAUTH2_SECRET = 'e98b0cc1a8c444f1859830753f42194a'
+
+
+#import nltk
+#nltk.download('punkt')
+#nltk.download('averaged_perceptron_tagger')
