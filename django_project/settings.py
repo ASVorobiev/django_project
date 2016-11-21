@@ -16,7 +16,8 @@ ADMINS = (
 
 
 MANAGERS = ADMINS
-ALLOWED_HOSTS = ['vkalendare.net', 'vkalendare.com', 'www.vkalendare.com']
+# noinspection PyPackageRequirements
+ALLOWED_HOSTS = ['vkalendare.net', 'vkalendare.com', 'www.vkalendare.com', '127.0.0.1']
 
 
 DATABASES = {
@@ -105,6 +106,7 @@ TEMPLATES = [
                  os.path.join(ROOT_PATH, 'django_project', 'mysite', 'templates', 'mysite'),
                  os.path.join(ROOT_PATH, 'django_project', 'mysite', 'templates', 'admin', 'mysite', 'events'),
                  os.path.join(ROOT_PATH, 'django_project', 'mysite', 'templates', 'el_pagination'),
+                 os.path.join(ROOT_PATH, 'django_project', 'mysite', 'templatetags'),
                  os.path.join(ROOT_PATH, 'django_project', 'user_auth', 'templates'),
                  os.path.join(ROOT_PATH, 'django_project', 'text_ru', 'templates'),
                  os.path.join(ROOT_PATH, 'django_project'),
@@ -143,6 +145,7 @@ INSTALLED_APPS = (
     'django_project.text_ru',
     'el_pagination',
     'taggit',
+    'django_project.mysite.templatetags.myfilters'
     # 'xadmin',
     # 'crispy_forms',
     # 'reversion',
@@ -265,3 +268,8 @@ SOCIAL_AUTH_TWITTER_SECRET = 'RSJmTueWBzCgeK9reZ0ViE0sZXKMgi5pgiQoUfcLVCWkCM8vWU
 # https://oauth.yandex.com/
 SOCIAL_AUTH_YANDEX_OAUTH2_KEY = '04d32f775cc04084b4c63ba53c763bcd'
 SOCIAL_AUTH_YANDEX_OAUTH2_SECRET = 'e98b0cc1a8c444f1859830753f42194a'
+
+
+#import nltk
+#nltk.download('punkt')
+#nltk.download('averaged_perceptron_tagger')
