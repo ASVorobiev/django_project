@@ -27,9 +27,11 @@ from django.views.decorators.csrf import csrf_exempt
 
 from django_project.mysite.forms import AddNewEvent, CustomPlacesForm
 from django_project.mysite.models import Events, Locations, MysiteOrganizers, MysiteCategories, TaggedCategories, \
-    Customplaces
+    Customplaces, MysiteVkEvents
 from transliterate import translit
 from django.template.defaulttags import register
+
+from datetime import datetime, timedelta
 
 from PIL import Image
 from PIL import ImageFont
@@ -393,6 +395,24 @@ def jservice(request):
                     obj.save()
                     pass
         return HttpResponse(json.dumps({'result': True}), content_type='application/json')
+
+
+def push_confidence():
+    events = MysiteVkEvents.objects.filter(members__gt=0, image_url__isnull=False, is_new=1, event_id__isnull=True,
+                                           created__lt=datetime.utcnow() - timedelta(days=1),
+                                           start__lt=datetime.utcnow() + timedelta(days=14), organizer_id__confidence=2)
+    return events
+
+# ->leftJoin('Organizers', 'VkEvents.organizer_id=Organizers.id')
+# ->groupBy('VkEvents.id')
+# ->where('VkEvents.members > 0')
+#
+# ->andWhere('VkEvents.image_url IS NOT NULL')
+# ->andWhere('VkEvents.is_new=1')
+# ->andWhere('VkEvents.event_id IS NULL')
+# ->andWhere('VkEvents.created < UNIX_TIMESTAMP()-86400')
+# ->andWhere('VkEvents.start < UNIX_TIMESTAMP()+1209600')
+# ->andWhere('Organizers.confidence=2');
 
 
 @staff_member_required

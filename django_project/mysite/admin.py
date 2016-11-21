@@ -7,7 +7,7 @@ from django.http import Http404
 from django.utils.safestring import mark_safe
 
 from django_project.mysite import models
-from django_project.mysite.models import Events, MysiteOrganizers, Locations
+from django_project.mysite.models import Events, MysiteOrganizers, Locations, Customplaces
 
 
 
@@ -99,6 +99,11 @@ class OrganizersAdmin(admin.ModelAdmin):
     search_fields = ['name']
     models = MysiteOrganizers
 admin.site.register(MysiteOrganizers, OrganizersAdmin)
+
+class CustomplacesAdmin(admin.ModelAdmin):
+    search_fields = ['name']
+    models = Customplaces
+admin.site.register(Customplaces, CustomplacesAdmin)
 
 # def delete(request, app_label, model_name):
 #     model = models.Events
