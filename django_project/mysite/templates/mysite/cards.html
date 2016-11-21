@@ -41,7 +41,6 @@
               <span class="black-text">
                 <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}">
                   <p>
-
                     <span class="grey-text text-darken-3">
                       {{ event.description|linebreaksbr }}
                     </span>
@@ -54,7 +53,7 @@
                 {{ event.title }}
                 <i class="material-icons right">close</i>
               </span>
-              <p class="truncate">{{ event.description|linebreaksbr }}</p>
+              <p class="truncate">{{ event.description|linebreaks }}</p>
             </div>
 {#            <div class="card-action">#}
 {#                <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span>Подробнее...</a>#}

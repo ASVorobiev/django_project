@@ -345,15 +345,18 @@ def add_tags_for_event(event_obj):
 
 @csrf_exempt
 def set_tags(request):
+    future_days = 90
     if request.GET['task'].isdigit():
         events_for_taggit = Events.objects.filter(pk=request.GET['task'])
     elif request.GET['task'] == 'all_future':
         events_for_taggit = Events.objects.exclude(start_date__lte=today).exclude(
-            start_date__gte=today + timedelta(days=90))
+            start_date__gte=today + timedelta(days=future_days))
     elif request.GET['task'] == 'empty':
         events_for_taggit = Events.objects.filter(tag_it__isnull=True)[:100]
-    else:
-        return HttpResponse(json.dumps({'tags': False}), content_type='application/json')
+    elif request.GET['task'] == 'empty_future':
+        events_for_taggit = Events.objects.exclude(start_date__lte=today).exclude(
+            start_date__gte=today + timedelta(days=future_days)).filter(tag_it__isnull=True)
+        # return HttpResponse(json.dumps({'tags': False}), content_type='application/json')
 
     tags = ''
     for event in events_for_taggit:

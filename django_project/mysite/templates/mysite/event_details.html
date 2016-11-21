@@ -38,7 +38,7 @@
   <div class="card">
       <div class="row">
           <div class="col s12 l5">
-              <img class="image_padding materialboxed responsive-img" src={{ event_data.image.url }}>
+              <img class="image_padding materialboxed responsive-img" src="{{ event_data.image.url }}" alt="Афиша {{ event_data.title }}">
           </div>
           <div class="col s12 l7 section">
             <div class="center-align">
@@ -62,7 +62,7 @@
 
           <div class="row">
           {% for tag in event_tags %}
-              <div class="chip"><a href="{% url 'location_events' current_location.site_screen_name %}?tag={{ tag | urlencode}}">{{ tag }}</a></div>
+              <div class="chip"><a href="{% url 'location_events' current_location.site_screen_name %}?tag={{ tag|urlencode }}">{{ tag }}</a></div>
           {% endfor %}
           </div>
 

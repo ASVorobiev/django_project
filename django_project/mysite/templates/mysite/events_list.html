@@ -77,7 +77,6 @@
               {% for ctg in categories %}
 {#                <a href="{% url 'location_events' loc.site_screen_name %}" onclick="set_user_location({{ loc.id }})">{{ loc.name }}</a>#}
                 <li><a href="{% url 'location_events' current_location.site_screen_name %}?category={{ ctg | urlencode}}">{{ ctg }}<span class="badge">{{ categories|get_item:ctg|get_item:'count' }}</span></a></li>
-
               {% endfor %}
             </ul>
           </div>
@@ -130,39 +129,38 @@
   .material-icons.md-14 { font-size: 14px; }
   </style>
   <div class="">
-      <div class="row">
-      <div class="row">
-      <div class="col s12 m6 l4">
-        <div class="card-panel teal">
-          <div class="card_circle">
-            <i class="material-icons large teal_icons">bubble_chart</i>
-          </div>
-                    <h5 class="white-text center">На этой неделе</h5>
-{#          <p class="white-text center">10 мероприятий</p>#}
-
+    <div class="row">
+    <div class="row">
+    <div class="col s12 m6 l4">
+      <div class="card-panel teal">
+        <div class="card_circle hide-on-med-and-down">
+          <i class="material-icons large teal_icons">bubble_chart</i>
         </div>
-      </div>
-
-      <div class="col s12 m6 l4">
-        <div class="card-panel red lighten-1">
-          <div class="card_circle">
-            <i class="material-icons large red_l1_icons">transfer_within_a_station</i>
-          </div>
-          <h5 class="white-text center">Куда пойти в выходные</h5>
+        <h5 class="white-text center">На этой неделе</h5>
 {#          <p class="white-text center">10 мероприятий</p>#}
-        </div>
-      </div>
-
-      <div class="col s12 m6 l4">
-        <div class="card-panel teal">
-          <div class="card_circle">
-            <i class="material-icons large teal_icons">money_off</i>
-          </div>
-          <h5 class="white-text center">Бесплатно</h5>
-{#          <p class="white-text center">10 мероприятий</p>#}
-        </div>
       </div>
     </div>
+
+    <div class="col s12 m6 l4">
+      <div class="card-panel red lighten-1">
+        <div class="card_circle hide-on-med-and-down">
+          <i class="material-icons large red_l1_icons">transfer_within_a_station</i>
+        </div>
+        <h5 class="white-text center">Куда пойти в выходные</h5>
+{#          <p class="white-text center">10 мероприятий</p>#}
+      </div>
+    </div>
+
+    <div class="col s12 m6 l4">
+      <div class="card-panel teal">
+        <div class="card_circle hide-on-med-and-down">
+          <i class="material-icons large teal_icons">money_off</i>
+        </div>
+        <h5 class="white-text center">Бесплатно</h5>
+{#          <p class="white-text center">10 мероприятий</p>#}
+      </div>
+    </div>
+  </div>
 
       {% for event in location_events %}
         {% block card_panel %}
