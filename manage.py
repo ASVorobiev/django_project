@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/home/www/vkalendare.com/venv/mysite/bin/python
 import os
 import sys
 
