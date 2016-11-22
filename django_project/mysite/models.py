@@ -196,7 +196,7 @@ class Events(models.Model):
 
 class LocationCities(models.Model):
     vk_city_id = models.IntegerField(primary_key=True)
-    location_id = models.IntegerField()
+    location = models.ForeignKey(Locations)
     vk_city_name = models.CharField(max_length=255)
 
 
@@ -243,7 +243,7 @@ class MysiteVkEvents(models.Model):
     start = models.IntegerField()
     finish = models.IntegerField(blank=True, null=True)
     members = models.IntegerField()
-    organizer_id = models.ForeignKey(MysiteOrganizers)
+    organizer = models.ForeignKey(MysiteOrganizers)
     contacts = models.TextField(blank=True, null=True)
     links = models.TextField(blank=True, null=True)
     place_id = models.IntegerField(blank=True, null=True)
@@ -255,3 +255,6 @@ class MysiteVkEvents(models.Model):
     class Meta:
         managed = False
         db_table = 'mysite_vk_events'
+
+    def __str__(self):
+        return self.name

@@ -2,7 +2,7 @@ import copy
 import hashlib
 import json
 import os
-from datetime import date, timedelta
+from datetime import date, timedelta, timezone
 from io import BytesIO
 import random
 
@@ -27,7 +27,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from django_project.mysite.forms import AddNewEvent, CustomPlacesForm
 from django_project.mysite.models import Events, Locations, MysiteOrganizers, MysiteCategories, TaggedCategories, \
-    Customplaces, MysiteVkEvents
+    Customplaces, MysiteVkEvents, LocationCities
 from transliterate import translit
 from django.template.defaulttags import register
 
@@ -396,11 +396,55 @@ def jservice(request):
                     pass
         return HttpResponse(json.dumps({'result': True}), content_type='application/json')
 
+    if request.GET['task'] == 'push_confidence':
+        push_confidence()
+        return HttpResponse(json.dumps({'result': True}), content_type='application/json')
 
-def push_confidence():
-    events = MysiteVkEvents.objects.filter(members__gt=0, image_url__isnull=False, is_new=1, event_id__isnull=True,
-                                           created__lt=datetime.utcnow() - timedelta(days=1),
-                                           start__lt=datetime.utcnow() + timedelta(days=14), organizer_id__confidence=2)
+
+def push_confidence(priority=0):
+    events = MysiteVkEvents.objects.filter(created__lt=int((datetime.utcnow() - timedelta(days=1)).timestamp()),
+                                           start__lt=int((datetime.utcnow() + timedelta(days=14)).timestamp()),
+                                           members__gt=0, image_url__isnull=False, is_new=1, event_id__isnull=True,
+                                           organizer_id__confidence=2)
+    for vk_event in events:
+        print(vk_event)
+        event_location = LocationCities.objects.get(vk_city_id=vk_event.city_id)
+        tz = event_location.location.tz
+        if tz:
+            if abs(tz) < 3600:
+                tz *= 3600
+
+            from tzlocal import get_localzone
+            tz = get_localzone()
+
+            dtime = datetime.fromtimestamp(vk_event.start, tz=tz)
+            # diff = tz - 0
+
+        event_date = {}
+        event_date['title'] = vk_event.name
+
+        event_date['description'] = vk_event.description
+        event_date['location'] = event_location.location_id
+        event_date['start_date'] = dtime.replace(tzinfo=timezone.utc).date()
+        event_date['start_time'] = dtime.replace(tzinfo=timezone.utc).time()
+        event_date['url'] = 'http://vk.com/event%d' % vk_event.id
+        event_date['organizer'] = vk_event.organizer_id
+        event_date['priority'] = priority
+        if vk_event.finish:
+            if vk_event.finish > vk_event.start:
+                finish_dtime = datetime.fromtimestamp(vk_event.finish, tz=tz)
+                event_date['finish_date'] = finish_dtime.replace(tzinfo=timezone.utc).date()
+                event_date['finish_time'] = finish_dtime.replace(tzinfo=timezone.utc).time()
+        AddNewEventObj = AddNewEvent(event_date)
+        if AddNewEventObj.is_valid():
+            # get image_url
+            # get thumb_url
+            obj = AddNewEventObj.save()
+
+            vk_event.is_new = 0
+            vk_event.event_id = obj.id
+            vk_event.save()
+
     return events
 
 # ->leftJoin('Organizers', 'VkEvents.organizer_id=Organizers.id')
