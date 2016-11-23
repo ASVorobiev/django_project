@@ -8,8 +8,10 @@ import random
 
 import re
 from time import sleep
+from tzlocal import get_localzone
 
 import nltk
+import requests
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.files.base import ContentFile
@@ -25,7 +27,7 @@ from django.contrib.staticfiles import finders
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from django_project.mysite.forms import AddNewEvent, CustomPlacesForm
+from django_project.mysite.forms import AddNewEvent, CustomPlacesForm, ConfidenceNewEvent
 from django_project.mysite.models import Events, Locations, MysiteOrganizers, MysiteCategories, TaggedCategories, \
     Customplaces, MysiteVkEvents, LocationCities
 from transliterate import translit
@@ -147,9 +149,9 @@ def events_details(request, site_screen_name, pk, title_translit='dont_remove'):
                                                          })
 
 
-def pill(image_io):
+def pill(image_io, image_logo='logo/vkalendare_logo_only.png'):
     im = Image.open(image_io)
-    logo = Image.open(finders.find('logo/vkalendare_logo_only.png'))
+    logo = Image.open(finders.find(image_logo))
     new_text = 'Информационная поддержка: "Афиша вКалендаре". Ещё больше мероприятий: www.vkalendare.com'
 
     # font = ImageFont.truetype(<font-file>, <font-size>)
@@ -402,11 +404,11 @@ def jservice(request):
 
 
 def push_confidence(priority=0):
-    events = MysiteVkEvents.objects.filter(created__lt=int((datetime.utcnow() - timedelta(days=1)).timestamp()),
+    events_for_approve = MysiteVkEvents.objects.filter(created__lt=int((datetime.utcnow() - timedelta(days=1)).timestamp()),
                                            start__lt=int((datetime.utcnow() + timedelta(days=14)).timestamp()),
                                            members__gt=0, image_url__isnull=False, is_new=1, event_id__isnull=True,
                                            organizer_id__confidence=2)
-    for vk_event in events:
+    for vk_event in events_for_approve:
         print(vk_event)
         event_location = LocationCities.objects.get(vk_city_id=vk_event.city_id)
         tz = event_location.location.tz
@@ -414,11 +416,10 @@ def push_confidence(priority=0):
             if abs(tz) < 3600:
                 tz *= 3600
 
-            from tzlocal import get_localzone
             tz = get_localzone()
-
             dtime = datetime.fromtimestamp(vk_event.start, tz=tz)
-            # diff = tz - 0
+        else:
+            dtime = datetime.fromtimestamp(vk_event.start)
 
         event_date = {}
         event_date['title'] = vk_event.name
@@ -430,22 +431,42 @@ def push_confidence(priority=0):
         event_date['url'] = 'http://vk.com/event%d' % vk_event.id
         event_date['organizer'] = vk_event.organizer_id
         event_date['priority'] = priority
+        event_date['is_active'] = 1
+        event_date['export_vk'] = 1
         if vk_event.finish:
-            if vk_event.finish > vk_event.start:
+            if 60 < (vk_event.finish - vk_event.start) < 604800:
                 finish_dtime = datetime.fromtimestamp(vk_event.finish, tz=tz)
                 event_date['finish_date'] = finish_dtime.replace(tzinfo=timezone.utc).date()
-                event_date['finish_time'] = finish_dtime.replace(tzinfo=timezone.utc).time()
-        AddNewEventObj = AddNewEvent(event_date)
-        if AddNewEventObj.is_valid():
-            # get image_url
-            # get thumb_url
-            obj = AddNewEventObj.save()
+                event_date['duration'] = vk_event.finish - vk_event.start
+        ConfidenceNewEventObj = ConfidenceNewEvent(event_date)
+        if ConfidenceNewEventObj.is_valid():
+            r = requests.get(vk_event.image_url, stream=True)
+            if not r.status_code == requests.codes.ok:  # попробуем в следующий раз
+                print('Не удалось скачать афишу для мероприятия: %s' % event_date['url'])
+                continue
+            r.raw.decode_content = True
+            p = pill(r.raw)
+            img_file = InMemoryUploadedFile(p[0], None, 'poster.jpg', 'image/jpeg', p[0].tell, None)
+            thumb_file = InMemoryUploadedFile(p[1], None, 'thumb.jpg', 'image/jpeg', p[1].tell, None)
+            FILES = {'image': img_file, 'thumb': thumb_file}
+            ConfidenceNewEventObj = ConfidenceNewEvent(event_date, FILES)
+            ConfidenceNewEventObj.image = img_file
+            ConfidenceNewEventObj.thumb = thumb_file
 
-            vk_event.is_new = 0
-            vk_event.event_id = obj.id
-            vk_event.save()
+            if ConfidenceNewEventObj.is_valid():
+                obj = ConfidenceNewEventObj.save()
 
-    return events
+                vk_event.is_new = 0
+                vk_event.event_id = obj.id
+                vk_event.save()
+                print('Добавлено: %s' % event_date['title'])
+
+    events_for_reject = MysiteVkEvents.objects.filter(is_new=1, event_id__isnull=True, organizer_id__confidence=3)
+    for vk_reject_event in events_for_reject:
+        vk_reject_event.is_new = 0
+        vk_reject_event.save()
+        print('Отклонено: %s' % vk_reject_event.name)
+    return events_for_approve
 
 # ->leftJoin('Organizers', 'VkEvents.organizer_id=Organizers.id')
 # ->groupBy('VkEvents.id')
