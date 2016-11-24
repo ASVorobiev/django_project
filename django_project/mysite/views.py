@@ -83,7 +83,7 @@ def events_list(request, site_screen_name=None):
                                                     is_deleted=0)
             location_events = location_events.filter(start_date__gte=today, start_date__lte=today + timedelta(days=45))
         elif tag:
-            location_events = Events.objects.filter(location__id=location_id, tag_it__name=tag, is_deleted=0)
+            location_events = Events.objects.filter(tag_it__name=tag, is_deleted=0)
             location_events = location_events.filter(start_date__gte=today, start_date__lte=today + timedelta(days=45))
         else:
             location_events = Events.objects.filter(location=location_id, start_date__gte=today, is_deleted=0,
