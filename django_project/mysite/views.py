@@ -402,6 +402,7 @@ def jservice(request):
 
 
 def push_confidence(priority=0):
+    result = {'status': 'Success'}
     events_for_approve = MysiteVkEvents.objects.filter(
         created__lt=int((datetime.utcnow() - timedelta(days=1)).timestamp()),
         start__lt=int((datetime.utcnow() + timedelta(days=14)).timestamp()),
@@ -459,15 +460,17 @@ def push_confidence(priority=0):
                 vk_event.event_id = obj.id
                 vk_event.save()
                 print('Добавлено: %s' % event_date['title'])
-        break
+    result['events_for_approve'] = 'events_for_approve'
 
     events_for_reject = MysiteVkEvents.objects.filter(is_new=1, event_id__isnull=True, organizer_id__confidence=3)
     for vk_reject_event in events_for_reject:
         vk_reject_event.is_new = 0
         vk_reject_event.save()
         print('Отклонено: %s' % vk_reject_event.name)
-        break
-    return events_for_approve
+    result['events_for_reject'] = events_for_reject
+
+    result['status'] = 'Success'
+    return result
 
 
 # ->leftJoin('Organizers', 'VkEvents.organizer_id=Organizers.id')

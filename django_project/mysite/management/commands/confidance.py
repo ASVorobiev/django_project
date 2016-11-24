@@ -10,7 +10,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         result = push_confidence()
-        if result:
+        if result['status'] == 'Success':
             self.stdout.write(self.style.SUCCESS('Success. \n %s' % result))
         else:
             self.stdout.write(self.style.ERROR('Confidence ERROR!!!'))
