@@ -459,12 +459,14 @@ def push_confidence(priority=0):
                 vk_event.event_id = obj.id
                 vk_event.save()
                 print('Добавлено: %s' % event_date['title'])
+        break
 
     events_for_reject = MysiteVkEvents.objects.filter(is_new=1, event_id__isnull=True, organizer_id__confidence=3)
     for vk_reject_event in events_for_reject:
         vk_reject_event.is_new = 0
         vk_reject_event.save()
         print('Отклонено: %s' % vk_reject_event.name)
+        break
     return events_for_approve
 
 
