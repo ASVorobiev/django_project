@@ -55,7 +55,7 @@ def get_item(dictionary, key):
 
 
 def events_list(request, site_screen_name=None):
-    locations = Locations.objects.exclude(created=0).order_by('name').all()
+    locations = Locations.objects.exclude(created=0, is_deleted=1).order_by('name').all()
     Events.tag_it.most_common().values_list()
     # Events.objects.filter(tag_it__name__in=["рок"])
     # Events.tag_it.most_common().filter(events__location=location_id).exclude(events__start_date__lte=today).exclude(events__start_date__gte=today + timedelta(days=45))
@@ -79,16 +79,16 @@ def events_list(request, site_screen_name=None):
         if category:
             location_events = Events.objects.filter(location__id=location_id,
                                                     tag_it__id__in=TaggedCategories.objects.filter(
-                                                        category_id__name=category).values('tag_id'))
-            location_events = location_events.exclude(start_date__lte=today).exclude(
-                start_date__gte=today + timedelta(days=45))
+                                                        category_id__name=category).values('tag_id'),
+                                                    is_deleted=0)
+            location_events = location_events.filter(start_date__gte=today, start_date__lte=today + timedelta(days=45))
         elif tag:
-            location_events = Events.objects.filter(location__id=location_id, tag_it__name=tag)
-            location_events = location_events.exclude(start_date__lte=today).exclude(
-                start_date__gte=today + timedelta(days=45))
+            location_events = Events.objects.filter(location__id=location_id, tag_it__name=tag, is_deleted=0)
+            location_events = location_events.filter(start_date__gte=today, start_date__lte=today + timedelta(days=45))
         else:
-            location_events = Events.objects.filter(location=location_id).exclude(start_date__lte=today).exclude(
-                start_date__gte=today + timedelta(days=45)).order_by('-priority').order_by('start_date')
+            location_events = Events.objects.filter(location=location_id, start_date__gte=today, is_deleted=0,
+                                                    start_date__lte=today + timedelta(days=45)).order_by(
+                '-priority').order_by('start_date')
 
         priority_events = Events.objects.filter(location=location_id).exclude(
             start_date__lte=today).order_by('-priority', 'start_date')[:10]
@@ -96,10 +96,9 @@ def events_list(request, site_screen_name=None):
         current_location = Locations.objects.get(id=location_id)
         category_obj = {}
         for ctgory in MysiteCategories.objects.all():
-            category_events = Events.objects.exclude(start_date__lte=today).exclude(
-                start_date__gte=today + timedelta(days=45)).filter(location__id=location_id,
-                                                                   tag_it__id__in=ctgory.taggedcategories_set.values(
-                                                                       'tag_id'))
+            category_events = Events.objects.filter(location__id=location_id, is_deleted=0,
+                                                    start_date__gte=today, start_date__lte=today + timedelta(days=45),
+                                                    tag_it__id__in=ctgory.taggedcategories_set.values('tag_id'))
             # category_events = location_events.filter(tag_it__id__in=ctgory.taggedcategories_set.values('tag_id'))
             if category_events:
                 category_obj[ctgory.name.capitalize()] = {'count': len(category_events)}
@@ -115,8 +114,7 @@ def events_list(request, site_screen_name=None):
     else:
         priority_events = Events.objects.exclude(start_date__lte=today).order_by('-priority', 'start_date', '?')[:25]
         # priority_events = random.shuffle(priority_events)
-        all_events = Events.objects.exclude(start_date__lte=today).exclude(
-            start_date__gte=today + timedelta(days=45)).order_by('start_date')
+        all_events = Events.objects.filter(start_date__gte=today, start_date__lte=today + timedelta(days=45)).order_by('start_date')
         current_location = 'Выберите ваш город'
         return render(request, 'mysite/events_list.html', {'location_events': all_events,
                                                            'locations': locations,
@@ -404,10 +402,11 @@ def jservice(request):
 
 
 def push_confidence(priority=0):
-    events_for_approve = MysiteVkEvents.objects.filter(created__lt=int((datetime.utcnow() - timedelta(days=1)).timestamp()),
-                                           start__lt=int((datetime.utcnow() + timedelta(days=14)).timestamp()),
-                                           members__gt=0, image_url__isnull=False, is_new=1, event_id__isnull=True,
-                                           organizer_id__confidence=2)
+    events_for_approve = MysiteVkEvents.objects.filter(
+        created__lt=int((datetime.utcnow() - timedelta(days=1)).timestamp()),
+        start__lt=int((datetime.utcnow() + timedelta(days=14)).timestamp()),
+        members__gt=0, image_url__isnull=False, is_new=1, event_id__isnull=True,
+        organizer_id__confidence=2)
     for vk_event in events_for_approve:
         print(vk_event)
         event_location = LocationCities.objects.get(vk_city_id=vk_event.city_id)
@@ -467,6 +466,7 @@ def push_confidence(priority=0):
         vk_reject_event.save()
         print('Отклонено: %s' % vk_reject_event.name)
     return events_for_approve
+
 
 # ->leftJoin('Organizers', 'VkEvents.organizer_id=Organizers.id')
 # ->groupBy('VkEvents.id')

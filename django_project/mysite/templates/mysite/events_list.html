@@ -2,6 +2,7 @@
 
 {% load staticfiles %}
 {% load el_pagination_tags %}
+{% load shuffle %}
 
 {% block title %}
   {% if user.location  %}
@@ -90,7 +91,7 @@
   <div class="card">
       <div class="slider">
           <ul class="slides">
-              {% for ev in priority_events %}
+              {% for ev in priority_events|shuffle %}
                 <li class="caption">
                   <a href="{% url 'event_details' ev.location.site_screen_name ev.id ev.title_translit|urlencode %}">
                     {% if ev.image %}

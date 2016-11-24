@@ -145,7 +145,8 @@ INSTALLED_APPS = (
     'django_project.text_ru',
     'el_pagination',
     'taggit',
-    'django_project.mysite.templatetags.myfilters'
+    'django_project.mysite.templatetags.myfilters',
+    'django_project.mysite.templatetags.shuffle'
     # 'xadmin',
     # 'crispy_forms',
     # 'reversion',
