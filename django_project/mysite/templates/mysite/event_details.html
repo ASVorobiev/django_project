@@ -70,28 +70,33 @@
 {#            <div class="chips-initial"></div>#}
 {#          {% endif %}#}
 
-            <div class="row">
+        <div class="row">
             <div class="col s2">
               <div class="" id="vk_like"></div>
               <script type="text/javascript">
-                VK.Widgets.Like("vk_like", {type: "full", height: 40});
-              </script>  
+                VK.Widgets.Like("vk_like", {type: "button", verb: 1, height: 30});
+              </script>
+
+{#              <div class="" id="vk_like"></div>#}
+{#              <script type="text/javascript">#}
+{#                VK.Widgets.Like("vk_like", {type: "full", verb: 1, height: 30});#}
+{#              </script>#}
               
                 {# <script type="text/javascript">#}
                 {#     document.write(VK.Share.button(false,{type: "link", text: "Сохранить к себе"}));#}
                 {# </script>#}
             </div>
-
-  </div>
+        </div>
   </div>
   <div class="row">
-          <div class="col s12 l12">
-    <div class="center-align" id="vk_comments"></div>
-      <script type="text/javascript">
-        VK.Widgets.Comments("vk_comments", {limit: 10, attach: "*"});
-      </script>
-        </div>
-          </div></div>
+    <div class="col s12 l12">
+        <div class="center-align" id="vk_comments"></div>
+        <script type="text/javascript">
+          VK.Widgets.Comments("vk_comments", {limit: 10, attach: "*"});
+        </script>
+    </div>
+  </div>
+  </div>
 </div>
 
 
