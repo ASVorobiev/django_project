@@ -494,7 +494,7 @@ def my_admin_view(request):
 def set_user_location(request):
     if 'id' in request.POST:
         request.session['user_location'] = request.POST['id']
-        # request.session.modified = True
+        request.session.modified = True
         if request.user.is_authenticated:
             usr = request.user
             usr.location_id = request.POST['id']
