@@ -420,7 +420,7 @@ def push_confidence(priority=0):
         members__gt=0, image_url__isnull=False, is_new=1, event_id__isnull=True,
         organizer_id__confidence=2)
     for vk_event in events_for_approve:
-        print(vk_event)
+        #print(vk_event.name)
         event_location = LocationCities.objects.get(vk_city_id=vk_event.city_id)
         tz = event_location.location.tz
         if tz:
