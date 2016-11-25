@@ -55,8 +55,9 @@ def get_item(dictionary, key):
 
 
 def events_list(request, site_screen_name=None):
-    locations = Locations.objects.exclude(created=0, is_deleted=1).order_by('name').all()
-    Events.tag_it.most_common().values_list()
+    response = {}
+    response['locations'] = Locations.objects.exclude(created=0, is_deleted=1).order_by('name').all()
+    # Events.tag_it.most_common().values_list()
     # Events.objects.filter(tag_it__name__in=["рок"])
     # Events.tag_it.most_common().filter(events__location=location_id).exclude(events__start_date__lte=today).exclude(events__start_date__gte=today + timedelta(days=45))
     # Events.objects.filter(location__id=6, tag_it__id__in=TaggedCategories.objects.filter(category_id__name='Клубы').values('tag_id'))
@@ -70,31 +71,29 @@ def events_list(request, site_screen_name=None):
 
     category = request.GET.get('category', '')
     tag = request.GET.get('tag', '')
-    free = request.GET.get('free', '')
+    if 'free' in request.GET:
+        free = True
+    else:
+        free = False
     from_date = request.GET.get('from_date', '')  # 2015-01-09
     to_date = request.GET.get('to_date', '')
-    if site_screen_name:
-        location = Locations.objects.exclude(created=0).get(site_screen_name=site_screen_name)
-        location_id = location.id
-        if category:
-            location_events = Events.objects.filter(location__id=location_id,
-                                                    tag_it__id__in=TaggedCategories.objects.filter(
-                                                        category_id__name=category).values('tag_id'),
-                                                    is_deleted=0)
-            location_events = location_events.filter(start_date__gte=today, start_date__lte=today + timedelta(days=45))
-        elif tag:
-            location_events = Events.objects.filter(tag_it__name=tag, is_deleted=0)
-            location_events = location_events.filter(start_date__gte=today, start_date__lte=today + timedelta(days=45))
-        else:
-            location_events = Events.objects.filter(location=location_id, start_date__gte=today, is_deleted=0,
-                                                    start_date__lte=today + timedelta(days=45)).order_by(
-                '-priority').order_by('start_date')
 
-        priority_events = Events.objects.filter(location=location_id).exclude(
+
+    response['location_events'] = Events.objects.all().order_by('-priority').order_by('start_date')
+    category_obj = {}
+
+
+    if site_screen_name:
+        location = Locations.objects.exclude(created=0, is_deleted=1).get(site_screen_name=site_screen_name)
+        location_id = location.id
+        response['location_events'] = response['location_events'].filter(location__id=location_id)
+
+        response['priority_events'] = Events.objects.filter(location=location_id).exclude(
             start_date__lte=today).order_by('-priority', 'start_date')[:10]
         # priority_events = random.shuffle(priority_events)
-        current_location = Locations.objects.get(id=location_id)
-        category_obj = {}
+        response['current_location'] = Locations.objects.get(id=location_id)
+        response['vk_group_id'] = response['current_location'].vk_group_id
+
         for ctgory in MysiteCategories.objects.all():
             category_events = Events.objects.filter(location__id=location_id, is_deleted=0,
                                                     start_date__gte=today, start_date__lte=today + timedelta(days=45),
@@ -103,25 +102,37 @@ def events_list(request, site_screen_name=None):
             if category_events:
                 category_obj[ctgory.name.capitalize()] = {'count': len(category_events)}
 
-        return render(request, 'mysite/events_list.html', {'location_events': location_events,
-                                                           'priority_events': priority_events,
-                                                           'locations': locations,
-                                                           'current_location': current_location,
-                                                           'vk_group_id': current_location.vk_group_id,
-                                                           'need_location': False,
-                                                           'categories': category_obj
-                                                           })
+        response['need_location'] = False
     else:
-        priority_events = Events.objects.exclude(start_date__lte=today).order_by('-priority', 'start_date', '?')[:25]
-        # priority_events = random.shuffle(priority_events)
-        all_events = Events.objects.filter(start_date__gte=today, start_date__lte=today + timedelta(days=45)).order_by('start_date')
-        current_location = 'Выберите ваш город'
-        return render(request, 'mysite/events_list.html', {'location_events': all_events,
-                                                           'locations': locations,
-                                                           'priority_events': priority_events,
-                                                           'current_location': current_location,
-                                                           'vk_group_id': None,
-                                                           'need_location': True})
+        response['priority_events'] = Events.objects.exclude(start_date__lte=today).order_by('-priority', 'start_date', '?')[:25]
+        response['current_location'] = 'Выберите ваш город'
+        response['need_location'] = True
+
+    response['categories'] = category_obj
+
+    if category:
+        response['location_events'] = response['location_events'].filter(tag_it__id__in=TaggedCategories.objects.filter(
+                                                        category_id__name=category).values('tag_id'))
+    if tag:
+        response['location_events'] = response['location_events'].filter(tag_it__name=tag)
+    if free:
+        response['location_events'] = response['location_events'].filter(is_free=1)
+    if from_date or to_date:
+        if from_date:
+            response['location_events'] = response['location_events'].filter(start_date__gte=from_date)
+        if to_date:
+            response['location_events'] = response['location_events'].filter(start_date__lte=to_date)
+    else:
+        response['location_events'] = response['location_events'].filter(start_date__gte=today, start_date__lte=today + timedelta(days=45))
+
+    dt = datetime.now()
+    start = dt - timedelta(days=dt.weekday())
+    response['start_week_date'] = str(start.date())
+    response['start_weekend_date'] = str((start + timedelta(days=5)).date())
+    response['end_week_date'] = str((start + timedelta(days=6)).date())
+
+    return render(request, 'mysite/events_list.html', response)
+
 
 
 def events_details(request, site_screen_name, pk, title_translit='dont_remove'):

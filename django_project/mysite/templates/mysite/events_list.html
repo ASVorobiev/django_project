@@ -133,33 +133,39 @@
     <div class="row">
     <div class="row">
     <div class="col s12 m6 l4">
-      <div class="card-panel teal">
-        <div class="card_circle hide-on-med-and-down">
-          <i class="material-icons large teal_icons">bubble_chart</i>
+      <a href="{% url 'location_events' current_location.site_screen_name %}?from_date={{ start_week_date }}&to_date={{ end_week_date }}">
+        <div class="card-panel teal">
+          <div class="card_circle hide-on-med-and-down">
+            <i class="material-icons large teal_icons">bubble_chart</i>
+          </div>
+          <h5 class="white-text center">На этой неделе</h5>
+  {#          <p class="white-text center">10 мероприятий</p>#}
         </div>
-        <h5 class="white-text center">На этой неделе</h5>
-{#          <p class="white-text center">10 мероприятий</p>#}
-      </div>
+      </a>
     </div>
 
     <div class="col s12 m6 l4">
-      <div class="card-panel red lighten-1">
-        <div class="card_circle hide-on-med-and-down">
-          <i class="material-icons large red_l1_icons">transfer_within_a_station</i>
+      <a href="{% url 'location_events' current_location.site_screen_name %}?from_date={{ start_weekend_date }}&to_date={{ end_week_date }}">
+        <div class="card-panel red lighten-1">
+          <div class="card_circle hide-on-med-and-down">
+            <i class="material-icons large red_l1_icons">transfer_within_a_station</i>
+          </div>
+          <h5 class="white-text center">Куда пойти в выходные</h5>
+  {#          <p class="white-text center">10 мероприятий</p>#}
         </div>
-        <h5 class="white-text center">Куда пойти в выходные</h5>
-{#          <p class="white-text center">10 мероприятий</p>#}
-      </div>
+      </a>
     </div>
 
     <div class="col s12 m6 l4">
-      <div class="card-panel teal">
-        <div class="card_circle hide-on-med-and-down">
-          <i class="material-icons large teal_icons">money_off</i>
+      <a href="{% url 'location_events' current_location.site_screen_name %}?free">
+        <div class="card-panel teal">
+          <div class="card_circle hide-on-med-and-down">
+            <i class="material-icons large teal_icons">money_off</i>
+          </div>
+          <h5 class="white-text center">Бесплатно</h5>
+  {#          <p class="white-text center">10 мероприятий</p>#}
         </div>
-        <h5 class="white-text center">Бесплатно</h5>
-{#          <p class="white-text center">10 мероприятий</p>#}
-      </div>
+      </a>
     </div>
   </div>
 

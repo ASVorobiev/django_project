@@ -17,7 +17,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 # noinspection PyPackageRequirements
-ALLOWED_HOSTS = ['vkalendare.net', 'vkalendare.com', 'www.vkalendare.com', '127.0.0.1']
+ALLOWED_HOSTS = ['0.0.0.0:8000','vkalendare.net', 'vkalendare.com', 'www.vkalendare.com', '127.0.0.1']
 
 
 DATABASES = {
