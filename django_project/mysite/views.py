@@ -432,7 +432,7 @@ def push_confidence(priority=0):
 
             dtime = datetime.utcfromtimestamp(vk_event.start + tz)
         else:
-            dtime = datetime.fromtimestamp(vk_event.start, tz=get_localzone()).replace(tzinfo=timezone.utc)
+            dtime = datetime.fromtimestamp(vk_event.start)
 
         event_date = {}
         event_date['title'] = vk_event.name
@@ -451,7 +451,7 @@ def push_confidence(priority=0):
                 if tz:
                     finish_dtime = datetime.utcfromtimestamp(vk_event.finish + tz)
                 else:
-                    finish_dtime = datetime.fromtimestamp(vk_event.finish, tz=get_localzone()).replace(tzinfo=timezone.utc)
+                    finish_dtime = datetime.fromtimestamp(vk_event.finish)
                 event_date['finish_date'] = finish_dtime.date()
                 event_date['duration'] = vk_event.finish - vk_event.start
         logger.debug('vk_event.start: %s, tx: %s' % (vk_event.start, tz))
@@ -478,7 +478,7 @@ def push_confidence(priority=0):
                 vk_event.event_id = obj.id
                 vk_event.save()
                 logger.info('Добавлено: %s' % event_date['title'])
-    result['events_for_approve'] = 'events_for_approve'
+    result['events_for_approve'] = events_for_approve
 
     events_for_reject = MysiteVkEvents.objects.filter(is_new=1, event_id__isnull=True, organizer_id__confidence=3)
     for vk_reject_event in events_for_reject:
