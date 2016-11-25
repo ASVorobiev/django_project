@@ -6,6 +6,9 @@ import pymysql
 
 pymysql.install_as_MySQLdb()
 
+import _locale
+_locale._getdefaultlocale = (lambda *args: ['en_US', 'utf8'])
+
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_project.settings")
 
