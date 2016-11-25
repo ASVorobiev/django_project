@@ -187,7 +187,7 @@ LOGGING = {
         'production_file': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': '../../logs/main_debug.log',
+            'filename': '../logs/main_debug.log',
             'maxBytes': 1024 * 1024 * 5,  # 5 MB
             'backupCount': 7,
             'formatter': 'main_formatter',
@@ -196,7 +196,7 @@ LOGGING = {
         'debug_file': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': '../../logs/main_debug.log',
+            'filename': '../logs/main_debug.log',
             'maxBytes': 1024 * 1024 * 5,  # 5 MB
             'backupCount': 7,
             'formatter': 'main_formatter',
@@ -226,7 +226,8 @@ LOGGING = {
 }
 
 # if _platform == "win32":
-#     LOGGING['handlers']['logfile']['filename'] = 'C:/vKalendare/django_mysite.log'
+#     LOGGING['handlers']['debug_file']['filename'] = '../logs/main_debug.log'
+#     LOGGING['handlers']['debug_file']['filename'] = '../logs/main_debug.log'
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
