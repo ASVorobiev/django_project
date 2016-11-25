@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 import copy
 import hashlib
 import json
@@ -41,7 +42,9 @@ from PIL import ImageDraw
 from PIL import ImageOps
 
 import pymorphy2
+import logging
 
+logger = logging.getLogger(__name__)
 today = date.today()
 
 
@@ -420,25 +423,24 @@ def push_confidence(priority=0):
         members__gt=0, image_url__isnull=False, is_new=1, event_id__isnull=True,
         organizer_id__confidence=2)
     for vk_event in events_for_approve:
-        print(vk_event)
+        logger.info(vk_event)
         event_location = LocationCities.objects.get(vk_city_id=vk_event.city_id)
         tz = event_location.location.tz
         if tz:
             if abs(tz) < 3600:
                 tz *= 3600
 
-            tz = get_localzone()
-            dtime = datetime.fromtimestamp(vk_event.start, tz=tz)
+            dtime = datetime.utcfromtimestamp(vk_event.start + tz)
         else:
-            dtime = datetime.fromtimestamp(vk_event.start)
+            dtime = datetime.fromtimestamp(vk_event.start, tz=get_localzone())
 
         event_date = {}
         event_date['title'] = vk_event.name
 
         event_date['description'] = vk_event.description
         event_date['location'] = event_location.location_id
-        event_date['start_date'] = dtime.replace(tzinfo=timezone.utc).date()
-        event_date['start_time'] = dtime.replace(tzinfo=timezone.utc).time()
+        event_date['start_date'] = dtime.date()
+        event_date['start_time'] = dtime.time()
         event_date['url'] = 'http://vk.com/event%d' % vk_event.id
         event_date['organizer'] = vk_event.organizer_id
         event_date['priority'] = priority
@@ -446,14 +448,19 @@ def push_confidence(priority=0):
         event_date['export_vk'] = 1
         if vk_event.finish:
             if 60 < (vk_event.finish - vk_event.start) < 604800:
-                finish_dtime = datetime.fromtimestamp(vk_event.finish, tz=tz)
-                event_date['finish_date'] = finish_dtime.replace(tzinfo=timezone.utc).date()
+                if tz:
+                    finish_dtime = datetime.utcfromtimestamp(vk_event.finish + tz)
+                else:
+                    finish_dtime = datetime.fromtimestamp(vk_event.finish, tz=get_localzone())
+                event_date['finish_date'] = finish_dtime.date()
                 event_date['duration'] = vk_event.finish - vk_event.start
+        logger.debug('vk_event.start: %s, tx: %s' % (vk_event.start, tz))
+
         ConfidenceNewEventObj = ConfidenceNewEvent(event_date)
         if ConfidenceNewEventObj.is_valid():
             r = requests.get(vk_event.image_url, stream=True)
             if not r.status_code == requests.codes.ok:  # попробуем в следующий раз
-                print('Не удалось скачать афишу для мероприятия: %s' % event_date['url'])
+                logger.error('Не удалось скачать афишу для мероприятия: %s' % event_date['url'])
                 continue
             r.raw.decode_content = True
             p = pill(r.raw)
@@ -470,14 +477,14 @@ def push_confidence(priority=0):
                 vk_event.is_new = 0
                 vk_event.event_id = obj.id
                 vk_event.save()
-                print('Добавлено: %s' % event_date['title'])
+                logger.info('Добавлено: %s' % event_date['title'])
     result['events_for_approve'] = 'events_for_approve'
 
     events_for_reject = MysiteVkEvents.objects.filter(is_new=1, event_id__isnull=True, organizer_id__confidence=3)
     for vk_reject_event in events_for_reject:
         vk_reject_event.is_new = 0
         vk_reject_event.save()
-        print('Отклонено: %s' % vk_reject_event.name)
+        logger.info('Отклонено: %s' % vk_reject_event.name)
     result['events_for_reject'] = events_for_reject
 
     result['status'] = 'Success'
