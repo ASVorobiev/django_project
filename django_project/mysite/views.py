@@ -73,7 +73,7 @@ def events_list(request, site_screen_name=None):
         request.user.location = location.name
     elif 'user_location' in request.session and site_screen_name:
         location = Locations.objects.get(pk=request.session['user_location'])
-        request.user.location = location.name
+        request.user.location = location
 
 
     category = request.GET.get('category', '')
