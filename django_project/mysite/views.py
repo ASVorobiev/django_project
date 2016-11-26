@@ -71,9 +71,9 @@ def events_list(request, site_screen_name=None):
         location = Locations.objects.get(pk=request.session['user_location'])
         site_screen_name = location.site_screen_name
         request.user.location = location.name
-    elif 'user_location' in request.session and site_screen_name:
+    elif 'user_location' in request.session and site_screen_name and not request.user.is_anonymous:
         location = Locations.objects.get(pk=request.session['user_location'])
-        request.user.location = location
+        request.user.location = location.name
 
 
     category = request.GET.get('category', '')
