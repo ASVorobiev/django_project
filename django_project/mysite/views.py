@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import copy
 import hashlib
 import json
@@ -71,6 +71,10 @@ def events_list(request, site_screen_name=None):
         location = Locations.objects.get(pk=request.session['user_location'])
         site_screen_name = location.site_screen_name
         request.user.location = location.name
+    elif 'user_location' in request.session and site_screen_name:
+        location = Locations.objects.get(pk=request.session['user_location'])
+        request.user.location = location.name
+
 
     category = request.GET.get('category', '')
     tag = request.GET.get('tag', '')
@@ -81,10 +85,8 @@ def events_list(request, site_screen_name=None):
     from_date = request.GET.get('from_date', '')  # 2015-01-09
     to_date = request.GET.get('to_date', '')
 
-
     response['location_events'] = Events.objects.all().order_by('-priority').order_by('start_date')
     category_obj = {}
-
 
     if site_screen_name:
         location = Locations.objects.exclude(created=0, is_deleted=1).get(site_screen_name=site_screen_name)
@@ -107,7 +109,8 @@ def events_list(request, site_screen_name=None):
 
         response['need_location'] = False
     else:
-        response['priority_events'] = Events.objects.exclude(start_date__lte=today).order_by('-priority', 'start_date', '?')[:25]
+        response['priority_events'] = Events.objects.exclude(start_date__lte=today).order_by('-priority', 'start_date',
+                                                                                             '?')[:25]
         response['current_location'] = 'Выберите ваш город'
         response['need_location'] = True
 
@@ -115,7 +118,7 @@ def events_list(request, site_screen_name=None):
 
     if category:
         response['location_events'] = response['location_events'].filter(tag_it__id__in=TaggedCategories.objects.filter(
-                                                        category_id__name=category).values('tag_id'))
+            category_id__name=category).values('tag_id'))
     if tag:
         response['location_events'] = response['location_events'].filter(tag_it__name=tag)
     if free:
@@ -126,7 +129,8 @@ def events_list(request, site_screen_name=None):
         if to_date:
             response['location_events'] = response['location_events'].filter(start_date__lte=to_date)
     else:
-        response['location_events'] = response['location_events'].filter(start_date__gte=today, start_date__lte=today + timedelta(days=45))
+        response['location_events'] = response['location_events'].filter(start_date__gte=today,
+                                                                         start_date__lte=today + timedelta(days=45))
 
     dt = datetime.now()
     start = dt - timedelta(days=dt.weekday())
@@ -135,7 +139,6 @@ def events_list(request, site_screen_name=None):
     response['end_week_date'] = str((start + timedelta(days=6)).date())
 
     return render(request, 'mysite/events_list.html', response)
-
 
 
 def events_details(request, site_screen_name, pk, title_translit='dont_remove'):
@@ -517,10 +520,10 @@ def set_user_location(request):
             usr = request.user
             usr.location_id = request.POST['id']
             usr.save()
-            return HttpResponse(json.dumps({'status': True, 'city': Locations.objects.get(id=usr.location_id).name}),
-                                content_type='application/json')
-            # request.user
-
+        user_location_name = Locations.objects.get(id=request.POST['id']).name
+        request.user.location = user_location_name
+        return HttpResponse(json.dumps({'status': True, 'city': user_location_name}),
+                            content_type='application/json')
     return HttpResponse(json.dumps({'status': False}), content_type='application/json')
 
 
