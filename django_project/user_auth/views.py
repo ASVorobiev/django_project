@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.auth import logout as auth_logout, login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseBadRequest
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from social.apps.django_app.utils import psa
 from social.backends.google import GooglePlusAuth
 from social.backends.oauth import BaseOAuth1, BaseOAuth2
@@ -27,13 +27,13 @@ def context(**extra):
     }, **extra)
 
 
-@render_to('auth.html')
+# @render_to('auth.html')
 def home(request):
     """Home view, displays login mechanism"""
     request.session['http_referer_foo'] = request.META.get('HTTP_REFERER')
     if request.user.is_authenticated():
         return redirect(request.META.get('HTTP_REFERER'))
-    return context()
+    return render(request, 'auth.html', context())
 
 
 @login_required
