@@ -131,6 +131,7 @@
   </style>
   <div class="">
     <div class="row">
+      {% if not need_location %}
       <div class="row">
         <div class="col s12 m6 l4">
           <a href="{% url 'location_events' current_location.site_screen_name %}?from_date={{ start_week_date }}&to_date={{ end_week_date }}">
@@ -168,6 +169,7 @@
           </a>
         </div>
       </div>
+      {% endif %}
 
       {% for event in location_events %}
         {% block card_panel %}

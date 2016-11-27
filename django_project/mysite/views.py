@@ -64,17 +64,32 @@ def events_list(request, site_screen_name=None):
     # Events.objects.filter(tag_it__name__in=["рок"])
     # Events.tag_it.most_common().filter(events__location=location_id).exclude(events__start_date__lte=today).exclude(events__start_date__gte=today + timedelta(days=45))
     # Events.objects.filter(location__id=6, tag_it__id__in=TaggedCategories.objects.filter(category_id__name='Клубы').values('tag_id'))
+    # if not request.user.is_anonymous:
+    #     pass
+    # elif 'user_location' in request.session:
+    #     pass
+    # else:
+
+
+
+
     if not request.user.is_anonymous and not site_screen_name and request.user.location_id:
         location = Locations.objects.get(pk=request.user.location_id)
         site_screen_name = location.site_screen_name
+
     elif 'user_location' in request.session and not site_screen_name:
         location = Locations.objects.get(pk=request.session['user_location'])
         site_screen_name = location.site_screen_name
         request.user.location = location.name
+    elif 'user_location' in request.session and request.user.is_anonymous:
+        location = Locations.objects.get(pk=request.session['user_location'])
+        request.user.location = location.name
     # elif 'user_location' in request.session and site_screen_name and not request.user.is_anonymous:
     #     location = Locations.objects.get(pk=request.session['user_location'])
     #     request.user.location = location.name
-
+    # else:
+    #     location = Locations.objects.get(pk=site_screen_name)
+    #     site_screen_name = location.site_screen_name
 
     category = request.GET.get('category', '')
     tag = request.GET.get('tag', '')
@@ -340,7 +355,7 @@ def jdata(request):
 
 
 def add_tags_for_event(event_obj):
-    print(event_obj)
+    logger.info(event_obj)
     morph = pymorphy2.MorphAnalyzer()
     tags = []
     for w in re.sub('[^а-яА-Я]', ' ', event_obj.title).strip().split(' '):
@@ -358,7 +373,7 @@ def add_tags_for_event(event_obj):
     for tag in tags:
         event_obj.tag_it.add(tag)
 
-    print(tags)
+    logger.info(tags)
     return ','.join(tags)
 
 
@@ -516,13 +531,15 @@ def set_user_location(request):
     if 'id' in request.POST:
         request.session['user_location'] = request.POST['id']
         request.session.modified = True
+        user_location_name = Locations.objects.get(id=request.POST['id'])
         if request.user.is_authenticated:
             usr = request.user
             usr.location_id = request.POST['id']
             usr.save()
-        user_location_name = Locations.objects.get(id=request.POST['id']).name
+        # else:
+            # request.user.location = user_location_name
         request.user.location = user_location_name
-        return HttpResponse(json.dumps({'status': True, 'city': user_location_name}),
+        return HttpResponse(json.dumps({'status': True, 'city': user_location_name.name}),
                             content_type='application/json')
     return HttpResponse(json.dumps({'status': False}), content_type='application/json')
 
