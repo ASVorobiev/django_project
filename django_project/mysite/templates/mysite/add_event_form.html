@@ -83,12 +83,10 @@
 
     {#            <i class="material-icons">location_city</i>#}
     <div class="row">
-    <div class="input-field col s12">
-
-      {{ form.location }}
-
-      <label>Город</label>
-    </div>
+      <div class="input-field col s12">
+        {{ form.location }}
+        <label>Город</label>
+      </div>
     </div>
 
     <div class="row" hidden id="place_row">
@@ -258,7 +256,8 @@
       $('.datepicker').pickadate({
         selectMonths: true, // Creates a dropdown to control month
         firstDay: 0,
-        selectYears: 4 // Creates a dropdown of 15 years to control year
+        selectYears: 4, // Creates a dropdown of 15 years to control year
+        format: 'yyyy-mm-dd'
       });
 
       $('.timepicker').pickatime({

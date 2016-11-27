@@ -96,15 +96,13 @@ def events_list(request, site_screen_name=None):
                                                                                                   is_deleted__lt=1)
 
     category_obj = {}
-
+    response['priority_events'] = response['location_events'].filter(start_date__gt=today).order_by('?')
     if site_screen_name:
         location = Locations.objects.exclude(created=0, is_deleted=1).get(site_screen_name=site_screen_name)
         location_id = location.id
         response['location_events'] = response['location_events'].filter(location__id=location_id)
 
-        response['priority_events'] = Events.objects.filter(location=location_id).exclude(
-            start_date__lte=today).order_by('-priority', 'start_date')[:10]
-        # priority_events = random.shuffle(priority_events)
+        # response['priority_events'] = response['priority_events'].filter(location=location_id)
         response['current_location'] = Locations.objects.get(id=location_id)
         response['vk_group_id'] = response['current_location'].vk_group_id
 
@@ -118,10 +116,10 @@ def events_list(request, site_screen_name=None):
 
         response['need_location'] = False
     else:
-        response['priority_events'] = response['location_events'].exclude(start_date__lte=today).order_by('?')[:25]
         response['current_location'] = 'Выберите ваш город'
         response['need_location'] = True
 
+    response['priority_events'] = response['priority_events'][:25]
     response['categories'] = category_obj
 
     if category:
@@ -242,10 +240,17 @@ def add_event_form(request):
         thumb_file = InMemoryUploadedFile(p[1], None, 'thumb.jpg', 'image/jpeg', p[1].tell, None)
         request.FILES['image'] = img_file
         request.FILES['thumb'] = thumb_file
+        if request.user.is_staff:
+            request.POST['export_vk'] = 1
+            request.POST['is_active'] = 1
+        else:
+            request.POST['export_vk'] = 0
+            request.POST['is_active'] = 0
         new_event_form = AddNewEvent(request.POST, request.FILES)
         if new_event_form.is_valid():
             if new_org_flag:
                 org_obj.location = Locations.objects.get(pk=request.POST['location'])
+                org_obj.status = 0
                 org_obj.save()
                 new_event_form.place = org_obj.id
             else:
