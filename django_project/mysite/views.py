@@ -531,15 +531,15 @@ def set_user_location(request):
     if 'id' in request.POST:
         request.session['user_location'] = request.POST['id']
         request.session.modified = True
-        user_location_name = Locations.objects.get(id=request.POST['id'])
+        user_location = Locations.objects.get(id=request.POST['id'])
         if request.user.is_authenticated:
             usr = request.user
-            usr.location_id = request.POST['id']
+            usr.location_id = user_location
             usr.save()
         # else:
             # request.user.location = user_location_name
-        request.user.location = user_location_name
-        return HttpResponse(json.dumps({'status': True, 'city': user_location_name.name}),
+        request.user.location = user_location
+        return HttpResponse(json.dumps({'status': True, 'city': user_location.name}),
                             content_type='application/json')
     return HttpResponse(json.dumps({'status': False}), content_type='application/json')
 
