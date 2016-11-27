@@ -5,7 +5,7 @@
 
             <div class="card-image">
 {#                      <div class="card-image waves-effect waves-block waves-light">#}
-              <div class="" style="font-size: medium;">
+              <div class="flow-text" style="font-size: 110%;">
                 <div class="card-content_padding">
                   <i class="material-icons tiny">date_range</i>
                   {{ event.start_date|date:"d.m.Y (D)"  }}
@@ -32,9 +32,9 @@
                 <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}">
                   <p class="flow-text">
                   {#                  <p style="font-weight:600">#}
-                    <span class="grey-text text-darken-3">
+                    <h5 class="grey-text text-darken-3">
                       {{ event.title }}
-                    </span>
+                    </h5>
                   </p>
                 </a>
                 <i class="material-icons right">more_vert</i>
