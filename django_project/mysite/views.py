@@ -64,14 +64,6 @@ def events_list(request, site_screen_name=None):
     # Events.objects.filter(tag_it__name__in=["рок"])
     # Events.tag_it.most_common().filter(events__location=location_id).exclude(events__start_date__lte=today).exclude(events__start_date__gte=today + timedelta(days=45))
     # Events.objects.filter(location__id=6, tag_it__id__in=TaggedCategories.objects.filter(category_id__name='Клубы').values('tag_id'))
-    # if not request.user.is_anonymous:
-    #     pass
-    # elif 'user_location' in request.session:
-    #     pass
-    # else:
-
-
-
 
     if not request.user.is_anonymous and not site_screen_name and request.user.location_id:
         location = Locations.objects.get(pk=request.user.location_id)
@@ -100,7 +92,8 @@ def events_list(request, site_screen_name=None):
     from_date = request.GET.get('from_date', '')  # 2015-01-09
     to_date = request.GET.get('to_date', '')
 
-    response['location_events'] = Events.objects.all().order_by('-priority').order_by('start_date')
+    response['location_events'] = Events.objects.all().order_by('-priority').order_by('start_date').exclude(created=0,
+                                                                                                            is_deleted=1)
     category_obj = {}
 
     if site_screen_name:
@@ -536,8 +529,6 @@ def set_user_location(request):
             usr = request.user
             usr.location = user_location
             usr.save()
-        # else:
-            # request.user.location = user_location_name
         request.user.location = user_location
         return HttpResponse(json.dumps({'status': True, 'city': user_location.name}),
                             content_type='application/json')
