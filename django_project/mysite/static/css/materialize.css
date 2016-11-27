@@ -6508,6 +6508,7 @@ select {
 
 .select-wrapper {
   position: relative;
+  padding: 0 1rem;
 }
 
 .select-wrapper input.select-dropdown {
@@ -6521,8 +6522,8 @@ select {
   line-height: 3rem;
   width: 100%;
   font-size: 1rem;
-  margin: 0 20px 20px 0;
-  padding: 0rem 0rem 0rem 1rem;
+  margin: 0 20px 20px 0px;
+  padding: 0rem 0rem 0rem 0rem;
   display: block;
 }
 
