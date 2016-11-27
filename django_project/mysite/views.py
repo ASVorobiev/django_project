@@ -534,7 +534,7 @@ def set_user_location(request):
         user_location = Locations.objects.get(id=request.POST['id'])
         if request.user.is_authenticated:
             usr = request.user
-            usr.location_id = user_location
+            usr.location_id = user_location.id
             usr.save()
         # else:
             # request.user.location = user_location_name
