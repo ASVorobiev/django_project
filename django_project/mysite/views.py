@@ -93,6 +93,7 @@ def events_list(request, site_screen_name=None):
     to_date = request.GET.get('to_date', '')
 
     response['location_events'] = Events.objects.all().order_by('-priority').order_by('start_date').exclude(created=0,
+                                                                                                            is_active=0,
                                                                                                             is_deleted=1)
     category_obj = {}
 
