@@ -92,9 +92,9 @@ def events_list(request, site_screen_name=None):
     from_date = request.GET.get('from_date', '')  # 2015-01-09
     to_date = request.GET.get('to_date', '')
 
-    response['location_events'] = Events.objects.all().order_by('-priority').order_by('start_date').exclude(created=0,
-                                                                                                            is_active=0,
-                                                                                                            is_deleted=1)
+    response['location_events'] = Events.objects.all().order_by('-priority', 'start_date').filter(is_active__gt=0,
+                                                                                                  is_deleted__lt=1)
+
     category_obj = {}
 
     if site_screen_name:
@@ -118,8 +118,7 @@ def events_list(request, site_screen_name=None):
 
         response['need_location'] = False
     else:
-        response['priority_events'] = Events.objects.exclude(start_date__lte=today).order_by('-priority', 'start_date',
-                                                                                             '?')[:25]
+        response['priority_events'] = response['location_events'].exclude(start_date__lte=today).order_by('?')[:25]
         response['current_location'] = 'Выберите ваш город'
         response['need_location'] = True
 
