@@ -280,6 +280,7 @@ def add_event_form(request):
             if new_event_form.is_valid():
                 obj = new_event_form.save(commit=False)
                 obj.owner = request.user
+                obj.save()
                 obj.url = 'http://vkalendare.com/%s/%s' % (location.site_screen_name,
                                                            obj.id)
                 obj.save()
