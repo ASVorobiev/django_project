@@ -276,6 +276,7 @@ def add_event_form(request):
             if new_event_form.is_valid():
                 obj = new_event_form.save(commit=False)
                 obj.owner = request.user
+                obj.url = 'http://vkalendare.com/%d' % obj.id
                 obj.save()
                 new_event_form.save_m2m()
                 response = {'redirect': request.build_absolute_uri(reverse('added_successfully'))}
@@ -491,7 +492,6 @@ def push_confidence(priority=0):
 
             if ConfidenceNewEventObj.is_valid():
                 obj = ConfidenceNewEventObj.save()
-
                 vk_event.is_new = 0
                 vk_event.event_id = obj.id
                 vk_event.save()

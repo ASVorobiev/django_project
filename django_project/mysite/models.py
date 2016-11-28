@@ -233,6 +233,7 @@ class Customplaces(models.Model):
     def __str__(self):
         return self.name
 
+
 class MysiteVkEvents(models.Model):
     id = models.IntegerField(primary_key=True)
     city_id = models.IntegerField()
@@ -246,7 +247,7 @@ class MysiteVkEvents(models.Model):
     organizer = models.ForeignKey(MysiteOrganizers)
     contacts = models.TextField(blank=True, null=True)
     links = models.TextField(blank=True, null=True)
-    place_id = models.IntegerField(blank=True, null=True)
+    place = models.ForeignKey(Customplaces, blank=True, null=True)
     is_new = models.IntegerField()
     event_id = models.IntegerField(blank=True, null=True)
     modified = models.IntegerField()
