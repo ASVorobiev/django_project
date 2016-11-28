@@ -459,6 +459,7 @@ def push_confidence(priority=0):
             dtime = datetime.utcfromtimestamp(vk_event.start + tz)
         else:
             dtime = datetime.fromtimestamp(vk_event.start, tz=tzlocal.get_localzone())
+            dtime = dtime.replace(tzinfo=None)
 
         event_date = {}
         event_date['title'] = vk_event.name
