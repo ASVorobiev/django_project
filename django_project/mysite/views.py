@@ -9,6 +9,8 @@ import random
 
 import re
 from time import sleep
+
+import tzlocal
 from tzlocal import get_localzone
 
 import nltk
@@ -234,6 +236,7 @@ def add_event_form(request):
             if CustomPlacesFormObj.is_valid():
                 org_obj = CustomPlacesFormObj.save(commit=False)
                 new_org_flag = True
+                request.POST['place_id'] = org_obj.id
 
         p = pill(request.FILES['image'])
         img_file = InMemoryUploadedFile(p[0], None, 'poster.jpg', 'image/jpeg', p[0].tell, None)
@@ -448,15 +451,14 @@ def push_confidence(priority=0):
 
             dtime = datetime.utcfromtimestamp(vk_event.start + tz)
         else:
-            dtime = datetime.fromtimestamp(vk_event.start)
+            dtime = datetime.fromtimestamp(vk_event.start, tz=tzlocal.get_localzone())
 
         event_date = {}
         event_date['title'] = vk_event.name
-
         event_date['description'] = vk_event.description
         event_date['location'] = event_location.location_id
         event_date['start_date'] = dtime.date()
-        event_date['start_time'] = dtime.time()
+        event_date['start_time'] = dtime.timetz()
         event_date['url'] = 'http://vk.com/event%d' % vk_event.id
         event_date['organizer'] = vk_event.organizer_id
         event_date['priority'] = priority
@@ -467,7 +469,7 @@ def push_confidence(priority=0):
                 if tz:
                     finish_dtime = datetime.utcfromtimestamp(vk_event.finish + tz)
                 else:
-                    finish_dtime = datetime.fromtimestamp(vk_event.finish)
+                    finish_dtime = datetime.fromtimestamp(vk_event.finish, tz=tzlocal.get_localzone())
                 event_date['finish_date'] = finish_dtime.date()
                 event_date['duration'] = vk_event.finish - vk_event.start
         logger.debug('vk_event.start: %s, tx: %s' % (vk_event.start, tz))
