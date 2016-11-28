@@ -253,7 +253,10 @@ def add_event_form(request):
         if new_event_form.is_valid():
             if new_org_flag:
                 org_obj.location = Locations.objects.get(pk=request.POST['location'])
-                org_obj.status = 0
+                if request.user.is_staff:
+                    org_obj.status = 2
+                else:
+                    org_obj.status = 0
                 org_obj.save()
                 new_event_form.place = org_obj.id
             else:
