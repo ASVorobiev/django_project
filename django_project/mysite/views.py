@@ -251,8 +251,9 @@ def add_event_form(request):
             request.POST['is_active'] = 0
         new_event_form = AddNewEvent(request.POST, request.FILES)
         if new_event_form.is_valid():
+            location = Locations.objects.get(pk=request.POST['location'])
             if new_org_flag:
-                org_obj.location = Locations.objects.get(pk=request.POST['location'])
+                org_obj.location = location
                 if request.user.is_staff:
                     org_obj.status = 2
                 else:
@@ -279,7 +280,7 @@ def add_event_form(request):
             if new_event_form.is_valid():
                 obj = new_event_form.save(commit=False)
                 obj.owner = request.user
-                obj.url = 'http://vkalendare.com/%s/%d' % (Locations.objects.get(pk=request.POST['location']).site_screen_name,
+                obj.url = 'http://vkalendare.com/%s/%s' % (location.site_screen_name,
                                                            obj.id)
                 obj.save()
                 new_event_form.save_m2m()
