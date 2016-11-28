@@ -259,7 +259,7 @@ def add_event_form(request):
                 else:
                     org_obj.status = 0
                 org_obj.save()
-                new_event_form.place = org_obj.id
+                new_event_form.place = org_obj
             else:
                 new_event_form.place = request.POST['place']
 

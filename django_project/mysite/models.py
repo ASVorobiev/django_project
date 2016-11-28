@@ -64,6 +64,7 @@ class MysitePlaces(models.Model):
     def __str__(self):
         return self.name
 
+
 class Locations(models.Model):
     name = models.CharField(max_length=255)
     vk_group_id = models.IntegerField(blank=True, null=True)
@@ -111,6 +112,25 @@ class MyManager(Manager):
             cursor.close()
 
 
+class Customplaces(models.Model):
+    location = models.ForeignKey(Locations)
+    name = models.CharField(max_length=255, verbose_name='Название места(обязательно)')
+    logo = models.CharField(max_length=255, blank=True, null=True, verbose_name='Ссылка на логотип')
+    url = models.CharField(max_length=255, blank=True, null=True, verbose_name='Ссылка на сайт')
+    status = models.IntegerField(blank=True, null=True, verbose_name='Статус модерации')
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+    org_parent = models.ForeignKey(MysiteOrganizers, blank=True, null=True, verbose_name='Создано "оранизатором"')
+    is_deleted = models.IntegerField(choices=((0, 'Нет'), (1, 'Да')), default=0)
+    modified = models.IntegerField(default=int(datetime.utcnow().timestamp()))
+    created = models.IntegerField(default=int(datetime.utcnow().timestamp()))
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
 
 class Events(models.Model):
     owner = models.ForeignKey(CustomUser, blank=True, null=True, verbose_name='Создатель')
@@ -128,7 +148,7 @@ class Events(models.Model):
     is_perodic = models.IntegerField(blank=True, null=True, choices=((0, 'No'), (1, 'Yes')))
     shedule = models.CharField(max_length=255, blank=True, null=True)
     # place_id = models.IntegerField(blank=True, null=True)
-    place = models.ForeignKey(MysitePlaces, verbose_name='Место', blank=True, null=True, default=None)
+    place = models.ForeignKey(Customplaces, verbose_name='Место', blank=True, null=True, default=None)
     place_comment = models.CharField(max_length=255, blank=True, null=True)
     # organizer_id = models.IntegerField(blank=True, null=True)
     organizer = models.ForeignKey(MysiteOrganizers, verbose_name='Организатор', blank=True, null=True)
@@ -148,8 +168,6 @@ class Events(models.Model):
     created = models.IntegerField(default=int(datetime.utcnow().timestamp()))
     modified = models.IntegerField(default=int(datetime.utcnow().timestamp()))
 
-
-
     def clean(self):
         if self.description:
             return self.description.strip()
@@ -165,30 +183,6 @@ class Events(models.Model):
     def title_translit(self):
         trans = translit(self.title.strip(), 'ru', reversed=True)
         return re.sub("[^.\w-]+", '_', trans)
-
-    # class loc_org(models.Field):
-    #     #     description = "A hand of cards (bridge style)"
-    #     #     # local_organizer = models.ForeignKey
-    #     #     def __init__(self, *args, **kwargs):
-    #     #         kwargs['max_length'] = 104
-    #     #         super(Events, self).__init__(*args, **kwargs)
-    #     #
-    #     def local_organizer(self):
-    #         sql_query = "SELECT * from mysite_organizers where id in (SELECT DISTINCT organizer_id from mysite_events WHERE location_id = %s) AND confidence > 1 AND vk_type = 'group' ORDER BY followers" % 1
-    #         return MysiteOrganizers.objects.raw(sql_query)
-    #
-    #     def __str__(self):
-    #         return self.name
-    #
-    #
-    # local_organizer = loc_org().local_organizer()
-    # objects = MyManager()
-    # local_organizer = loc_org().local_organizer(organizer)
-    # def local_organizer(self):
-    #     sql_query = "SELECT * from mysite_organizers where id in (SELECT DISTINCT organizer_id from mysite_events WHERE location_id = %s) AND confidence > 1 AND vk_type = 'group' ORDER BY followers" % 1
-    #     return MysiteOrganizers.objects.raw(sql_query).model
-    # local_organizer.short_description = 'Организатор'
-    # local_organizer.allow_tags = True
 
     def __str__(self):
         return self.title
@@ -214,25 +208,6 @@ class TaggedCategories(TaggedItemBase):
     def __str__(self):
         return self.tag.name
 
-class Customplaces(models.Model):
-    location = models.ForeignKey(Locations)
-    name = models.CharField(max_length=255, verbose_name='Название места(обязательно)')
-    logo = models.CharField(max_length=255, blank=True, null=True, verbose_name='Ссылка на логотип')
-    url = models.CharField(max_length=255, blank=True, null=True, verbose_name='Ссылка на сайт')
-    status = models.IntegerField(blank=True, null=True, verbose_name='Статус модерации')
-    latitude = models.FloatField(blank=True, null=True)
-    longitude = models.FloatField(blank=True, null=True)
-    org_parent = models.ForeignKey(MysiteOrganizers, blank=True, null=True, verbose_name='Создано "оранизатором"')
-    is_deleted = models.IntegerField(choices=((0, 'Нет'), (1, 'Да')), default=0)
-    modified = models.IntegerField(default=int(datetime.utcnow().timestamp()))
-    created = models.IntegerField(default=int(datetime.utcnow().timestamp()))
-
-    class Meta:
-        ordering = ['name']
-
-    def __str__(self):
-        return self.name
-
 
 class MysiteVkEvents(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -247,7 +222,7 @@ class MysiteVkEvents(models.Model):
     organizer = models.ForeignKey(MysiteOrganizers)
     contacts = models.TextField(blank=True, null=True)
     links = models.TextField(blank=True, null=True)
-    place = models.ForeignKey(Customplaces, blank=True, null=True)
+    place = models.IntegerField(blank=True, null=True)
     is_new = models.IntegerField()
     event_id = models.IntegerField(blank=True, null=True)
     modified = models.IntegerField()

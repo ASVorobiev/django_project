@@ -89,7 +89,7 @@
       </div>
     </div>
 
-    <div class="row" hidden id="place_row">
+    <div class="row" id="place_row">
       <div class="input-field col s10" id="place_selector">
         <select id="local_places" name="place" class="icons validate">
 
@@ -141,7 +141,7 @@
 
     <div class="row">
       <div class="input-field col s12">
-        <div class="chips-initial" required></div>
+        <div class="chips-initial"></div>
       </div>
     </div>
 
@@ -367,6 +367,8 @@
               });
               $('#local_places').append(items);
               $('#local_places').material_select();
+{#              $('#local_places').attr('name', 'local_places');#}
+{#              $('#local_places').attr('id', 'local_places_id');#}
               $('#place_row').show();
             }
         })
@@ -414,6 +416,9 @@
                     formData.append(value['name'], value['value']);
                   });
                 }
+                else {
+                    formData.append('place', $('#place_selector').find(':selected').val())
+                    ;}
 {#                formData.append(OrgformData.serialize());#}
 
 {#                $.ajax({#}
