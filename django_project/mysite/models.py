@@ -222,7 +222,7 @@ class MysiteVkEvents(models.Model):
     organizer = models.ForeignKey(MysiteOrganizers)
     contacts = models.TextField(blank=True, null=True)
     links = models.TextField(blank=True, null=True)
-    place = models.IntegerField(blank=True, null=True)
+    place_id = models.IntegerField(blank=True, null=True)
     is_new = models.IntegerField()
     event_id = models.IntegerField(blank=True, null=True)
     modified = models.IntegerField()
