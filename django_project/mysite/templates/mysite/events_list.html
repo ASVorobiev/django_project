@@ -3,6 +3,7 @@
 {% load staticfiles %}
 {% load el_pagination_tags %}
 {% load shuffle %}
+{% load myfilters %}
 
 {% block title %}
   {% if user.location  %}
@@ -116,11 +117,17 @@
   <div id="modal1" class="modal">
     <div class="modal-content">
       <h4>Выберите ваш город</h4>
-      {% for loc in locations %}
-      <li value={{ loc.site_screen_name }}>
-        <a href="{% url 'location_events' loc.site_screen_name %}" onclick="set_user_location({{ loc.id }})">{{ loc.name }}</a>
-      </li>
-      {% endfor %}
+      <div class="row">
+        {% for loc_list in locations|split_by_three %}
+          {% for loc in loc_list %}
+            <div class="col s12 l4">
+              <li value={{ loc.site_screen_name }}>
+                <a href="{% url 'location_events' loc.site_screen_name %}" onclick="set_user_location({{ loc.id }})">{{ loc.name }}</a>
+              </li>
+            </div>
+          {% endfor %}
+        {% endfor %}
+      </div>
     </div>
   </div>
 
