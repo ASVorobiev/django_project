@@ -104,7 +104,7 @@ def events_list(request, site_screen_name=None):
         location_id = location.id
         response['location_events'] = response['location_events'].filter(location__id=location_id)
 
-        # response['priority_events'] = response['priority_events'].filter(location=location_id)
+        response['priority_events'] = response['priority_events'].filter(location=location_id)
         response['current_location'] = Locations.objects.get(id=location_id)
         response['vk_group_id'] = response['current_location'].vk_group_id
 
