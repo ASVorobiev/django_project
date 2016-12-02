@@ -55,7 +55,8 @@
 </ul>
 
   <header>
-    <nav class="top-nav light-blue darken-3">
+{#    <nav class="top-nav light-blue darken-3">#}
+    <nav class="top-nav custom-teal darken-1">
       <div class="">
         <div class="nav-wrapper">
           <a href="#" data-activates="nav-mobile" class="button-collapse top-nav full"><i class="material-icons">menu</i></a>
@@ -65,18 +66,15 @@
               <a class="center waves-effect waves-light btn hide-on-small-and-down red lighten-1"  href="{% url 'add_event_form' %}">Добавить мероприятие</a>
             </li>
             {% if current_location %}
-            <li>
-                            <i class="material-icons">location_on</i>
-            </li>
-            <li>
-
-              <a class="dropdown-button hide-on-med-and-down" data-activates="locations_ddown">{{ current_location }}
-
+              <li>
+                <i class="material-icons">location_on</i>
+              </li>
+              <li>
+                <a class="dropdown-button hide-on-med-and-down" data-activates="locations_ddown">{{ current_location }}
                   <i class="material-icons right">arrow_drop_down</i>
-
-              </a>
-            </li>
-                {% endif %}
+                </a>
+              </li>
+            {% endif %}
           </ul>
         </div>
       </div>
@@ -212,7 +210,7 @@
 {#      </div>#}
 {#    </footer>#}
 
- <footer class="page-footer light-blue darken-3">
+ <footer class="page-footer custom-teal">
     <div class="">
       <div class="row">
         <div class="col l5 s12">
