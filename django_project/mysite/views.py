@@ -465,7 +465,11 @@ def push_confidence(priority=0):
         else:
             # dtime = datetime.fromtimestamp(vk_event.start, tz=tzlocal.get_localzone())
             # dtime = dtime.replace(tzinfo=None)
-            dtime = datetime.fromtimestamp(vk_event.start).replace(tzinfo=pytz.utc).astimezone(tzlocal.get_localzone())
+
+            #dtime = datetime.fromtimestamp(vk_event.start).replace(tzinfo=pytz.utc).astimezone(tzlocal.get_localzone())
+
+            local_tz = tzlocal.get_localzone().utcoffset(datetime.utcfromtimestamp(vk_event.start)).seconds
+            dtime = datetime.utcfromtimestamp(vk_event.start + local_tz)
 
         event_date = {}
         event_date['title'] = vk_event.name
@@ -484,7 +488,8 @@ def push_confidence(priority=0):
                     finish_dtime = datetime.utcfromtimestamp(vk_event.finish + tz)
                 else:
                     # finish_dtime = datetime.fromtimestamp(vk_event.finish, tz=tzlocal.get_localzone())
-                    finish_dtime = datetime.fromtimestamp(vk_event.finish).replace(tzinfo=pytz.utc).astimezone(tzlocal.get_localzone())
+                    local_tz_finish = tzlocal.get_localzone().utcoffset(datetime.utcfromtimestamp(vk_event.finish)).seconds
+                    finish_dtime = datetime.utcfromtimestamp(vk_event.finish + local_tz_finish)
 
                 event_date['finish_date'] = finish_dtime.date()
                 event_date['duration'] = vk_event.finish - vk_event.start
