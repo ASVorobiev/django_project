@@ -8593,3 +8593,7 @@ header, main, footer {
 
 .material-icons.teal_icons { color: teal; }
 .material-icons.red_l1_icons { color: #ef5350; }
+
+.wcommunity_wrap {
+  margin-top: 10px;
+}
