@@ -4350,6 +4350,22 @@ html {
   }
 }
 
+.custom {}
+.custom h1, h2, h3, h4, h5, h6 {
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.custom h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+  font-weight: inherit;
+}
+
+.custom h1 {
+  font-size: 1.4rem;
+  line-height: 110%;
+  margin: 1.1rem 0 0.68rem 0;
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-weight: 400;
   line-height: 1.1;
@@ -4700,7 +4716,7 @@ small {
   color: inherit;
 }
 
-.card .card-content:after{
+.card .card-content .shad:after{
     content: "";
     position: absolute; top: 0; bottom: 0; left: 0; right: 0;
     box-shadow: inset white 0 -80px 30px -50px;

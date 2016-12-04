@@ -1,7 +1,7 @@
 {% extends "mysite/base.html" %}
 
 {% block card_panel %}
-          <div class="card large sticky-action z-depth-1">
+          <div class="card large sticky-action z-depth-1 hoverable">
 
             <div class="card-image">
 {#                      <div class="card-image waves-effect waves-block waves-light">#}
@@ -28,30 +28,34 @@
 
             </div>
             <div class="card-content">
+              <div class="custom">
               <span class="card-title activator grey-text text-darken-4">
-                <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}">
-                  <p class="grey-text text-darken-2" style="font-weight:600 ">
-                    {{ event.title }}
-                  </p>
-                </a>
                 <i class="material-icons right">more_vert</i>
+                <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}">
+                  <div class="custom">
+                    <h1 class="grey-text text-darken-2" style="font-weight:600 ">
+                      {{ event.title }}
+                    </h1>
+                  </div>
+                </a>
               </span>
               <span class="black-text">
                 <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}">
                   <p>
-                    <span class="grey-text text-darken-3">
+                    <span class="shad grey-text text-darken-3">
                       {{ event.description|linebreaksbr }}
                     </span>
                   </p>
                 </a>
               </span>
+                </div>
             </div>
             <div class="card-reveal">
               <span class="card-title grey-text text-darken-4">
                 {{ event.title }}
                 <i class="material-icons right">close</i>
               </span>
-              <p class="truncate">{{ event.description|linebreaks }}</p>
+              <div class="truncate">{{ event.description|linebreaks }}</div>
             </div>
 {#            <div class="card-action">#}
 {#                <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span>Подробнее...</a>#}
