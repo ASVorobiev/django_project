@@ -4703,26 +4703,12 @@ small {
 .card .card-content:after{
     content: "";
     position: absolute; top: 0; bottom: 0; left: 0; right: 0;
-    box-shadow: inset white 0 -25px 30px;
+    box-shadow: inset white 0 -80px 30px -50px;
 }
-
-/*.card .card-content:after {*/
-    /*content: "";*/
-    /*box-shadow: 0px -50px 50px -50px #000 inset;*/
-    /*position:absolute;*/
-    /*bottom: 250px;*/
-    /*left:0;*/
-    /*width:100%;*/
-    /*height:50px;*/
-    /*overflow: hidden;*/
-/*}*/
 
 .card .card-content .card-title {
   line-height: 28px;
 }
-
-
-
 
 .card .card-action {
   position: relative;
