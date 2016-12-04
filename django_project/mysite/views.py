@@ -9,7 +9,8 @@ import random
 
 import re
 from time import sleep
-from tzlocal import get_localzone
+
+
 
 import nltk
 import requests
@@ -35,6 +36,9 @@ from transliterate import translit
 from django.template.defaulttags import register
 
 from datetime import datetime, timedelta
+import tzlocal
+import pytz
+from tzlocal import get_localzone
 
 from PIL import Image
 from PIL import ImageFont
@@ -102,7 +106,7 @@ def events_list(request, site_screen_name=None):
         location_id = location.id
         response['location_events'] = response['location_events'].filter(location__id=location_id)
 
-        # response['priority_events'] = response['priority_events'].filter(location=location_id)
+        response['priority_events'] = response['priority_events'].filter(location=location_id)
         response['current_location'] = Locations.objects.get(id=location_id)
         response['vk_group_id'] = response['current_location'].vk_group_id
 
@@ -234,6 +238,7 @@ def add_event_form(request):
             if CustomPlacesFormObj.is_valid():
                 org_obj = CustomPlacesFormObj.save(commit=False)
                 new_org_flag = True
+                request.POST['place_id'] = org_obj.id
 
         p = pill(request.FILES['image'])
         img_file = InMemoryUploadedFile(p[0], None, 'poster.jpg', 'image/jpeg', p[0].tell, None)
@@ -248,11 +253,15 @@ def add_event_form(request):
             request.POST['is_active'] = 0
         new_event_form = AddNewEvent(request.POST, request.FILES)
         if new_event_form.is_valid():
+            location = Locations.objects.get(pk=request.POST['location'])
             if new_org_flag:
-                org_obj.location = Locations.objects.get(pk=request.POST['location'])
-                org_obj.status = 0
+                org_obj.location = location
+                if request.user.is_staff:
+                    org_obj.status = 2
+                else:
+                    org_obj.status = 0
                 org_obj.save()
-                new_event_form.place = org_obj.id
+                new_event_form.place = org_obj
             else:
                 new_event_form.place = request.POST['place']
 
@@ -273,6 +282,9 @@ def add_event_form(request):
             if new_event_form.is_valid():
                 obj = new_event_form.save(commit=False)
                 obj.owner = request.user
+                obj.save()
+                obj.url = 'http://vkalendare.com/%s/%s' % (location.site_screen_name,
+                                                           obj.id)
                 obj.save()
                 new_event_form.save_m2m()
                 response = {'redirect': request.build_absolute_uri(reverse('added_successfully'))}
@@ -302,35 +314,38 @@ def admin_list(request):
         if request.POST['task'] == 'set_active':
             event = Events.objects.get(pk=request.POST['event_id'])
             event.is_active = 1
+            event.export_vk = 1
             event.save()
-            json
+            return HttpResponse(json.dumps({'status': 'success'}), content_type='application/json')
 
         if request.POST['task'] == 'set_active_with_priority':
             event = Events.objects.get(pk=request.POST['event_id'])
             event.is_active = 1
+            event.export_vk = 1
             event.priority = 1
             event.save()
-            return HttpResponse(json.dumps({'error_code': 0}), content_type='application/json')
+            return HttpResponse(json.dumps({'status': 'success'}), content_type='application/json')
 
         if request.POST['task'] == 'set_dismiss':
             event = Events.objects.get(pk=request.POST['event_id'])
             event.is_active = 0
+            event.export_vk = 0
             event.save()
-            return HttpResponse(json.dumps({'error_code': 0}), content_type='application/json')
+            return HttpResponse(json.dumps({'status': 'success'}), content_type='application/json')
 
-        context = {'unique': '0.00', 'seo_check': {'count_chars_with_space': 110, 'mixed_words': [], 'spam_percent': 22,
-                                                   'list_keys': [{'count': 2, 'key_title': 'друг'}], 'count_words': 15,
-                                                   'count_chars_without_space': 96, 'water_percent': 16,
-                                                   'list_keys_group': [
-                                                       {'count': 2, 'sub_keys': [], 'key_title': 'друг'}]},
-                   'text_unique': '0.00', 'spell_check': [], 'result_json': {
-                'clear_text': 'На основе одного шаблона генерируется множество статей с невысокой уникальностью очень похожих друг на друга',
-                'urls': [{'url': 'http://vk.com/wall-91072377', 'plagiat': 100,
-                          'words': '0 1 2 3 4 5 6 7 8 9 10 11 12 13 14'},
-                         {'url': 'http://pr-cy.ru/lib/seo/Kontent-sayta-SEO-kopirayting-Unikal-nost-kontenta',
-                          'plagiat': 100, 'words': '0 1 2 3 4 5 6 7 8 9 10 11 12 13 14'}], 'unique': 0,
-                'mixed_words': '', 'date_check': '19.09.2016 19:58:30'}, 'text_uid': '57e0192d87fb8'}
-        return HttpResponse(json.dumps(context), content_type='application/json')
+        # context = {'unique': '0.00', 'seo_check': {'count_chars_with_space': 110, 'mixed_words': [], 'spam_percent': 22,
+        #                                            'list_keys': [{'count': 2, 'key_title': 'друг'}], 'count_words': 15,
+        #                                            'count_chars_without_space': 96, 'water_percent': 16,
+        #                                            'list_keys_group': [
+        #                                                {'count': 2, 'sub_keys': [], 'key_title': 'друг'}]},
+        #            'text_unique': '0.00', 'spell_check': [], 'result_json': {
+        #         'clear_text': 'На основе одного шаблона генерируется множество статей с невысокой уникальностью очень похожих друг на друга',
+        #         'urls': [{'url': 'http://vk.com/wall-91072377', 'plagiat': 100,
+        #                   'words': '0 1 2 3 4 5 6 7 8 9 10 11 12 13 14'},
+        #                  {'url': 'http://pr-cy.ru/lib/seo/Kontent-sayta-SEO-kopirayting-Unikal-nost-kontenta',
+        #                   'plagiat': 100, 'words': '0 1 2 3 4 5 6 7 8 9 10 11 12 13 14'}], 'unique': 0,
+        #         'mixed_words': '', 'date_check': '19.09.2016 19:58:30'}, 'text_uid': '57e0192d87fb8'}
+        # return HttpResponse(json.dumps(context), content_type='application/json')
 
 
 def jdata(request):
@@ -448,11 +463,16 @@ def push_confidence(priority=0):
 
             dtime = datetime.utcfromtimestamp(vk_event.start + tz)
         else:
-            dtime = datetime.fromtimestamp(vk_event.start)
+            # dtime = datetime.fromtimestamp(vk_event.start, tz=tzlocal.get_localzone())
+            # dtime = dtime.replace(tzinfo=None)
+
+            #dtime = datetime.fromtimestamp(vk_event.start).replace(tzinfo=pytz.utc).astimezone(tzlocal.get_localzone())
+
+            local_tz = tzlocal.get_localzone().utcoffset(datetime.utcfromtimestamp(vk_event.start)).seconds
+            dtime = datetime.utcfromtimestamp(vk_event.start + local_tz)
 
         event_date = {}
         event_date['title'] = vk_event.name
-
         event_date['description'] = vk_event.description
         event_date['location'] = event_location.location_id
         event_date['start_date'] = dtime.date()
@@ -467,7 +487,10 @@ def push_confidence(priority=0):
                 if tz:
                     finish_dtime = datetime.utcfromtimestamp(vk_event.finish + tz)
                 else:
-                    finish_dtime = datetime.fromtimestamp(vk_event.finish)
+                    # finish_dtime = datetime.fromtimestamp(vk_event.finish, tz=tzlocal.get_localzone())
+                    local_tz_finish = tzlocal.get_localzone().utcoffset(datetime.utcfromtimestamp(vk_event.finish)).seconds
+                    finish_dtime = datetime.utcfromtimestamp(vk_event.finish + local_tz_finish)
+
                 event_date['finish_date'] = finish_dtime.date()
                 event_date['duration'] = vk_event.finish - vk_event.start
         logger.debug('vk_event.start: %s, tx: %s' % (vk_event.start, tz))
@@ -489,7 +512,6 @@ def push_confidence(priority=0):
 
             if ConfidenceNewEventObj.is_valid():
                 obj = ConfidenceNewEventObj.save()
-
                 vk_event.is_new = 0
                 vk_event.event_id = obj.id
                 vk_event.save()

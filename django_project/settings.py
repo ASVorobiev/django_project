@@ -19,7 +19,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 # noinspection PyPackageRequirements
-ALLOWED_HOSTS = ['0.0.0.0', 'vkalendare.net', 'vkalendare.com', 'www.vkalendare.com', '127.0.0.1']
+ALLOWED_HOSTS = ['0.0.0.0', 'vkalendare.net', '.vkalendare.com', '127.0.0.1', '192.168.0.1/24', '[::1]']
 
 
 DATABASES = {
@@ -320,10 +320,15 @@ SOCIAL_AUTH_TWITTER_KEY = 'dQemFi4fKcnUauKqrkKOyb4oL'
 SOCIAL_AUTH_TWITTER_SECRET = 'RSJmTueWBzCgeK9reZ0ViE0sZXKMgi5pgiQoUfcLVCWkCM8vWU'
 
 # https://oauth.yandex.com/
+# https://oauth.yandex.com/client/edit/04d32f775cc04084b4c63ba53c763bcd
 SOCIAL_AUTH_YANDEX_OAUTH2_KEY = '04d32f775cc04084b4c63ba53c763bcd'
 SOCIAL_AUTH_YANDEX_OAUTH2_SECRET = 'e98b0cc1a8c444f1859830753f42194a'
 
+# https://www.instagram.com/developer/clients/manage/?edited=vkalendare
+SOCIAL_AUTH_INSTAGRAM_KEY = '2ee6681ccb10469ab998207367bb117d'
+SOCIAL_AUTH_INSTAGRAM_SECRET = '83e161fd39a64394873c81aa226153e2'
+# SOCIAL_AUTH_INSTAGRAM_AUTH_EXTRA_ARGUMENTS = {'scope': 'likes comments relationships'}
 
-#import nltk
-#nltk.download('punkt')
-#nltk.download('averaged_perceptron_tagger')
+# import nltk
+# nltk.download('punkt')
+# nltk.download('averaged_perceptron_tagger')

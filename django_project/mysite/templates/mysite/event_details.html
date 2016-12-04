@@ -36,58 +36,58 @@
   </div>
 
   <div class="card">
-      <div class="row">
-          <div class="col c12 l5">
-              <img class="image_padding materialboxed responsive-img" src="{{ event_data.image.url }}" alt="Афиша {{ event_data.title }}">
-          </div>
-          <div class="col s12 l7 section">
-            <div class="center-align">
-                <h4>{{ event_data.title }}</h4>
-            </div>
-          <div class="divider"></div>
-            <div class="section">
-                <i class="tiny material-icons">schedule</i>
-                <a>{{ event_data.start_date }} {{ event_data.start_date|date:'(l)' }}</a> в
-                <a>{{ event_data.start_time }}</a> (через {{ event_data.start_date|timeuntil }})
-            </div>
-          <div class="divider"></div>
-            {% if event_data.description %}
-            <div class="section">
-            {% spaceless %}
+    <div class="row">
+      <div class="col c12 l5">
+          <img class="image_padding materialboxed responsive-img" src="{{ event_data.image.url }}" alt="Афиша {{ event_data.title }}">
+      </div>
+      <div class="col s12 l7 section">
+        <div class="center-align">
+            <h4>{{ event_data.title }}</h4>
+        </div>
+      <div class="divider"></div>
+        <div class="section">
+          <i class="tiny material-icons">schedule</i>
+          <a>{{ event_data.start_date }} {{ event_data.start_date|date:'(l)' }}</a> в
+          <a>{{ event_data.start_time }}</a> (через {{ event_data.start_date|timeuntil }})
+        </div>
+      <div class="divider"></div>
+        {% if event_data.description %}
+        <div class="section">
+        {% spaceless %}
 {#              {{ event_data.clean|urlize }}#}
-              {{ event_data.description|urlize|linebreaks }}
-            {% endspaceless %}
-            </div>
-            {% endif %}
+          {{ event_data.description|urlize|linebreaks }}
+        {% endspaceless %}
+        </div>
+        {% endif %}
 
-          <div class="row">
-          {% for tag in event_tags %}
-              <div class="chip"><a href="{% url 'location_events' current_location.site_screen_name %}?tag={{ tag|urlencode }}">{{ tag }}</a></div>
-          {% endfor %}
-          </div>
+      <div class="row">
+        {% for tag in event_tags %}
+            <div class="chip"><a href="{% url 'location_events' current_location.site_screen_name %}?tag={{ tag|urlencode }}">{{ tag }}</a></div>
+        {% endfor %}
+      </div>
 
 {#          {% if event_tags %}#}
 {#            <div class="chips-initial"></div>#}
 {#          {% endif %}#}
 
-        <div class="row">
-            <div class="col s2">
+      <div class="row">
+        <div class="col s2">
 
-              <div class="" id="vk_like"></div>
-              <script type="text/javascript">
-                VK.Widgets.Like("vk_like", {type: "button", verb: 1, height: 30});
-              </script>
+          <div class="" id="vk_like"></div>
+          <script type="text/javascript">
+            VK.Widgets.Like("vk_like", {type: "button", verb: 1, height: 30});
+          </script>
 
 {#              <div class="" id="vk_like"></div>#}
 {#              <script type="text/javascript">#}
 {#                VK.Widgets.Like("vk_like", {type: "full", verb: 1, height: 30});#}
 {#              </script>#}
-              
-                {# <script type="text/javascript">#}
-                {#     document.write(VK.Share.button(false,{type: "link", text: "Сохранить к себе"}));#}
-                {# </script>#}
-            </div>
+
+            {# <script type="text/javascript">#}
+            {#     document.write(VK.Share.button(false,{type: "link", text: "Сохранить к себе"}));#}
+            {# </script>#}
         </div>
+      </div>
   </div>
   <div class="row">
     <div class="col s12 l12">
