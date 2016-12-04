@@ -8594,6 +8594,6 @@ header, main, footer {
 .material-icons.teal_icons { color: teal; }
 .material-icons.red_l1_icons { color: #ef5350; }
 
-#vk_groups {
-  margin-top: 10px;
+.vk_groups {
+  margin-top: 1.1rem;
 }
