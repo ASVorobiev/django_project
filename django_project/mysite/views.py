@@ -439,7 +439,7 @@ def jservice(request):
 
 
 def update_event(vk_events_list):
-    vk_events_list = [49611313]
+    # vk_events_list = [49611313]
     result = {'events': []}
     vk_events_for_update = MysiteVkEvents.objects.filter(id__in=vk_events_list)
     for vk_event in vk_events_for_update:
