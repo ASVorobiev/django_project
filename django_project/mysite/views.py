@@ -333,19 +333,7 @@ def admin_list(request):
             event.save()
             return HttpResponse(json.dumps({'status': 'success'}), content_type='application/json')
 
-        # context = {'unique': '0.00', 'seo_check': {'count_chars_with_space': 110, 'mixed_words': [], 'spam_percent': 22,
-        #                                            'list_keys': [{'count': 2, 'key_title': 'друг'}], 'count_words': 15,
-        #                                            'count_chars_without_space': 96, 'water_percent': 16,
-        #                                            'list_keys_group': [
-        #                                                {'count': 2, 'sub_keys': [], 'key_title': 'друг'}]},
-        #            'text_unique': '0.00', 'spell_check': [], 'result_json': {
-        #         'clear_text': 'На основе одного шаблона генерируется множество статей с невысокой уникальностью очень похожих друг на друга',
-        #         'urls': [{'url': 'http://vk.com/wall-91072377', 'plagiat': 100,
-        #                   'words': '0 1 2 3 4 5 6 7 8 9 10 11 12 13 14'},
-        #                  {'url': 'http://pr-cy.ru/lib/seo/Kontent-sayta-SEO-kopirayting-Unikal-nost-kontenta',
-        #                   'plagiat': 100, 'words': '0 1 2 3 4 5 6 7 8 9 10 11 12 13 14'}], 'unique': 0,
-        #         'mixed_words': '', 'date_check': '19.09.2016 19:58:30'}, 'text_uid': '57e0192d87fb8'}
-        # return HttpResponse(json.dumps(context), content_type='application/json')
+
 
 
 def jdata(request):
@@ -445,8 +433,31 @@ def jservice(request):
         push_confidence()
         return HttpResponse(json.dumps({'result': True}), content_type='application/json')
 
+    if request.GET['task'] == 'update_event':
+        update_event([134224605])
+        return HttpResponse(json.dumps({'result': True}), content_type='application/json')
 
-def push_confidence(priority=0, local_tz=10800):
+
+def update_event(vk_events_list):
+    vk_events_list = [49611313]
+    result = {'events': []}
+    vk_events_for_update = MysiteVkEvents.objects.filter(id__in=vk_events_list)
+    for vk_event in vk_events_for_update:
+        event = Events.objects.get(pk=vk_event.event_id)
+        r = requests.get(vk_event.image_url, stream=True)
+        if not r.status_code == requests.codes.ok:  # попробуем в следующий раз
+            logger.error('Не удалось скачать афишу для мероприятия: %s' % event.url)
+            continue
+        r.raw.decode_content = True
+        p = pill(r.raw)
+        event.image = InMemoryUploadedFile(p[0], None, 'poster.jpg', 'image/jpeg', p[0].tell, None)
+        event.thumb = InMemoryUploadedFile(p[1], None, 'thumb.jpg', 'image/jpeg', p[1].tell, None)
+        event.save()
+        result['events'].append(event.title)
+    result['status'] = 'Success'
+    return result
+
+def push_confidence(priority=0, local_tz=10800, event_id=None):
     result = {'status': 'Success'}
     events_for_approve = MysiteVkEvents.objects.filter(
         created__lt=int((datetime.utcnow() - timedelta(days=1)).timestamp()),
