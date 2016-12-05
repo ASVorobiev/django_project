@@ -452,6 +452,7 @@ def update_event(vk_events_list):
         p = pill(r.raw)
         event.image = InMemoryUploadedFile(p[0], None, 'poster.jpg', 'image/jpeg', p[0].tell, None)
         event.thumb = InMemoryUploadedFile(p[1], None, 'thumb.jpg', 'image/jpeg', p[1].tell, None)
+        logger.debug(event.image)
         event.save()
         result['events'].append(event.title)
     result['status'] = 'Success'
