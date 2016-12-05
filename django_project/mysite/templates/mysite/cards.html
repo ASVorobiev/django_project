@@ -4,17 +4,17 @@
           <div class="card large sticky-action z-depth-1 hoverable">
 
             <div class="card-image">
-{#                      <div class="card-image waves-effect waves-block waves-light">#}
-              <div class="flow-text" style="font-size: 110%;">
-                <div class="card-content_padding">
-                  <i class="material-icons tiny">date_range</i>
-                  {{ event.start_date|date:"d.m.Y (D)"  }}
-                  <div class="right">
-                    <i class="material-icons tiny">access_time</i>
-                    {{ event.start_time }}
-                  </div>
-                </div>
+              <div class="custom_row">
+                <span class="valign-wrapper col s7 l7 center-align" style="text-align: center">
+                  <i class="material-icons tiny valign">date_range</i>
+                  <span class="valign"> {{ event.start_date|date:"d.m.Y (D)" }} </span>
+                </span>
+                <span class="valign-wrapper col s5 l5 center-align">
+                  <i class="material-icons tiny valign">access_time</i>
+                  <span class="valign"> {{ event.start_time }} </span>
+                </span>
               </div>
+
 
               {% if event.image %}
                 <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}">

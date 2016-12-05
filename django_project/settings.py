@@ -43,6 +43,7 @@ elif _platform == "win32":
             'PASSWORD': 'Qwerty123',
             'HOST': '127.0.0.1',
             'PORT': '3306',
+            'PORT': '3306',
 
         }
     }
@@ -69,7 +70,7 @@ MEDIA_ROOT = '/home/www/vkalendare.net/mod/storage'
 MEDIA_URL = '/storage/'
 DATE_FORMAT = 'd E Y'
 
-STATIC_ROOT = os.path.join(ROOT_PATH, 'django_project/mysite/static')
+STATIC_ROOT = os.path.join(ROOT_PATH, 'django_project/mysite/static', 'django_project/about/static')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
@@ -106,6 +107,7 @@ TEMPLATES = [
 
         'DIRS': [join(ROOT_PATH, 'templates'),
                  os.path.join(ROOT_PATH, 'django_project', 'mysite', 'templates', 'mysite'),
+                 os.path.join(ROOT_PATH, 'django_project', 'about', 'templates'),
                  os.path.join(ROOT_PATH, 'django_project', 'mysite', 'templates', 'admin', 'mysite', 'events'),
                  os.path.join(ROOT_PATH, 'django_project', 'mysite', 'templates', 'el_pagination'),
                  os.path.join(ROOT_PATH, 'django_project', 'mysite', 'templatetags'),
@@ -148,7 +150,8 @@ INSTALLED_APPS = (
     'el_pagination',
     'taggit',
     'django_project.mysite.templatetags.myfilters',
-    'django_project.mysite.templatetags.shuffle'
+    'django_project.mysite.templatetags.shuffle',
+    'django_project.about',
     # 'xadmin',
     # 'crispy_forms',
     # 'reversion',

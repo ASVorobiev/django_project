@@ -3481,6 +3481,28 @@ input[type=range] + .thumb {
   min-height: 1px;
 }
 
+
+
+.custom_row {
+  /*margin-left: auto;*/
+  /*margin-right: auto;*/
+  margin: 0.2rem 0 0.2rem 0;
+
+}
+
+.custom_row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.custom_row .col {
+  float: left;
+  box-sizing: border-box;
+  padding: 0 0.75rem;
+  min-height: 1px;
+}
+
 /*.row .mod.col {*/
   /*float: left;*/
   /*box-sizing: border-box;*/

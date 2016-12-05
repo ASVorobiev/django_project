@@ -19,17 +19,10 @@ from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from django_project import settings
-from django_project.mysite import admin
+from django_project.about import views
 
 
-urlpatterns = [url(r'', include('django_project.user_auth.urls')),
-               url(r'', include('django_project.text_ru.urls')),
-               url(r'', include('social.apps.django_app.urls', namespace='social')),
-               # url(r'^admin/', include(admin.)),
-               url(r'', include('django_project.about.urls')),
-               url(r'', include('django_project.mysite.urls')),
-
-               ]
+urlpatterns = [url(r'^about/$', views.main, name='about')]
 
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

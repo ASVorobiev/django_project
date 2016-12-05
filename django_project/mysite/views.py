@@ -446,7 +446,7 @@ def jservice(request):
         return HttpResponse(json.dumps({'result': True}), content_type='application/json')
 
 
-def push_confidence(priority=0):
+def push_confidence(priority=0, local_tz=10800):
     result = {'status': 'Success'}
     events_for_approve = MysiteVkEvents.objects.filter(
         created__lt=int((datetime.utcnow() - timedelta(days=1)).timestamp()),
@@ -468,7 +468,7 @@ def push_confidence(priority=0):
 
             #dtime = datetime.fromtimestamp(vk_event.start).replace(tzinfo=pytz.utc).astimezone(tzlocal.get_localzone())
 
-            local_tz = tzlocal.get_localzone().utcoffset(datetime.utcfromtimestamp(vk_event.start)).seconds
+            # local_tz = tzlocal.get_localzone().utcoffset(datetime.utcfromtimestamp(vk_event.start)).seconds
             dtime = datetime.utcfromtimestamp(vk_event.start + local_tz)
 
         event_date = {}
