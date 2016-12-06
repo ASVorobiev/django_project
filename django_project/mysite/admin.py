@@ -92,7 +92,7 @@ class EventsAdmin(admin.ModelAdmin):
     list_locations_name.short_description = 'Город'  # Renames column head
 
     list_display = ['image_small', 'title', 'list_locations_name', 'description', 'start_date', 'start_time', 'button']
-    list_filter = ('start_date', 'location_id__name', 'priority', 'is_active')
+    list_filter = ('start_date', 'location_id__name', 'priority', 'is_active', 'export_vk')
 admin.site.register(Events, EventsAdmin)
 
 class OrganizersAdmin(admin.ModelAdmin):

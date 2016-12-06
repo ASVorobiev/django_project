@@ -249,7 +249,7 @@ def add_event_form(request):
             request.POST['export_vk'] = 1
             request.POST['is_active'] = 1
         else:
-            request.POST['export_vk'] = 0
+            request.POST['export_vk'] = 9
             request.POST['is_active'] = 0
         new_event_form = AddNewEvent(request.POST, request.FILES)
         if new_event_form.is_valid():
