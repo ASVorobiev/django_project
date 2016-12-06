@@ -142,36 +142,36 @@
       <div class="row">
         <div class="col s12 m6 l4">
           <a href="{% url 'location_events' current_location.site_screen_name %}?from_date={{ start_week_date }}&to_date={{ end_week_date }}">
-            <div class="card-panel custom-teal">
+            <div class="card-panel">
               <div class="card_circle hide-on-med-and-down">
-                <i class="material-icons large teal_icons">bubble_chart</i>
+                <i class="material-icons large myfiltercards1">bubble_chart</i>
               </div>
-              <h5 class="white-text center">На этой неделе</h5>
-      {#          <p class="white-text center">10 мероприятий</p>#}
+              <h5 class="black-text center">На этой неделе</h5>
+                <p class="black-text center">10 мероприятий</p>
             </div>
           </a>
         </div>
 
         <div class="col s12 m6 l4">
           <a href="{% url 'location_events' current_location.site_screen_name %}?from_date={{ start_weekend_date }}&to_date={{ end_week_date }}">
-            <div class="card-panel red lighten-1">
+            <div class="card-panel">
               <div class="card_circle hide-on-med-and-down">
-                <i class="material-icons large red_l1_icons">transfer_within_a_station</i>
+                <i class="material-icons large myfiltercards2">transfer_within_a_station</i>
               </div>
-              <h5 class="white-text center">Куда пойти в выходные</h5>
-      {#          <p class="white-text center">10 мероприятий</p>#}
+              <h5 class="black-text center">Куда пойти в выходные</h5>
+                <p class="black-text center">10 мероприятий</p>
             </div>
           </a>
         </div>
 
         <div class="col s12 m6 l4">
           <a href="{% url 'location_events' current_location.site_screen_name %}?free">
-            <div class="card-panel custom-teal">
+            <div class="card-panel">
               <div class="card_circle hide-on-med-and-down">
-                <i class="material-icons large teal_icons">money_off</i>
+                <i class="material-icons large myfiltercards1">money_off</i>
               </div>
-              <h5 class="white-text center">Бесплатно</h5>
-      {#          <p class="white-text center">10 мероприятий</p>#}
+              <h5 class="black-text center">Бесплатно</h5>
+                <p class="black-text center">10 мероприятий</p>
             </div>
           </a>
         </div>
@@ -219,8 +219,8 @@
   </div>
 {% endif %}
 
-      {% block fixed_action_btn %}
-      {{ block.super }}
-    {% endblock %}
+{% block fixed_action_btn %}
+  {{ block.super }}
+{% endblock %}
 
 {% endblock %}

@@ -28,7 +28,7 @@
 
 {% block content %}
   <div class="row valign-wrapper ">
-    <div class="col s12 blue-grey darken-1" id="breadcrumb-panel">
+    <div class="col s12 mybreadcrumb-panel" id="breadcrumb-panel">
       <a href="{% url 'events_list' %}"  class="breadcrumb">Главная</a>
       <a href="{% url 'location_events' current_location.site_screen_name  %}" class="breadcrumb">{{ current_location }}</a>
       <a href="#!" class="breadcrumb">{{ event_data }}</a>
@@ -38,17 +38,22 @@
   <div class="card">
     <div class="row">
       <div class="col c12 l5">
-          <img class="image_padding materialboxed responsive-img" src="{{ event_data.image.url }}" alt="Афиша {{ event_data.title }}">
+        <img class="image_padding materialboxed responsive-img" src="{{ event_data.image.url }}" alt="Афиша {{ event_data.title }}">
       </div>
       <div class="col s12 l7 section">
-        <div class="center-align">
+        <div class="">
             <h4>{{ event_data.title }}</h4>
         </div>
       <div class="divider"></div>
         <div class="section">
-          <i class="tiny material-icons">schedule</i>
-          <a>{{ event_data.start_date }} {{ event_data.start_date|date:'(l)' }}</a> в
-          <a>{{ event_data.start_time }}</a> (через {{ event_data.start_date|timeuntil }})
+          <div>
+            <i class="tiny material-icons">date_range</i>
+            <span>{{ event_data.start_date }} {{ event_data.start_date|date:'(l)' }}</span>
+          </div>
+          <div>
+            <i class="tiny material-icons">access_time</i>
+            <span>{{ event_data.start_time }}</span> (через {{ event_data.start_date|timeuntil }})
+          </div>
         </div>
       <div class="divider"></div>
         {% if event_data.description %}
@@ -116,14 +121,33 @@
 {% endblock %}
 
   {% block pin %}
-     <div class="card-panel grey lighten-5 z-depth-1">
-                  <div class="row">
-                 Организатор: <a href="{{ event_data.organizer.url }}" target="_blank">{{ event_data.organizer }}
-                    {% if event_data.organizer.vk_type != 'id' %}
-                <img src="{{ event_data.organizer.logo }}" alt="" class="circle responsive-img"></a> <!-- notice the "circle" class -->
-                  {% endif %}
-                  </div>
-    </div>
+    {% if event_data.organizer %}
+      <div class="card-panel grey lighten-5 z-depth-1">
+        <div class="row">
+          Организатор: <a href="{{ event_data.organizer.url }}" target="_blank">{{ event_data.organizer }}
+          {% if event_data.organizer.vk_type != 'id' %}
+            <img src="{{ event_data.organizer.logo }}" alt="" class="circle responsive-img"></a> <!-- notice the "circle" class -->
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+    {% if event_data.place %}
+      <div class="card-panel grey lighten-5 z-depth-1">
+        <div class="row">
+          Место проведения:
+          {% if event_data.place.url %}
+            <a href="{{ event_data.place.url }}" target="_blank">
+          {% else %}
+            <a href="#">
+          {% endif %}
+          {{ event_data.place.name }}
+          {% if event_data.place.logo %}
+            <img src="{{ event_data.place.logo }}" alt="место проведения мероприятия" class="circle responsive-img">
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
   </div>
     {% block fixed_action_btn %}
       {{ block.super }}

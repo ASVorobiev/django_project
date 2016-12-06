@@ -55,15 +55,14 @@
 </ul>
 
   <header>
-{#    <nav class="top-nav light-blue darken-3">#}
-    <nav class="top-nav custom-teal darken-1">
+    <nav class="top-nav myheader">
       <div class="">
         <div class="nav-wrapper">
           <a href="#" data-activates="nav-mobile" class="button-collapse top-nav full"><i class="material-icons">menu</i></a>
           <a href="{% url 'events_list' %}" class="brand-logo">вКалендаре</a>
           <ul class="right hide-on-med-and-down">
             <li>
-              <a class="center waves-effect waves-light btn hide-on-small-and-down red lighten-1"  href="{% url 'add_event_form' %}">Добавить мероприятие</a>
+              <a class="center waves-effect waves-light btn hide-on-small-and-down mybuttons"  href="{% url 'add_event_form' %}">Добавить мероприятие</a>
             </li>
             {% if current_location %}
               <li>
@@ -128,7 +127,7 @@
       </div>
 
       <li>
-        <a class="center waves-effect waves-light btn hide-on-large-only red lighten-1 white-text"  href="{% url 'add_event_form' %}">Добавить мероприятие</a>
+        <a class="center waves-effect waves-light btn hide-on-large-only mybuttons white-text"  href="{% url 'add_event_form' %}">Добавить мероприятие</a>
       </li>
       <li class="bold"><a href={% url 'about' %} class="waves-effect waves-teal">О нас</a></li>
       {% block category %}
@@ -141,7 +140,6 @@
       {% else %}
         <li class="bold"><a href="{% url 'login' %}" class="waves-effect waves-teal">Войти</a></li></ul>
       {% endif %}
-
   </header>
 
   <main>
@@ -154,9 +152,6 @@
             {% block content %}{% endblock %}
           {% endblock %}
         </div>
-
-
-
         <div class="col hide-on-small-only m3 l2">
 {#          <div class="pin-top" style="top: 0px;">#}
 {#            <div class="buysellads hide-on-small-only">#}

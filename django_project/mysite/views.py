@@ -334,8 +334,6 @@ def admin_list(request):
             return HttpResponse(json.dumps({'status': 'success'}), content_type='application/json')
 
 
-
-
 def jdata(request):
     if request.method == "POST":
         if request.POST['task'] == 'get_location_places':
@@ -457,6 +455,7 @@ def update_event(vk_events_list):
         result['events'].append(event.title)
     result['status'] = 'Success'
     return result
+
 
 def push_confidence(priority=0, local_tz=10800, event_id=None):
     result = {'status': 'Success'}
