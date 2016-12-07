@@ -123,7 +123,7 @@ def events_list(request, site_screen_name=None):
         response['current_location'] = 'Выберите ваш город'
         response['need_location'] = True
 
-    response['priority_events'] = response['priority_events'][:25]
+    response['priority_events'] = response['priority_events'][:9]
     response['categories'] = category_obj
 
     if category:
