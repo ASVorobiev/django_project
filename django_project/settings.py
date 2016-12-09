@@ -42,9 +42,7 @@ elif _platform == "win32":
             'USER': 'root',
             'PASSWORD': 'Qwerty123',
             'HOST': '127.0.0.1',
-            'PORT': '3306',
-            'PORT': '3306',
-
+            'PORT': '3306'
         }
     }
 
@@ -70,9 +68,11 @@ MEDIA_ROOT = '/home/www/vkalendare.net/mod/storage'
 MEDIA_URL = '/storage/'
 DATE_FORMAT = 'd E Y'
 
-STATIC_ROOT = os.path.join(ROOT_PATH, 'django_project/mysite/static', 'django_project/about/static')
+STATIC_ROOT = os.path.join(ROOT_PATH, 'django_project', 'static')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
+    os.path.join(ROOT_PATH, 'django_project/mysite/static'),
+    os.path.join(ROOT_PATH, 'django_project/about/static'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
