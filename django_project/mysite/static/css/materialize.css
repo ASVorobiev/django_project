@@ -8553,7 +8553,7 @@ button.picker__today:focus, button.picker__clear:focus, button.picker__close:foc
 }
 
 header, main, footer {
-  padding-left: 240px;
+  padding-left: 260px;
 }
 
 @media only screen and (max-width : 992px) {
@@ -8599,12 +8599,18 @@ header, main, footer {
   background-color: rgb(238,238,238);
 }
 
+.card_icon {
+  width:120px;
+  height:120px;
+  margin:0 auto;
+  display:block;
+}
+
 .card_circle {
   width:120px;
   height:120px;
   display:block;
   margin: 0px auto 10px auto;
-  border-radius:px;
   -moz-border-radius:60px;
   -webkit-border-radius:60px;
   -khtml-border-radius:60px;
@@ -8619,9 +8625,6 @@ header, main, footer {
   background:whitesmoke;
 
  }
-
-.material-icons.teal_icons { color: teal; }
-.material-icons.red_l1_icons { color: #ef5350; }
 
 .vk_groups {
   margin-top: 0.5rem;

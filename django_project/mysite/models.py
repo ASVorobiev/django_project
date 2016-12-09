@@ -133,6 +133,8 @@ class Customplaces(models.Model):
 
 
 class Events(models.Model):
+    class Meta:
+        ordering = ['start_date', 'start_time']
     owner = models.ForeignKey(CustomUser, blank=True, null=True, verbose_name='Создатель')
     location = models.ForeignKey(Locations, verbose_name='Локация')
     title = models.CharField(max_length=255, verbose_name='Заголовок')

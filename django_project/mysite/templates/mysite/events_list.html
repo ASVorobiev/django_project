@@ -142,43 +142,88 @@
       <div class="row">
         <div class="col s12 m6 l4">
           <a href="{% url 'location_events' current_location.site_screen_name %}?from_date={{ start_week_date }}&to_date={{ end_week_date }}">
-            <div class="card-panel">
-              <div class="card_circle hide-on-med-and-down">
-                <i class="material-icons large myfiltercards1">bubble_chart</i>
+            <div class="card-panel hide-on-small-only">
+              <div class="card_icon">
+                <img class="responsive-img" src="{% static 'icons/ikonka1.png' %}" />
               </div>
               <h5 class="black-text center">На этой неделе</h5>
-                <p class="black-text center">10 мероприятий</p>
+              <p class="black-text center">{{ this_week_event_count }}</p>
+            </div>
+            <div class="card-panel hide-on-med-and-up">
+              <div class="valign-wrapper">
+                <div class="col s5">
+                  <div class="card_icon">
+                    <img class="responsive-img" src="{% static 'icons/ikonka1.png' %}" />
+                  </div>
+                </div>
+                <div class="col s7">
+                  <div class="valign">
+                    <h5 class="black-text">На этой неделе</h5>
+                    <p class="black-text">{{ this_week_event_count }}</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </a>
         </div>
 
         <div class="col s12 m6 l4">
           <a href="{% url 'location_events' current_location.site_screen_name %}?from_date={{ start_weekend_date }}&to_date={{ end_week_date }}">
-            <div class="card-panel">
-              <div class="card_circle hide-on-med-and-down">
-                <i class="material-icons large myfiltercards2">transfer_within_a_station</i>
+            <div class="card-panel hide-on-small-only">
+              <div class="card_icon">
+                <img class="responsive-img" src="{% static 'icons/ikonka2.png' %}" />
               </div>
               <h5 class="black-text center">Куда пойти в выходные</h5>
-                <p class="black-text center">10 мероприятий</p>
+              <p class="black-text center">{{ this_weekend_event_count }}</p>
+            </div>
+            <div class="card-panel hide-on-med-and-up">
+              <div class="valign-wrapper">
+                <div class="col s5">
+                  <div class="card_icon">
+                    <img class="responsive-img" src="{% static 'icons/ikonka2.png' %}" />
+                  </div>
+                </div>
+                <div class="col s7">
+                  <div class="valign">
+                    <h5 class="black-text">Куда пойти в выходные</h5>
+                    <p class="black-text">{{ this_weekend_event_count }}</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </a>
         </div>
 
         <div class="col s12 m6 l4">
           <a href="{% url 'location_events' current_location.site_screen_name %}?free">
-            <div class="card-panel">
-              <div class="card_circle hide-on-med-and-down">
-                <i class="material-icons large myfiltercards1">money_off</i>
+            <div class="card-panel hide-on-small-only">
+              <div class="card_icon">
+                <img class="responsive-img" src="{% static 'icons/ikonka3.png' %}" />
               </div>
               <h5 class="black-text center">Бесплатно</h5>
-                <p class="black-text center">10 мероприятий</p>
+              <p class="black-text center">{{ free_event_count }}</p>
+            </div>
+            <div class="card-panel hide-on-med-and-up">
+              <div class="valign-wrapper">
+                <div class="col s5">
+                  <div class="card_icon">
+                    <img class="responsive-img" src="{% static 'icons/ikonka3.png' %}" />
+                  </div>
+                </div>
+                <div class="col s7">
+                  <div class="valign">
+                    <h5 class="black-text">Бесплатно</h5>
+                    <p class="black-text">{{ free_event_count }}</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </a>
         </div>
       </div>
       {% endif %}
 
-      {% for event in location_events %}
+      {% for event in location_events|dictsort:"start_date" %}
         {% block card_panel %}
             <div class="col c12 m6 l4">
               {{ block.super }}
@@ -188,7 +233,7 @@
     </div>
   </div>
 
-  <div class="col">
+  <div class="col hidden">
     <span class="">I am a very simple card. I am good at containing small bits of information.
     I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
     </span>

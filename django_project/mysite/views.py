@@ -10,8 +10,6 @@ import random
 import re
 from time import sleep
 
-
-
 import nltk
 import requests
 from django.conf import settings
@@ -123,7 +121,7 @@ def events_list(request, site_screen_name=None):
         response['current_location'] = 'Выберите ваш город'
         response['need_location'] = True
 
-    response['priority_events'] = response['priority_events'][:9]
+    response['priority_events'] = response['priority_events'][:8]
     response['categories'] = category_obj
 
     if category:
@@ -147,6 +145,29 @@ def events_list(request, site_screen_name=None):
     response['start_week_date'] = str(start.date())
     response['start_weekend_date'] = str((start + timedelta(days=5)).date())
     response['end_week_date'] = str((start + timedelta(days=6)).date())
+
+    meropriyatie = pymorphy2.MorphAnalyzer().parse('мероприятие')[0]
+    response['this_week_event_count'] = len(
+        response['location_events'].filter(start_date__gte=response['start_week_date'],
+                                           start_date__lte=response['end_week_date']))
+    if response['this_week_event_count']:
+        response['this_week_event_count'] = "%s %s" % (response['this_week_event_count'], meropriyatie.make_agree_with_number(response['this_week_event_count']).word)
+    else:
+        response['this_week_event_count'] = 'мероприятий не найдено'
+
+    response['this_weekend_event_count'] = len(
+        response['location_events'].filter(start_date__gte=response['start_weekend_date'],
+                                           start_date__lte=response['end_week_date']))
+    if response['this_weekend_event_count']:
+        response['this_weekend_event_count'] = "%s %s" % (response['this_weekend_event_count'], meropriyatie.make_agree_with_number(response['this_weekend_event_count']).word)
+    else:
+        response['this_weekend_event_count'] = 'мероприятий не найдено'
+
+    response['free_event_count'] = len(response['location_events'].filter(is_free=1))
+    if response['free_event_count']:
+        response['free_event_count'] = "%s %s" % (response['free_event_count'], meropriyatie.make_agree_with_number(response['free_event_count']).word)
+    else:
+        response['free_event_count'] = 'мероприятий не найдено'
 
     return render(request, 'mysite/events_list.html', response)
 
@@ -477,7 +498,7 @@ def push_confidence(priority=0, local_tz=10800, event_id=None):
             # dtime = datetime.fromtimestamp(vk_event.start, tz=tzlocal.get_localzone())
             # dtime = dtime.replace(tzinfo=None)
 
-            #dtime = datetime.fromtimestamp(vk_event.start).replace(tzinfo=pytz.utc).astimezone(tzlocal.get_localzone())
+            # dtime = datetime.fromtimestamp(vk_event.start).replace(tzinfo=pytz.utc).astimezone(tzlocal.get_localzone())
 
             # local_tz = tzlocal.get_localzone().utcoffset(datetime.utcfromtimestamp(vk_event.start)).seconds
             dtime = datetime.utcfromtimestamp(vk_event.start + local_tz)
@@ -499,7 +520,8 @@ def push_confidence(priority=0, local_tz=10800, event_id=None):
                     finish_dtime = datetime.utcfromtimestamp(vk_event.finish + tz)
                 else:
                     # finish_dtime = datetime.fromtimestamp(vk_event.finish, tz=tzlocal.get_localzone())
-                    local_tz_finish = tzlocal.get_localzone().utcoffset(datetime.utcfromtimestamp(vk_event.finish)).seconds
+                    local_tz_finish = tzlocal.get_localzone().utcoffset(
+                        datetime.utcfromtimestamp(vk_event.finish)).seconds
                     finish_dtime = datetime.utcfromtimestamp(vk_event.finish + local_tz_finish)
 
                 event_date['finish_date'] = finish_dtime.date()
