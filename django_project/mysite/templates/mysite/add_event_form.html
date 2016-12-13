@@ -83,22 +83,22 @@
 
     {#            <i class="material-icons">location_city</i>#}
     <div class="row">
-      <div class="input-field col s12">
+      <div class="input-field col s12" id="city_selector">
         {{ form.location }}
         <label>Город</label>
       </div>
     </div>
 
-    <div class="row" id="place_row" hidden>
-      <div class="input-field col s10" id="place_selector">
+    <div class="row" id="place_row">
+      <div class="input-field col s10" id="place_selector" disabled>
         <select id="local_places" name="place" class="icons validate">
 
         </select>
-        <label>Место</label>
+        <label>Место проведения мероприятия</label>
       </div>
       <div class="input-field col s10" id="new_org" hidden>
           <input disabled value="" id="new_org_input" type="text" class="validate">
-          <label for="disabled">Добавлено новое место</label>
+          <label for="disabled">Добавлено новое место проведения мероприятий</label>
       </div>
       <div class="col s1">
         <a class="center-align btn-flat modal-trigger" href="#modal_org">
@@ -147,12 +147,12 @@
 
     <div class="row">
       <div class="input-field col s5 offset-s1">
-         <i for="date">Дата</i>
+         <i for="date"><span class="label">Дата</span></i>
          <input id="date" type="date" name="start_date" class="datepicker" required>
       </div>
 
       <div class="input-field col s4 offset-s1">
-        <i for="time">Время</i>
+        <i for="time" class="label"><span class="label">Время</span></i>
         <input type="time" id="time" name="start_time" class="timepicker" required>
       </div>
     </div>
@@ -184,35 +184,31 @@
 
   <div class="tabs-wrapper">
     <div class="row">
-      <h3 class="red lighten-1 white-text center-align flow-text" style="font-weight: bolder" >
-          Внимание, АКЦИЯ!
-      </h3>
-
-      <div class="card-panel">
-      <div class="teal lighten-2 white-text center-align">
-        <span>Публикуем 100% уникальные мероприятия <br></span>
-          <span class="white-text text-lighten-1 center-align flow-text" style="font-weight: bolder" >БЕСПЛАТНО</span>
-      </div>
-      <div id="wont">
-        Хотите узнать, насколько Ваше мероприятие уникально? <span>Чем выше уникальность, тем больше скидка!</span><br>
-      </div>
-      <div id="uniq_bar" hidden>
-        Уникальность вашего мероприятия:
-        <div class="progress center" style="height: 20px;" id="prog_bar">
-          <div id="set_progress"></div>
+      <div class="card">
+        <h3 class="red lighten-1 white-text center-align flow-text" style="font-weight: bolder; margin: 0;" >
+            Внимание, АКЦИЯ!
+        </h3>
+        <div class="card-panel" style="margin: 0">
+          <div class="teal lighten-2 white-text center-align">
+            <span>Публикуем 100% уникальные мероприятия <br></span>
+            <span class="white-text text-lighten-1 center-align flow-text" style="font-weight: bolder" >БЕСПЛАТНО</span>
+          </div>
+          <div id="wont">
+            Хотите узнать, насколько Ваше мероприятие уникально?<br>
+          </div>
+          <div id="uniq_bar" hidden>
+            Уникальность вашего мероприятия:
+            <div class="progress center" style="height: 20px;" id="prog_bar">
+              <div id="set_progress"></div>
+            </div>
+          </div>
         </div>
+        <a type="button" onclick="" class="blue-grey lighten-1 white-text waves-effect waves-light center-align flow-text" style="font-weight: bolder" id="check_text" name="check_text">
+            Проверить на уникальность
+        </a>
       </div>
-    </div>
-
-    <a type="button" onclick="" class="blue-grey lighten-1 white-text waves-effect waves-light center-align flow-text" style="font-weight: bolder" id="check_text" name="check_text">
-        Проверить на уникальность
-    </a>
 
 {#      <button class="btn-large blue-grey lighten-1 waves-effect waves-light flow-text" form="main_form" type="submit" id="check_text">#}
-{##}
-{##}
-{##}
-{##}
 {#        <h3 class="flow-text">#}
 {#        <span class="container">Проверить на уникальность</span></h3>#}
 {#        <i class="material-icons right">send</i>#}
@@ -223,33 +219,31 @@
 {#    </div>#}
 
     <!-- VK Widget -->
-    <div class="card-panel center-align">
-      Возникли вопросы?
-      <div id="vk_contact_us" class="center-align"></div>
-      <script type="text/javascript" class="center-align">
-        VK.Widgets.ContactUs("vk_contact_us", {height: 100}, 271252027);
-      </script>
+      <div class="card-panel center-align">
+        Возникли вопросы?
+        <div id="vk_contact_us" class="center-align"></div>
+        <script type="text/javascript" class="center-align">
+          VK.Widgets.ContactUs("vk_contact_us", {height: 100}, 271252027);
+        </script>
+      </div>
     </div>
   </div>
-</div>
 
-<div id="modal_results" class="modal">
-  <div class="modal-content">
-    <h4>Результаты анализа описания мероприятия</h4>
-    <div id="modal_results_content">
-
+  <div id="modal_results" class="modal">
+    <div class="modal-content">
+      <h4>Результаты анализа описания мероприятия</h4>
+      <div id="modal_results_content">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Закрыть</a>
     </div>
   </div>
-  <div class="modal-footer">
-    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Закрыть</a>
-  </div>
-</div>
 {% endblock %}
 
 {% block scripts %}
   <script type="text/javascript" src="{% static 'js/materialize.clockpicker.js' %}"></script>
   <link rel="stylesheet" href="{% static 'css/materialize.clockpicker.css' %}">
-{#  <script type="text/javascript" src="{% static 'js/materialize.js' %}"></script>#}
 
   <script type="application/javascript">
     $(document).ready(function(){
@@ -277,72 +271,74 @@
   <script type="application/javascript">
     $(function(){
       $("#check_text").click(function(e) {
-        e.preventDefault();
-        $('#set_progress').replaceWith('<div id="set_progress" class="indeterminate"></div>');
+        if ($('#description').val()) {
 
-        $('#wont').hide();
-        $('#uniq_bar').show();
-        $('#check_text').attr("disabled", true);
+          e.preventDefault();
+          $('#set_progress').replaceWith('<div id="set_progress" class="indeterminate"></div>');
+          $('#wont').hide();
 
-        $.ajax({
-          type: 'POST',
-          url: {% url 'jq' %},
-          dateType: 'json',
-          data:{
-            description:$('#description').val(),
-            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
-          },
-          success:function (json) {
-            $("#modal_results_content").html(json.message);
-            $('#check_text').attr("disabled", false);
+          $('#uniq_bar').show();
+          $('#check_text').attr("disabled", true);
+          $.ajax({
+            type: 'POST',
+            url: {% url 'jq' %},
+            dateType: 'json',
+            data:{
+              description: $('#description').val(),
+              csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+            },
+            success:function (json) {
+              $("#modal_results_content").html(json.message);
+              $('#check_text').attr("disabled", false);
 
-            $('#set_progress').replaceWith('<div id="set_progress" class="determinate red" style="width: '+json.result_json.unique+'">'+json.result_json.unique+'%</div>');
-            $('#modal_results').openModal();
-            $('#modal_results_content').empty();
+              $('#set_progress').replaceWith('<div id="set_progress" class="determinate red" style="width: '+json.result_json.unique+'">'+json.result_json.unique+'%</div>');
+              $('#modal_results').openModal();
+              $('#modal_results_content').empty();
+{#             Если есть ссылки плагиата #}
+              if (json.urls) {
+                var mydiv = $('<div/>', {
+                    id:     'mydiv',
+                    class:  'row'
+                });
+                $('#modal_results_content').append(mydiv);
 
-  {#         Если есть ссылки плагиата #}
-            if (json.urls) {
-              var mydiv = $('<div/>', {
-                  id:     'mydiv',
-                  class:  'row'
-              });
-              $('#modal_results_content').append(mydiv);
+                var h5 = $("<h5/>", {
+                    class: 'red-text text-accent-2',
+                    text: 'Уникальность вашего текста крайне низка.'
+                }).appendTo(mydiv);
 
-              var h5 = $("<h5/>", {
-                  class: 'red-text text-accent-2',
-                  text: 'Уникальность вашего текста крайне низка.'
-              }).appendTo(mydiv);
+                var span1 = $("<span/>", {
+                    text: 'Данное описание уже было опубликовано здесь:'
+                }).appendTo(mydiv);
 
-              var span1 = $("<span/>", {
-                  text: 'Данное описание уже было опубликовано здесь:'
-              }).appendTo(mydiv);
+                var blockquote = $('<blockquote/>').appendTo(mydiv);
+                var ul = $('<ul/>').appendTo(blockquote);
+                for (i=0; i<json.urls.length; i++){
+                  var li = $('<li/>', {class: 'truncate'}).appendTo(ul);
+                  $('<a/>', {
+                    text: json.urls[i].url,
+                    href: json.urls[i].url,
+                    target: "_blank"
+                  }).appendTo(li);
+                }
 
-              var blockquote = $('<blockquote/>').appendTo(mydiv);
-              var ul = $('<ul/>').appendTo(blockquote);
-              for (i=0; i<json.urls.length; i++){
-                var li = $('<li/>', {class: 'truncate'}).appendTo(ul);
-                $('<a/>', {
-                  text: json.urls[i].url,
-                  href: json.urls[i].url,
-                  target: "_blank"
-                }).appendTo(li);
+                var div3 = document.createElement('div');
+                div3.className = 'raw';
+
+                div3.textContent = 'Судя по всему Вы ранее публиковали данное описание на других ресурсах.' +
+                        'Если Вы хотите получить скидку или разместить ваше мероприятие бесплатно Вы можете:' +
+                        'Отредактировать описание вашего мероприятия, повысив его уникальность. Не забудьте обновить текст в нашей форме, когда он будет готов. Проверить текста на уникальность можно ТУТ.' +
+                        'В следующий раз публиковать Ваше мероприятие в первую очередь у нас на сайте БЕСПЛАТНО';
+                $("#modal_results_content").append(div3);
+      {#          Добавим ссылку на детали проверки#}
+                $("#text_ru_details").href = 'asdasdadsd';
+              }
             }
-
-            var div3 = document.createElement('div');
-            div3.className = 'raw';
-
-            div3.textContent = 'Судя по всему Вы ранее публиковали данное описание на других ресурсах.' +
-                    'Если Вы хотите получить скидку или разместить ваше мероприятие бесплатно Вы можете:' +
-                    'Отредактировать описание вашего мероприятия, повысив его уникальность. Не забудьте обновить текст в нашей форме, когда он будет готов. Проверить текста на уникальность можно ТУТ.' +
-                    'В следующий раз публиковать Ваше мероприятие в первую очередь у нас на сайте БЕСПЛАТНО';
-            $("#modal_results_content").append(div3);
-  {#          Добавим ссылку на детали проверки#}
-            $("#text_ru_details").href = 'asdasdadsd'
-          }
+          })
         }
+        else {alert('Заполните описание мероприятия')}
       })
     })
-    });
   </script>
 
   <script>
@@ -370,6 +366,7 @@
 {#              $('#local_places').attr('name', 'local_places');#}
 {#              $('#local_places').attr('id', 'local_places_id');#}
               $('#place_row').show();
+              $('#place_selector').prop( "disabled", false );
             }
         })
       });
@@ -378,82 +375,67 @@
 
 
   <script type="text/javascript">
-      $(function () {
-{#          $('#org_form :input').not(':submit').clone().hide().appendTo('#main_form');#}
-{#          $('#main_form, #org_form').serialize();#}
-          var frm = $('#main_form');
-          var frmNode = frm.get(0);
-          var chipsObj = [];
-          var $btn = frm.find('#send-to-moderation');
-            $('.chips-initial').on('chip.add', function(e, chip) {
-                chipsObj.push(chip.tag);
-            }).on('chip.delete', function(e, chip) {
-               chipsObj.splice(chipsObj.indexOf(chip.tag), 1);
-            }).material_chip({
-              placeholder: 'Добавьте теги',
+    $(function () {
+      var frm = $('#main_form');
+      var frmNode = frm.get(0);
+      var chipsObj = [];
+      var $btn = frm.find('#send-to-moderation');
+        $('.chips-initial').on('chip.add', function(e, chip) {
+            chipsObj.push(chip.tag);
+        }).on('chip.delete', function(e, chip) {
+           chipsObj.splice(chipsObj.indexOf(chip.tag), 1);
+        }).material_chip({
+          placeholder: 'Добавьте теги',
 {#                Напишите ключевое слово для поиска и нажмите Enter#}
-              secondaryPlaceholder: 'Добавьте теги'
-            });
+          secondaryPlaceholder: 'Добавьте теги'
+        });
 
+        frm.on('submit', function (e1) {
+          e1.preventDefault();
+          if($('#main_form')[0].checkValidity()) {
+            var formData = new FormData(frmNode);
+            var files = $('#files').get(0).files;
 
-            frm.on('submit', function (e1) {
-              e1.preventDefault();
-              if($('#main_form')[0].checkValidity()) {
-                var formData = new FormData(frmNode);
-                var files = $('#files').get(0).files;
+            formData.append('tag_it', chipsObj.join(','));
 
-                formData.append('tag_it', chipsObj.join(','));
+            if (files[0]) {
+                formData.append('image', files[0]);
+            }
+            console.log('111');
 
-                if (files[0]) {
-                    formData.append('image', files[0]);
-                }
-                console.log('111');
+            if ($('#cancel_new_org').is(":visible")) {
+              var OrgFormDataSerialize = $('#org_form').serializeArray();
+              $.each(OrgFormDataSerialize, function (index, value) {
+                console.log("INDEX: " + value['name'] + " VALUE: " + value['value']);
+                formData.append(value['name'], value['value']);
+              });
+            }
+            else {
+                formData.append('place', $('#place_selector').find(':selected').val())
+                ;}
 
-                if ($('#cancel_new_org').is(":visible")) {
-                  var OrgFormDataSerialize = $('#org_form').serializeArray();
-                  $.each(OrgFormDataSerialize, function (index, value) {
-                    console.log("INDEX: " + value['name'] + " VALUE: " + value['value']);
-                    formData.append(value['name'], value['value']);
-                  });
-                }
-                else {
-                    formData.append('place', $('#place_selector').find(':selected').val())
-                    ;}
-{#                formData.append(OrgformData.serialize());#}
-
-{#                $.ajax({#}
-{#                    type: $frm.attr('method'),#}
-{#                    url: $frm.attr('action'),#}
-{#                    headers: {'X-CSRFToken': '{{ csrf_token }}'},#}
-{#                    data: formData,#}
-{#                    processData: false,#}
-{#                    contentType: false,#}
-{#                    success: function (data) {#}
-{#                          window.location.href = data['redirect'];#}
-{#                    }#}
-{#                });#}
-                $.ajax({
-                  type: 'POST',
-                  url: {% url 'add_event_form'%},
-                  headers: {'X-CSRFToken': '{{ csrf_token }}'},
-                  data: formData,
-                  processData: false,
-                  contentType: false,
-                  success: function(data) {
-                    console.log(data);
-                    window.location.href = data['redirect'];
-                  },
-                  error: function (err) {
-                    console.log(err)
-                  }
-                })
-
+            $.ajax({
+              type: 'POST',
+              url: {% url 'add_event_form'%},
+              headers: {'X-CSRFToken': '{{ csrf_token }}'},
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function(data) {
+                console.log(data);
+                window.location.href = data['redirect'];
+              },
+              error: function (err) {
+                console.log(err)
               }
-              else {
-                  alert(frm.error);
+            })
 
-              }
-            });
+          }
+          else {
+              alert(frm.error);
+
+          }
+        });
       });
   </script>
 
@@ -461,29 +443,27 @@
   $(function () {
     $('#save_org').on('click', function (org) {
       console.log('org_form submit');
-{#      $("#org_form").validate;#}
       if ($("#org_form")[0].checkValidity()) {
         org.preventDefault();
         $('#modal_org').closeModal();
-        $('#place_selector').hide();
+        $('#place_selector').prop( "disabled", true );
         $('#new_org_input').val(
                 $('#id_new_org-name').val()
         );
         Materialize.updateTextFields();
         $('#new_org').show();
-        $('#cancel_new_org').show();
+        $('#cancel_new_org').prop( "disabled", false );
       }
     });
     $('#cancel_new_org').on('click', function () {
       $('#new_org').hide();
-      $('#place_selector').show();
+      $('#place_selector').prop( "disabled", false );
       Materialize.updateTextFields();
       $('#cancel_new_org').hide();
     });
 
   });
   </script>
-{#  #}
 {#  <script type="application/javascript">#}
 {#    $(function () {#}
 {#      $('#open_org_form').click(function () {#}

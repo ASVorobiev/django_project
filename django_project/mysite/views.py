@@ -173,7 +173,7 @@ def events_list(request, site_screen_name=None):
 
 
 def events_details(request, site_screen_name, pk, title_translit='dont_remove'):
-    locations = Locations.objects.all()
+    locations = Locations.objects.exclude(created=0, is_deleted=1).order_by('name').all()
     current_location = Locations.objects.get(site_screen_name=site_screen_name)
     event_data = Events.objects.get(id=pk)
     events_from_this_organizator = Events.objects.filter(location=event_data.location_id,
@@ -247,7 +247,7 @@ def add_event_form(request):
         return redirect('login', )
     context = {}
     context['form'] = AddNewEvent(request.POST, request.FILES)
-    context['locations'] = Locations.objects.all()
+    context['locations'] = Locations.objects.exclude(created=0, is_deleted=1).order_by('name').all()
     # new_place_data = {'logo': 'http://', 'url': ''}
     context['org_form'] = CustomPlacesForm(prefix='new_org')
     # context['org_form']['name'].css_classes('foo bar')
@@ -271,7 +271,7 @@ def add_event_form(request):
             request.POST['is_active'] = 1
         else:
             request.POST['export_vk'] = 9
-            request.POST['is_active'] = 0
+            request.POST['is_active'] = 9
         new_event_form = AddNewEvent(request.POST, request.FILES)
         if new_event_form.is_valid():
             location = Locations.objects.get(pk=request.POST['location'])
@@ -322,8 +322,11 @@ def add_event_form(request):
                 # return redirect('added_successfully')
             else:
                 return HttpResponseBadRequest
+        else:
+            response = {'status': 'error', 'message': new_event_form.errors}
+            return HttpResponse(json.dumps(response), content_type='application/json')
                 # return redirect('event_details', site_screen_name=obj.location.site_screen_name, pk=obj.pk, title_translit='new')
-    return render_to_response('add_event_form.html', context)
+    return render(request, 'add_event_form.html', context)
 
 
 def added_successfully(request):

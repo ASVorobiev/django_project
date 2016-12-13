@@ -162,10 +162,12 @@ class Events(models.Model):
     url = models.CharField(max_length=255, blank=True, null=True)
     priority = models.IntegerField(choices=((0, 'Обычное'),
                                             (1, 'Приоритетное')), default=0)
-    is_active = models.IntegerField(choices=((9, 'Не проверено'),
-                                             (0, 'Отклонено'),
-                                             (1, 'Одобрено')), default=9)
-    export_vk = models.IntegerField(choices=((0, 'Нет'), (1, 'Да')), default=0)
+    is_active = models.IntegerField(choices=((0, 'Отклонено'),
+                                             (1, 'Одобрено'),
+                                             (9, 'Не проверено')), default=9)
+    export_vk = models.IntegerField(choices=((0, 'Нет'),
+                                             (1, 'Да'),
+                                             (9, 'Не проверено')), default=0)
     is_deleted = models.IntegerField(choices=((0, 'Нет'), (1, 'Да')), default=0)
     created = models.IntegerField(default=int(datetime.utcnow().timestamp()))
     modified = models.IntegerField(default=int(datetime.utcnow().timestamp()))

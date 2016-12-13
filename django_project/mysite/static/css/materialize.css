@@ -2140,11 +2140,11 @@
   color: transparent !important;
 }
 
-.custom-teal {
-  background-color: #117A8A !important;
+.custom-header {
+  background-color: #F85A3E !important;
 }
-.custom-teal.darken-1 {
-  background-color: #1C8595 !important;
+.custom-header.darken-1 {
+  background-color: #F85A3E !important;
 }
 /* ==========================================================================
    Materialize variables
@@ -5674,6 +5674,13 @@ button:focus {
 label {
   font-size: 0.8rem;
   color: #9e9e9e;
+}
+
+.label {
+  color: #9e9e9e;
+  top: 0.8rem;
+  font-size: 1rem;
+  cursor: text;
 }
 
 /* Text Inputs + Textarea
