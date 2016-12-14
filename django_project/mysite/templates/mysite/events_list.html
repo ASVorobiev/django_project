@@ -13,6 +13,12 @@
   {% endif %}
 {% endblock %}
 
+{% block meta %}
+  <link rel="stylesheet" type="text/css" href="{% static 'slick/slick.css' %}" />
+  // Add the new slick-theme.css if you want the default styling
+  <link rel="stylesheet" type="text/css" href="{% static 'slick/slick-theme.css' %}" />
+{% endblock %}
+
 {% block scripts %}
   <script type="text/javascript" src="//vk.com/js/api/openapi.js?130"></script>
   <script type="application/javascript">
@@ -50,6 +56,16 @@
     function open_modal1() {
             $('#modal1').openModal();
     }
+  </script>
+  <script type="text/javascript" src="{% static 'slick/slick.min.js' %}"></script>
+  <script type="application/javascript">
+    $(document).ready(function(){
+      $('.multiple-items').slick({
+          infinite: true,
+          slidesToShow: 4,
+          slidesToScroll: 3
+      });
+    });
   </script>
 {% endblock %}
 
@@ -139,88 +155,110 @@
   <div class="">
     <div class="row">
       {% if not need_location %}
-      <div class="row">
-        <div class="col s12 m6 l4">
-          <a href="{% url 'location_events' current_location.site_screen_name %}?from_date={{ start_week_date }}&to_date={{ end_week_date }}">
-            <div class="card-panel hide-on-small-only">
-              <div class="card_icon">
-                <img class="responsive-img" src="{% static 'icons/ikonka1.png' %}" />
+        <div class="row">
+          <div class="col s12 m6 l4">
+            <a href="{% url 'location_events' current_location.site_screen_name %}?from_date={{ start_week_date }}&to_date={{ end_week_date }}">
+              <div class="card-panel hide-on-small-only">
+                <div class="card_icon">
+                  <img class="responsive-img" src="{% static 'icons/ikonka1.png' %}" />
+                </div>
+                <h5 class="black-text center">На этой неделе</h5>
+                <p class="black-text center">{{ this_week_event_count }}</p>
               </div>
-              <h5 class="black-text center">На этой неделе</h5>
-              <p class="black-text center">{{ this_week_event_count }}</p>
-            </div>
-            <div class="card-panel hide-on-med-and-up">
-              <div class="valign-wrapper">
-                <div class="col s6">
-                  <div class="card_icon">
-                    <img class="responsive-img" src="{% static 'icons/ikonka1.png' %}" />
+              <div class="card-panel hide-on-med-and-up">
+                <div class="valign-wrapper">
+                  <div class="col s6">
+                    <div class="card_icon">
+                      <img class="responsive-img" src="{% static 'icons/ikonka1.png' %}" />
+                    </div>
+                  </div>
+                  <div class="col s6">
+                    <div class="valign">
+                      <h5 class="black-text">На этой неделе</h5>
+                      <p class="black-text">{{ this_week_event_count }}</p>
+                    </div>
                   </div>
                 </div>
-                <div class="col s6">
-                  <div class="valign">
-                    <h5 class="black-text">На этой неделе</h5>
-                    <p class="black-text">{{ this_week_event_count }}</p>
-                  </div>
-                </div>
               </div>
-            </div>
-          </a>
-        </div>
+            </a>
+          </div>
 
-        <div class="col s12 m6 l4">
-          <a href="{% url 'location_events' current_location.site_screen_name %}?from_date={{ start_weekend_date }}&to_date={{ end_week_date }}">
-            <div class="card-panel hide-on-small-only">
-              <div class="card_icon">
-                <img class="responsive-img" src="{% static 'icons/ikonka2.png' %}" />
+          <div class="col s12 m6 l4">
+            <a href="{% url 'location_events' current_location.site_screen_name %}?from_date={{ start_weekend_date }}&to_date={{ end_week_date }}">
+              <div class="card-panel hide-on-small-only">
+                <div class="card_icon">
+                  <img class="responsive-img" src="{% static 'icons/ikonka2.png' %}" />
+                </div>
+                <h5 class="black-text center">Куда пойти в выходные</h5>
+                <p class="black-text center">{{ this_weekend_event_count }}</p>
               </div>
-              <h5 class="black-text center">Куда пойти в выходные</h5>
-              <p class="black-text center">{{ this_weekend_event_count }}</p>
-            </div>
-            <div class="card-panel hide-on-med-and-up">
-              <div class="valign-wrapper">
-                <div class="col s5">
-                  <div class="card_icon">
-                    <img class="responsive-img" src="{% static 'icons/ikonka2.png' %}" />
+              <div class="card-panel hide-on-med-and-up">
+                <div class="valign-wrapper">
+                  <div class="col s5">
+                    <div class="card_icon">
+                      <img class="responsive-img" src="{% static 'icons/ikonka2.png' %}" />
+                    </div>
+                  </div>
+                  <div class="col s7">
+                    <div class="valign">
+                      <h5 class="black-text">Куда пойти в выходные</h5>
+                      <p class="black-text">{{ this_weekend_event_count }}</p>
+                    </div>
                   </div>
                 </div>
-                <div class="col s7">
-                  <div class="valign">
-                    <h5 class="black-text">Куда пойти в выходные</h5>
-                    <p class="black-text">{{ this_weekend_event_count }}</p>
-                  </div>
-                </div>
               </div>
-            </div>
-          </a>
-        </div>
+            </a>
+          </div>
 
-        <div class="col s12 m6 l4">
-          <a href="{% url 'location_events' current_location.site_screen_name %}?free">
-            <div class="card-panel hide-on-small-only">
-              <div class="card_icon">
-                <img class="responsive-img" src="{% static 'icons/ikonka3.png' %}" />
+          <div class="col s12 m6 l4">
+            <a href="{% url 'location_events' current_location.site_screen_name %}?free">
+              <div class="card-panel hide-on-small-only">
+                <div class="card_icon">
+                  <img class="responsive-img" src="{% static 'icons/ikonka3.png' %}" />
+                </div>
+                <h5 class="black-text center">Бесплатно</h5>
+                <p class="black-text center">{{ free_event_count }}</p>
               </div>
-              <h5 class="black-text center">Бесплатно</h5>
-              <p class="black-text center">{{ free_event_count }}</p>
-            </div>
-            <div class="card-panel hide-on-med-and-up">
-              <div class="valign-wrapper">
-                <div class="col s5">
-                  <div class="card_icon">
-                    <img class="responsive-img" src="{% static 'icons/ikonka3.png' %}" />
+              <div class="card-panel hide-on-med-and-up">
+                <div class="valign-wrapper">
+                  <div class="col s5">
+                    <div class="card_icon">
+                      <img class="responsive-img" src="{% static 'icons/ikonka3.png' %}" />
+                    </div>
+                  </div>
+                  <div class="col s7">
+                    <div class="valign">
+                      <h5 class="black-text">Бесплатно</h5>
+                      <p class="black-text">{{ free_event_count }}</p>
+                    </div>
                   </div>
                 </div>
-                <div class="col s7">
-                  <div class="valign">
-                    <h5 class="black-text">Бесплатно</h5>
-                    <p class="black-text">{{ free_event_count }}</p>
-                  </div>
-                </div>
               </div>
-            </div>
-          </a>
+            </a>
+          </div>
         </div>
-      </div>
+          <div class="multiple-items">
+            <div class="row">
+              <div class="center-align">
+                <div class="card-panel teal">
+                  <span class="white-text">I am a very simple card. I am good at containing small bits of information.
+                  I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
+                  </span>
+                </div>
+                <div class="card-panel teal">
+                  <span class="white-text">I am a very simple card. I am good at containing small bits of information.
+                  I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
+                  </span>
+                </div>
+
+                <div><h3>2</h3></div>
+                <div><h3>3</h3></div>
+                <div><h3>4</h3></div>
+                <div><h3>5</h3></div>
+                <div><h3>6</h3></div>
+              </div>
+            </div>
+        </div>
       {% endif %}
 
       {% for event in location_events|dictsort:"start_date" %}

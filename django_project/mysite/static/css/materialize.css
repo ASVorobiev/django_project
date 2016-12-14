@@ -8657,3 +8657,10 @@ header, main, footer {
   background-color: #223843 !important;
 }
 
+.multiple-items  {
+  width:700px;
+  height:120px;
+  margin: 30px 50px;
+  align-self: center;
+  display:block;
+}

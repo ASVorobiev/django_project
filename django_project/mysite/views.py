@@ -74,10 +74,10 @@ def events_list(request, site_screen_name=None):
     elif 'user_location' in request.session and not site_screen_name:
         location = Locations.objects.get(pk=request.session['user_location'])
         site_screen_name = location.site_screen_name
-        request.user.location = location.name
+        request.user.location = location
     elif 'user_location' in request.session and request.user.is_anonymous:
         location = Locations.objects.get(pk=request.session['user_location'])
-        request.user.location = location.name
+        request.user.location = location
     # elif 'user_location' in request.session and site_screen_name and not request.user.is_anonymous:
     #     location = Locations.objects.get(pk=request.session['user_location'])
     #     request.user.location = location.name
@@ -94,8 +94,8 @@ def events_list(request, site_screen_name=None):
     from_date = request.GET.get('from_date', '')  # 2015-01-09
     to_date = request.GET.get('to_date', '')
 
-    response['location_events'] = Events.objects.all().order_by('-priority', 'start_date').filter(is_active__gt=0,
-                                                                                                  is_deleted__lt=1)
+    response['location_events'] = Events.objects.all().order_by('-priority', 'start_date').filter(is_active=1,
+                                                                                                  is_deleted=0)
 
     category_obj = {}
     response['priority_events'] = response['location_events'].filter(start_date__gt=today).order_by('?')
