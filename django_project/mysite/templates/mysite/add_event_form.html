@@ -446,18 +446,18 @@
       if ($("#org_form")[0].checkValidity()) {
         org.preventDefault();
         $('#modal_org').closeModal();
-        $('#place_selector').prop( "disabled", true );
+        $('#place_selector').hide();
         $('#new_org_input').val(
                 $('#id_new_org-name').val()
         );
         Materialize.updateTextFields();
         $('#new_org').show();
-        $('#cancel_new_org').prop( "disabled", false );
+        $('#cancel_new_org').show();
       }
     });
     $('#cancel_new_org').on('click', function () {
       $('#new_org').hide();
-      $('#place_selector').prop( "disabled", false );
+      $('#place_selector').show();
       Materialize.updateTextFields();
       $('#cancel_new_org').hide();
     });

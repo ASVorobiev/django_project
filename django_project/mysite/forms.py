@@ -3,7 +3,7 @@ from .models import Events, MysiteOrganizers, Customplaces
 
 
 class AddNewEvent(forms.ModelForm):
-    def __init__(self, current_user, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(AddNewEvent, self).__init__(*args, **kwargs)
         self.fields['location'].queryset = self.fields['location'].queryset.exclude(created=0, is_deleted=1).order_by('name')
 

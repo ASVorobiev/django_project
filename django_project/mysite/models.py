@@ -114,7 +114,7 @@ class MyManager(Manager):
 
 class Customplaces(models.Model):
     location = models.ForeignKey(Locations)
-    name = models.CharField(max_length=255, verbose_name='Название места(обязательно)')
+    name = models.CharField(max_length=255, verbose_name='Название места (обязательно)')
     logo = models.CharField(max_length=255, blank=True, null=True, verbose_name='Ссылка на логотип')
     url = models.CharField(max_length=255, blank=True, null=True, verbose_name='Ссылка на сайт')
     status = models.IntegerField(blank=True, null=True, verbose_name='Статус модерации')

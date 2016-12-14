@@ -93,11 +93,11 @@
             </div>
             <div class="row">
               <div class="input-field col l12">
-                <input id="email" type="email" name="email" class="validate">
+                <input id="email" type="email" maxlength="128" name="email" class="validate">
                 <label for="email">Email</label>
               </div>
               <div class="input-field col l12">
-                <input placeholder="" class="validate" title="Пароль должен содержать не менее 6 символов, включая ВЕРХНИЙ/нижний регистр, а так же ЦИФРЫ"
+                <input placeholder="" class="validate" title="Пароль должен содержать не менее 6 ЛАТИНСКИХ символов, включая ВЕРХНИЙ/нижний регистр, а так же ЦИФРЫ"
                        type="password" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" name="password"
 {#                   onchange="#}
 {#                    this.setCustomValidity(this.validity.patternMismatch ? this.title : '');#}
@@ -107,8 +107,8 @@
               </div>
               <div class="input-field col l12">
                 <div class="form-group">
-                  <label class="control-label" for="fullname">Как к вам обращаться:</label>
-                  <input class="form-control" id="fullname" type="text" name="fullname" value="" required pattern="\w+"/>
+                  <label class="control-label" for="fullname">Как вас представить?</label>
+                  <input class="form-control" maxlength="50"  id="fullname" type="text" title="Имя" name="fullname" value="" required pattern="\D+"/>
                 </div>
               </div>
             </div>
