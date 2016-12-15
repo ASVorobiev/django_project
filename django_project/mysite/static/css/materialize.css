@@ -8657,10 +8657,35 @@ header, main, footer {
   background-color: #223843 !important;
 }
 
-.multiple-items  {
-  width:700px;
-  height:120px;
+.multiple-items-margin  {
   margin: 30px 50px;
-  align-self: center;
-  display:block;
+}
+
+.multiple-items  {
+width: auto;
+height: 8rem;
+box-sizing: border-box;
+margin: 30px auto;
+display:block;
+text-align: center;
+}
+
+.img-container {
+  text-align:center; /* Align center inline elements */
+  font: 0/0 a;       /* Hide the characters like spaces */
+}
+
+.img-container:before {
+  content: ' ';
+  display: inline-block;
+  vertical-align: middle;
+  height: 100%;
+}
+
+.img-container img {
+  vertical-align: middle;
+  display: inline-block;
+  max-height: 80%;
+  max-width: 80%;
+  width: auto;
 }
