@@ -1,66 +1,66 @@
 {% extends "mysite/base.html" %}
 
 {% block card_panel %}
-          <div class="card large sticky-action z-depth-1 hoverable">
+  <div class="card large sticky-action z-depth-1 hoverable">
 
-            <div class="card-image">
-              <div class="custom_row">
-                <span class="valign-wrapper col s9 l9 center-align" style="text-align: center">
-                  <i class="material-icons tiny valign">date_range</i>
-                  <span class="valign"> {{ event.start_date|date:"d.m.Y (D)" }} </span>
-                </span>
-                <span class="valign-wrapper col s3 l3 right-align">
-                  <i class="material-icons tiny valign">access_time</i>
-                  <span class="valign"> {{ event.start_time }} </span>
-                </span>
-              </div>
+    <div class="card-image">
+      <div class="custom_row">
+        <span class="valign-wrapper col s9 l9 center-align" style="text-align: center">
+          <i class="material-icons tiny valign">date_range</i>
+          <span class="valign"> {{ event.start_date|date:"d.m.Y (D)" }} </span>
+        </span>
+        <span class="valign-wrapper col s3 l3 right-align">
+          <i class="material-icons tiny valign">access_time</i>
+          <span class="valign"> {{ event.start_time }} </span>
+        </span>
+      </div>
 
 
-              {% if event.image %}
-                <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}">
-                <div class="container">
-                  <div class="image">
-                    <img src={{ event.image.url }}>
-                  </div>
-                </div>
-                </a>
-              {% endif %}
+      {% if event.image %}
+        <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}">
+        <div class="container">
+          <div class="image">
+            <img src={{ event.image.url }}>
+          </div>
+        </div>
+        </a>
+      {% endif %}
 
-            </div>
-            <div class="card-content">
-              <div class="custom">
-              <span class="card-title activator grey-text text-darken-4">
-                <i class="material-icons right">more_vert</i>
-                <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}">
-                  <div class="custom">
-                    <h1 class="grey-text text-darken-2" style="font-weight:600 ">
-                      {{ event.title }}
-                    </h1>
-                  </div>
-                </a>
-              </span>
-              <span class="black-text">
-                <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}">
-                  <p>
-                    <span class="shad grey-text text-darken-3">
-                      {{ event.description|linebreaksbr }}
-                    </span>
-                  </p>
-                </a>
-              </span>
-                </div>
-            </div>
-            <div class="card-reveal">
-              <span class="card-title grey-text text-darken-4">
-                {{ event.title }}
-                <i class="material-icons right">close</i>
-              </span>
-              <div class="truncate">{{ event.description|linebreaks }}</div>
-            </div>
+    </div>
+    <div class="card-content">
+      <div class="custom">
+      <span class="card-title activator grey-text text-darken-4">
+        <i class="material-icons right">more_vert</i>
+        <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}">
+          <div class="custom">
+            <h1 class="grey-text text-darken-2" style="font-weight:600 ">
+              {{ event.title }}
+            </h1>
+          </div>
+        </a>
+      </span>
+      <span class="black-text">
+        <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}">
+          <p>
+            <span class="shad grey-text text-darken-3">
+              {{ event.description|linebreaksbr }}
+            </span>
+          </p>
+        </a>
+      </span>
+        </div>
+    </div>
+    <div class="card-reveal">
+      <span class="card-title grey-text text-darken-4">
+        {{ event.title }}
+        <i class="material-icons right">close</i>
+      </span>
+      <div class="truncate">{{ event.description|linebreaks }}</div>
+    </div>
 {#            <div class="card-action">#}
 {#                <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span>Подробнее...</a>#}
 {#            </div>#}
-          </div>
+  </div>
 
 {% endblock %}
 

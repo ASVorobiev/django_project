@@ -41,8 +41,8 @@
         <img class="image_padding materialboxed responsive-img" src="{{ event_data.image.url }}" alt="Афиша {{ event_data.title }}">
       </div>
       <div class="col s12 l7 section">
-        <div class="">
-            <h4>{{ event_data.title }}</h4>
+        <div class="custom2">
+          <h1>{{ event_data.title }}</h1>
         </div>
       <div class="divider"></div>
         <div class="section">
@@ -56,24 +56,19 @@
           </div>
         </div>
       <div class="divider"></div>
-        {% if event_data.description %}
+      {% if event_data.description %}
         <div class="section">
-        {% spaceless %}
-{#              {{ event_data.clean|urlize }}#}
-          {{ event_data.description|urlize|linebreaks }}
-        {% endspaceless %}
+          {% spaceless %}
+            <p>{{ event_data.description|urlize|linebreaks }}</p>
+          {% endspaceless %}
         </div>
-        {% endif %}
+      {% endif %}
 
       <div class="row">
         {% for tag in event_tags %}
             <div class="chip"><a href="{% url 'location_events' current_location.site_screen_name %}?tag={{ tag|urlencode }}">{{ tag }}</a></div>
         {% endfor %}
       </div>
-
-{#          {% if event_tags %}#}
-{#            <div class="chips-initial"></div>#}
-{#          {% endif %}#}
 
       <div class="row">
         <div class="col s2">
@@ -108,17 +103,18 @@
 
 
   {% if events_from_this_organizator %}
-    <div class="col">
-      <h4>Смотрите так же:</h4>
-      <h5>Другие мероприятия этого организатора</h5>
+    <div class="col custom2">
+      <h2>Смотрите так же:</h2>
+      <h3>Другие мероприятия этого организатора</h3>
 
-          {% for event in events_from_this_organizator %}
-            {% block card_panel %}
-              <div class="col s12 m6 l4">
-                {{ block.super }}
-              </div>
-            {% endblock %}
-          {% endfor %}
+        {% for event in events_from_this_organizator %}
+          {% block card_panel %}
+            <div class="col s12 m6 l4">
+              {{ block.super }}
+            </div>
+          {% endblock %}
+        {% endfor %}
+
     </div>
   {% endif %}
 {% endblock %}
@@ -127,10 +123,12 @@
     {% if event_data.organizer %}
       <div class="card-panel grey lighten-5 z-depth-1">
         <div class="row">
-          Организатор: <a href="{{ event_data.organizer.url }}" target="_blank">{{ event_data.organizer }}
-          {% if event_data.organizer.vk_type != 'id' %}
-            <img src="{{ event_data.organizer.logo }}" alt="" class="circle responsive-img"></a> <!-- notice the "circle" class -->
-          {% endif %}
+          Организатор:
+          <a href="{{ event_data.organizer.url }}" target="_blank">{{ event_data.organizer }}
+            {% if event_data.organizer.vk_type != 'id' %}
+              <img src="{{ event_data.organizer.logo }}" alt="{{ event_data.organizer.name }}" class="circle responsive-img">
+            {% endif %}
+          </a>
         </div>
       </div>
     {% endif %}
@@ -145,9 +143,9 @@
           {% endif %}
           {{ event_data.place.name }}
           {% if event_data.place.logo %}
-            <img src="{{ event_data.place.logo }}" alt="место проведения мероприятия" class="circle responsive-img">
-            </a>
+            <img src="{{ event_data.place.logo }}" alt="{{ event_data.place.name }}" class="circle responsive-img">
           {% endif %}
+          </a>
         </div>
       </div>
     {% endif %}
