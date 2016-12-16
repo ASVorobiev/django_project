@@ -5,7 +5,11 @@ from .models import Events, MysiteOrganizers, Customplaces
 class AddNewEvent(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(AddNewEvent, self).__init__(*args, **kwargs)
+        self.fields['location'].required = True
         self.fields['location'].queryset = self.fields['location'].queryset.exclude(created=0, is_deleted=1).order_by('name')
+        self.fields['place'].required = True
+        self.fields['start_date'].required = True
+        self.fields['start_time'].required = True
 
     class Meta:
         model = Events

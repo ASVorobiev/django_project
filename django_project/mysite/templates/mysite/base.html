@@ -133,7 +133,7 @@
       <li>
         <a class="center waves-effect waves-light btn hide-on-large-only mybuttons white-text"  href="{% url 'add_event_form' %}">Добавить мероприятие</a>
       </li>
-      <li class="bold"><a href={% url 'about' %} class="waves-effect waves-teal">О нас</a></li>
+      <li class="bold" hidden><a href={% url 'about' %} class="waves-effect waves-teal">О нас</a></li>
       {% block category %}
       {% endblock %}
       {%  block user_location %}
@@ -214,8 +214,6 @@
         <div class="col l5 s12">
           <h5 class="white-text">О нас</h5>
           <p class="grey-text text-lighten-4">We are a team of college students working on this project like it's our full time job. Any amount would help support and continue development on this project and is greatly appreciated.</p>
-
-
         </div>
         <div class="col l3 s12">
           <h5 class="white-text">Понравился проект?</h5>
