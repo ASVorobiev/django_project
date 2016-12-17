@@ -8676,8 +8676,10 @@ header, main, footer {
   background-color: #223843 !important;
 }
 
-.multiple-items-margin  {
-  margin: 30px 50px;
+@media only screen and (min-width: 600px) {
+  .multiple-items-margin {
+    margin: 30px 50px;
+  }
 }
 
 .multiple-items  {
