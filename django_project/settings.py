@@ -58,11 +58,11 @@ elif _platform == "win32":
 # }
 
 LANGUAGE_CODE = 'ru-RU'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 SITE_ID = 1
 USE_I18N = True
 USE_L10N = True
-USE_TZ = False
+USE_TZ = True
 # MEDIA_ROOT = 'C:\\vKalendare\\storage'
 MEDIA_ROOT = '/home/www/vkalendare.net/mod/storage'
 MEDIA_URL = '/storage/'
