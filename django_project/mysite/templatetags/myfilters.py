@@ -1,6 +1,6 @@
 from django import template
-from django.template.defaultfilters import stringfilter
-from datetime import datetime, timedelta
+from django.utils.timesince import timesince
+from datetime import datetime
 
 register = template.Library()
 
@@ -61,3 +61,19 @@ def partition_horizontal(thelist, n):
 @register.filter
 def split_by_three(data):
     return [data[i:i+3] for i in range(0, len(data), 3)]
+
+
+@register.filter
+def timedelta(value, arg=None):
+    if not value:
+        return ''
+    else:
+        value = datetime.combine(value.start_date, value.start_time)
+    if arg:
+        cmp = arg
+    else:
+        cmp = datetime.now()
+    if value > cmp:
+        return "через %s" % timesince(cmp, value)
+    else:
+        return "%s назад" % timesince(value, cmp)

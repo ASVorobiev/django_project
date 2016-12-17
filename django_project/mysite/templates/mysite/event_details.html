@@ -1,5 +1,6 @@
 {% extends "mysite/cards.html" %}
 {% load staticfiles %}
+{% load myfilters %}
 
 {% block scripts %}
   <script type="text/javascript" src="//vk.com/js/api/openapi.js?130"></script>
@@ -52,7 +53,7 @@
           </div>
           <div>
             <i class="tiny material-icons">access_time</i>
-            <span>{{ event_data.start_time }}</span> (через {{ event_data.start_date|timeuntil }})
+            <span>{{ event_data.start_time }}</span> ({{ event_data|timedelta }})
           </div>
         </div>
       <div class="divider"></div>
