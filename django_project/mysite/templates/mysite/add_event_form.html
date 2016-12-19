@@ -116,19 +116,20 @@
       </div>
     </div>
 
-    <div class="col s10">
-      <div class="file-field input-field file-upload">
-        <div class="btn">
-          <span>Загрузить афишу</span>
-          <input type="file" name="image" id="files" onchange="upload_img(this);" accept="image/*" required/>
+    <div class="row">
+      <div class="col s10">
+        <div class="file-field input-field file-upload">
+          <div class="btn">
+            <span>Загрузить афишу</span>
+            <input type="file" name="image" id="files" onchange="upload_img(this);" accept="image/*" required/>
+          </div>
+          <div class="file-path-wrapper">
+            <input class="file-path validate" type="text" accept="image/*" placeholder="Загрузите афишу вашего мероприятия" aria-disabled="true" required>
+          </div>
         </div>
-        <div class="file-path-wrapper">
-          <input class="file-path validate" type="text" accept="image/*" placeholder="Загрузите афишу вашего мероприятия" aria-disabled="true" required>
         </div>
-      </div>
-      </div>
-    <div class="col s2 "><img id="img_id" class="materialboxed responsive-img" src="{% static 'placeHolder.png' %}" alt="Ваша афиша"/></div>
-
+      <div class="col s2 "><img id="img_id" class="materialboxed responsive-img" src="{% static 'placeHolder.png' %}" alt="Ваша афиша"/></div>
+    </div>
 {#    <div class="row">#}
 {#      <div class="input-field col s12">#}
 {#        <i class="material-icons prefix">textsms</i>#}
@@ -148,7 +149,7 @@
     <div class="row">
       <div class="input-field col s5 offset-s1">
          <i for="date"><span class="label">Дата</span></i>
-         <input id="date" type="date" name="start_date" class="datepicker" required>
+         <input id="date" type="date" name="start_date" class="datepicker required" required>
       </div>
 
       <div class="input-field col s4 offset-s1">
@@ -191,7 +192,7 @@
         <div class="card-panel" style="margin: 0">
           <div class="teal lighten-2 white-text center-align">
             <span>Публикуем 100% уникальные мероприятия <br></span>
-            <span class="white-text text-lighten-1 center-align flow-text" style="font-weight: bolder" >БЕСПЛАТНО</span>
+            <span class="white-text text-lighten-1 center-align" style="font-weight: bolder" >БЕСПЛАТНО</span>
           </div>
           <div id="wont">
             Хотите узнать, насколько Ваше мероприятие уникально?<br>
@@ -243,6 +244,7 @@
 
 {% block scripts %}
   <script type="text/javascript" src="{% static 'js/materialize.clockpicker.js' %}"></script>
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
   <link rel="stylesheet" href="{% static 'css/materialize.clockpicker.css' %}">
 
   <script type="application/javascript">
@@ -345,6 +347,7 @@
     $(function() {
       $( "#id_location" ).change(function() {
         console.log( "Handler for .select() called." );
+        $('#local_places').prop('required', true);
         $.ajax({
           type: 'POST',
           url: {% url 'jdata' %},
@@ -363,8 +366,7 @@
               });
               $('#local_places').append(items);
               $('#local_places').material_select();
-{#              $('#local_places').attr('name', 'local_places');#}
-{#              $('#local_places').attr('id', 'local_places_id');#}
+              $("select[required]").css({display: "inline", height: 0, padding: 0, width: 0});
               $('#place_row').show();
               $('#place_selector').prop( "disabled", false );
             }
@@ -390,9 +392,36 @@
           secondaryPlaceholder: 'Добавьте теги'
         });
 
+        function checkDate() {
+          var datepicker = $('.datepicker').pickadate('picker');
+          if (datepicker.get() == '') {
+            $('#start_date').addClass('invalid');
+            return false
+          } else {
+            $('#start_date').removeClass('invalid');
+            return true
+          }
+        }
+
         frm.on('submit', function (e1) {
           e1.preventDefault();
-          if($('#main_form')[0].checkValidity()) {
+
+          frm.validate({ // initialize the plugin
+          rules: {
+            start_date: {
+              required: true
+            },
+            location: {
+              required: true
+            }
+          },
+          messages: {
+            start_date: "Пожалуйста, укажите дату проведения мероприятия",
+            location: "Для добавления мероприятия выберите город"
+          }
+        });
+
+          if( ($('#main_form')[0].checkValidity()) && ($("#main_form").valid) && (checkDate()) ) {
             var formData = new FormData(frmNode);
             var files = $('#files').get(0).files;
 
@@ -448,11 +477,12 @@
         $('#modal_org').closeModal();
         $('#place_selector').hide();
         $('#new_org_input').val(
-                $('#id_new_org-name').val()
+          $('#id_new_org-name').val()
         );
         Materialize.updateTextFields();
         $('#new_org').show();
         $('#cancel_new_org').show();
+        $('#local_places').prop('required', false);
       }
     });
     $('#cancel_new_org').on('click', function () {
@@ -460,6 +490,7 @@
       $('#place_selector').show();
       Materialize.updateTextFields();
       $('#cancel_new_org').hide();
+      $('#local_places').prop('required', true);
     });
 
   });

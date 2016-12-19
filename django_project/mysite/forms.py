@@ -1,5 +1,7 @@
 from django import forms
-from .models import Events, MysiteOrganizers, Customplaces
+from django.forms import ModelChoiceField
+
+from .models import Events, MysiteOrganizers, Customplaces, Locations
 
 
 class AddNewEvent(forms.ModelForm):
@@ -13,7 +15,6 @@ class AddNewEvent(forms.ModelForm):
 
     class Meta:
         model = Events
-        # required = True
         fields = ('owner', 'title', 'description', 'image', 'thumb', 'location', 'start_date', 'start_time',
                   'organizer', 'tag_it', 'is_free', 'place', 'export_vk', 'is_active', 'url')
 

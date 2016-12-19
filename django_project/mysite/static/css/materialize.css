@@ -8714,3 +8714,20 @@ text-align: center;
 .location-dropdown {
   min-width: 165px;
 }
+
+input[name="start_date"]:focus.invalid~label:after,
+input[name="start_date"].invalid~label:after {
+  content: attr(data-error);
+  color: #F44336;
+  opacity: 1;
+}
+input[name="start_date"]:focus~label:after,
+input[name="start_date"]~label:after {
+  display: block;
+  content: "";
+  position: absolute;
+  top: 36px;
+  opacity: 0;
+  white-space: pre;
+  transition: .2s opacity ease-out, .2s color ease-out;
+}
