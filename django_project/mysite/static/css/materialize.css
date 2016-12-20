@@ -4155,6 +4155,7 @@ nav .button-collapse {
   position: relative;
   z-index: 1;
   height: 56px;
+  margin-left: 3px;
 }
 
 nav .button-collapse i {
@@ -8712,7 +8713,7 @@ text-align: center;
 }
 
 .location-dropdown {
-  min-width: 165px;
+  min-width: 12vw;
 }
 
 input[name="start_date"]:focus.invalid~label:after,

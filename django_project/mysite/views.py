@@ -4,6 +4,8 @@ import hashlib
 import json
 import os
 from datetime import date, timedelta, timezone
+
+from django.db.models import Q
 from io import BytesIO
 import random
 
@@ -62,15 +64,10 @@ def get_item(dictionary, key):
 def events_list(request, site_screen_name=None):
     response = {}
     response['locations'] = Locations.objects.exclude(created=0, is_deleted=1).order_by('name').all()
-    # Events.tag_it.most_common().values_list()
-    # Events.objects.filter(tag_it__name__in=["рок"])
-    # Events.tag_it.most_common().filter(events__location=location_id).exclude(events__start_date__lte=today).exclude(events__start_date__gte=today + timedelta(days=45))
-    # Events.objects.filter(location__id=6, tag_it__id__in=TaggedCategories.objects.filter(category_id__name='Клубы').values('tag_id'))
 
     if not request.user.is_anonymous and not site_screen_name and request.user.location_id:
         location = Locations.objects.get(pk=request.user.location_id)
         site_screen_name = location.site_screen_name
-
     elif 'user_location' in request.session and not site_screen_name:
         location = Locations.objects.get(pk=request.session['user_location'])
         site_screen_name = location.site_screen_name
@@ -78,12 +75,6 @@ def events_list(request, site_screen_name=None):
     elif 'user_location' in request.session and request.user.is_anonymous:
         location = Locations.objects.get(pk=request.session['user_location'])
         request.user.location = location
-    # elif 'user_location' in request.session and site_screen_name and not request.user.is_anonymous:
-    #     location = Locations.objects.get(pk=request.session['user_location'])
-    #     request.user.location = location.name
-    # else:
-    #     location = Locations.objects.get(pk=site_screen_name)
-    #     site_screen_name = location.site_screen_name
 
     category = request.GET.get('category', '')
     tag = request.GET.get('tag', '')
@@ -93,6 +84,7 @@ def events_list(request, site_screen_name=None):
         free = False
     from_date = request.GET.get('from_date', '')  # 2015-01-09
     to_date = request.GET.get('to_date', '')
+    place = request.GET.get('place', '')
 
     response['location_events'] = Events.objects.all().order_by('-priority', 'start_date').filter(is_active=1,
                                                                                                   is_deleted=0)
@@ -131,6 +123,9 @@ def events_list(request, site_screen_name=None):
         response['location_events'] = response['location_events'].filter(tag_it__name=tag)
     if free:
         response['location_events'] = response['location_events'].filter(is_free=1)
+    if place:
+        place_obj = Customplaces.objects.get(id=place)
+        response['location_events'] = response['location_events'].filter(Q(organizer=place_obj.org_parent_id) | Q(place=place_obj.id))
     if from_date or to_date:
         if from_date:
             response['location_events'] = response['location_events'].filter(start_date__gte=from_date)
@@ -308,7 +303,9 @@ def add_event_form(request):
                                                            obj.id)
                 obj.save()
                 new_event_form.save_m2m()
-                response = {'status': 'OK', 'redirect': request.build_absolute_uri(reverse('added_successfully'))}
+                response = {'status': 'OK',
+                            'Cache-Control': 'no-cache',
+                            'redirect': request.build_absolute_uri(reverse('added_successfully'))}
                 return HttpResponse(json.dumps(response), content_type='application/json')
                 # return HttpResponseRedirect(request.build_absolute_uri(reverse('added_successfully')))
                 # return redirect(added_successfully)

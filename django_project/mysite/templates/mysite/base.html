@@ -61,12 +61,10 @@
           <a href="#" data-activates="nav-mobile" class="button-collapse top-nav full"><i class="material-icons">menu</i></a>
           <a href="{% url 'events_list' %}" class="brand-logo">вКалендаре</a>
 
-          <ul class="right hide-on-med-and-down">
-{#            <div class="col l4">#}
+          <ul class="right hide-on-med-and-down" id="head_navigate">
             <li>
               <a class="center waves-effect waves-light btn hide-on-small-and-down mybuttons"  href="{% url 'add_event_form' %}">Добавить мероприятие</a>
             </li>
-{#            </div>#}
             {% if current_location %}
               <li>
                 <i class="material-icons">location_on</i>
@@ -78,7 +76,6 @@
               </li>
             {% endif %}
           </ul>
-
         </div>
       </div>
       {% block nav %}

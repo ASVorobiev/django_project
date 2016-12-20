@@ -2,9 +2,15 @@
 {% load staticfiles %}
 {% load myfilters %}
 
+{% block meta %}
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, post-check=0, pre-check=0" />
+  <meta http-equiv="Pragma" content="no-cache" />
+{% endblock %}
+
 {% block content %}
 <script type="text/javascript" src="//vk.com/js/api/openapi.js?130"></script>
 <script type="text/javascript">
+  $('#head_navigate').hide();
   $(document).ready(function(){
     // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
     $('.modal-trigger').leanModal();
@@ -22,6 +28,9 @@
       };
       reader.readAsDataURL(input.files[0]);
     }
+{#    else {#}
+{#      $('#img_id').attr('src', placeHolder);#}
+{#    }#}
   }
 </script>
 
@@ -253,7 +262,12 @@
         selectMonths: true, // Creates a dropdown to control month
         firstDay: 0,
         selectYears: 4, // Creates a dropdown of 15 years to control year
-        format: 'yyyy-mm-dd'
+        format: 'yyyy-mm-dd',
+        onSet: function( arg ){
+          if ( 'select' in arg ){ //prevent closing on selecting month/year
+              this.close();
+        }
+    }
       });
 
       $('.timepicker').pickatime({
