@@ -308,7 +308,7 @@ def add_event_form(request):
                                                            obj.id)
                 obj.save()
                 new_event_form.save_m2m()
-                response = {'redirect': request.build_absolute_uri(reverse('added_successfully'))}
+                response = {'status': 'OK', 'redirect': request.build_absolute_uri(reverse('added_successfully'))}
                 return HttpResponse(json.dumps(response), content_type='application/json')
                 # return HttpResponseRedirect(request.build_absolute_uri(reverse('added_successfully')))
                 # return redirect(added_successfully)
