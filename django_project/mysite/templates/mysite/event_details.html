@@ -22,7 +22,7 @@
 {% block meta %}
   <meta property="og:title" content="{{ event_data.title }}" />
   <meta property="og:image" content="{{ event_data.image.url }}" />
-  <meta property="og:description" content="{{ event_data.description|urlize|linebreaks|truncatewords:20 }}" />
+  <meta property="og:description" content="{{ event_data.description|urlize|truncatewords:20 }}" />
 {% endblock %}
 
 {% block title %}{{ event_data.title }} | вКалендаре{% endblock %}
