@@ -1,0 +1,10 @@
+/django_project/uwsgi.core
+/django_project/settings.py
+/django_project/mysite.sock
+
+__pycache__/
+.idea/*
+#django_project/about/static/css/
+#django_project/about/static/fonts/
+#django_project/about/static/js/
+#django_project/mysite/migrations/
