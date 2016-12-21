@@ -427,8 +427,8 @@ def jservice(request):
         return HttpResponse(json.dumps({'result': True}), content_type='application/json')
 
     if request.GET['task'] == 'orgs_to_places':
-        location_id = 1
-        sql_query = "SELECT * from mysite_organizers where id in (SELECT DISTINCT organizer_id from mysite_events WHERE location_id = %s) AND confidence > 1 AND vk_type = 'group' ORDER BY followers" % location_id
+        location_id = 6
+        sql_query = "SELECT * from mysite_organizers where id in (SELECT DISTINCT organizer_id from mysite_events WHERE location_id = %s) AND confidence = 2 AND vk_type = 'group' ORDER BY followers" % location_id
         places = MysiteOrganizers.objects.raw(sql_query)
 
         # data['location'] = location_id
