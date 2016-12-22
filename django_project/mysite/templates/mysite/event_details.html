@@ -15,7 +15,7 @@
     "@type": "Event",
     "name": "{{ event_data.title }}",
     "startDate" : "{{ event_data.start_date }}T{{ event_data.start_time }}",
-    "url" : "{{ request.path }}",
+    "url" : "{{ request.get_full_path }}",
     "location" : {
       "@type" : "Place",
 {#      "sameAs" : "{{ event_data.place.name }}",#}
@@ -40,7 +40,7 @@
   <meta property="og:title" content="{{ event_data.title }}" />
   <meta property="og:image" content="{{ event_data.image.url }}" />
   <meta property="og:site_name" content="Все мероприятия {{ event_data.location.name }} уже вКалендаре!"/>
-  <meta property="og:url" content="{{ event_data.url }}" />
+  <meta property="og:url" content="{{ request.get_full_path }}" />
   <meta property="og:type" content="article"/>
   <meta property="og:locale" content="ru_RU"/>
   <link rel="canonical" href="http://vkalendare.com/{{ event_data.location.site_screen_name }}"/>

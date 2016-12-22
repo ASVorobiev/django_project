@@ -18,10 +18,10 @@
   {#      <meta property="og:title" content="" />#}
   {#      <meta property="og:image" content="" />#}
         <meta property="og:site_name" content="Все мероприятия {{ current_location }} уже вКалендаре!"/>
-        <meta property="og:url" content="{{ request.path }}" />
+        <meta property="og:url" content="{{ request.get_full_path }}" />
         <meta property="og:type" content="article"/>
         <meta property="og:locale" content="ru_RU"/>
-        <link rel="canonical" href="{{ request.path }}"/>
+        <link rel="canonical" href="{{ request.get_full_path }}"/>
     {% else %}
         <meta name="description" content="театры, концерты, выставки, события для детей и другие развлечения. выбирайте, куда сходить и как провести свободное время."/>
         <meta name="keywords" content="афиша, мероприятия, анонсы, куда сходить, расписания концертов, выставок, спектаклей и клубных событий, развлечения для детей" />
