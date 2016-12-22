@@ -12,20 +12,19 @@
   <title>{% block title %}Афиша мероприятий вКалендаре. Куда сходить. Анонсы, концерты, спектакли{% endblock %}</title>
   {% block meta %}
     {% if current_location %}
-        <meta name="description" content="театры, концерты, выставки, события для детей и другие развлечения. Выбирайте, куда сходить и как провести свободное время в {{ loc.name }}"/>
-        <meta name="keywords" content="афиша, {{ loc.name }}, мероприятия, анонсы, куда сходить, расписания концертов, выставок, спектаклей и клубных событий, развлечения для детей" />
+        <meta name="description" content="театры, концерты, выставки, события для детей и другие развлечения. Выбирайте, куда сходить и как провести свободное время в {{ current_location }}"/>
+        <meta name="keywords" content="афиша, {{ current_location}}, мероприятия, анонсы, куда сходить, расписания концертов, выставок, спектаклей и клубных событий, развлечения для детей" />
 
   {#      <meta property="og:title" content="" />#}
   {#      <meta property="og:image" content="" />#}
         <meta property="og:site_name" content="Все мероприятия {{ current_location }} уже вКалендаре!"/>
-        <meta property="og:url" content="http://vkalendare.com/{{ loc.site_screen_name }}" />
+{#        <meta property="og:url" content="http://vkalendare.com/{{ loc.site_screen_name }}" />#}
         <meta property="og:type" content="article"/>
         <meta property="og:locale" content="ru_RU"/>
-        <link rel="canonical" href="http://vkalendare.com/{{ locsite_screen_name }}"/>
-        <link rel="image_src" href="{{ event_data.image.url }}"/>
+{#        <link rel="canonical" href="http://vkalendare.com/{{ loc.site_screen_name }}"/>#}
     {% else %}
-        <meta name="description" content="театры, концерты, выставки, события для детей и другие развлечения. Выбирайте, куда сходить и как провести свободное время."/>
-        <meta name="keywords" content="афиша,  мероприятия, анонсы, куда сходить, расписания концертов, выставок, спектаклей и клубных событий, развлечения для детей" />
+        <meta name="description" content="театры, концерты, выставки, события для детей и другие развлечения. выбирайте, куда сходить и как провести свободное время."/>
+        <meta name="keywords" content="афиша, мероприятия, анонсы, куда сходить, расписания концертов, выставок, спектаклей и клубных событий, развлечения для детей" />
     {% endif %}
   {% endblock %}
 
