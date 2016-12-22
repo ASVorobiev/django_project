@@ -9,6 +9,21 @@
   <script type="text/javascript">
     VK.init({apiId: 5618522, onlyWidgets: true});
   </script>
+  <script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Event",
+    "name": "{{ event_data.title }}",
+    "startDate" : "{{ event_data.start_date }}T{{ event_data.start_time }}",
+    "url" : "{{ request.path }}",
+    "location" : {
+      "@type" : "Place",
+{#      "sameAs" : "{{ event_data.place.name }}",#}
+      "name" : "{{ event_data.place.name }}",
+{#      "address" : "7 S. Broadway, Denver, CO 80209"#}
+    }
+  }
+  </script>
 {#  <script type="application/javascript">#}
 {#    function logArrayElements(element, index, array) {#}
 {#      console.log('a[' + index + '] = ' + element);#}
