@@ -30,7 +30,9 @@
   <link rel="image_src" href="{{ event_data.image.url }}"/>
 {% endblock %}
 
-{% block title %}{{ event_data.title }} | вКалендаре{% endblock %}
+{% block title %}
+  {{ event_data.title }} | {{ event_data.location.name }} | вКалендаре
+{% endblock %}
 
 {% block content %}
   <div class="row valign-wrapper ">
