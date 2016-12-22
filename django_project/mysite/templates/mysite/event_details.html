@@ -18,14 +18,10 @@
 {#    });#}
 {#    </script>#}
 {% endblock %}
-
-{% block title %}
-  {{ event_data.title }} | {{ event_data.location.name }} | вКалендаре
-{% endblock %}
-
+{% block title %}{{ event_data.title }} | {{ event_data.location.name }} | вКалендаре{% endblock %}
 {% block meta %}
   <meta name="keywords" content="афиша, куда сходить в {{ event_data.location.name }}, {{ event_data.description|truncatewords:10|striptags|urlize }}" />
-  <meta name="description" property="og:description" content="{{ event_data.description|truncatewords:15|striptags|urlize }}" />
+  <meta name="description" property="og:description" content="{{ event_data.description|truncatewords:25|striptags|urlize }}" />
   <meta property="og:title" content="{{ event_data.title }}" />
   <meta property="og:image" content="{{ event_data.image.url }}" />
   <meta property="og:site_name" content="Все мероприятия {{ event_data.location.name }} уже вКалендаре!"/>

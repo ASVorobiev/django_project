@@ -1,17 +1,15 @@
 {% load staticfiles %}
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8"/>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, user-scalable=yes"/>
   <meta name="MobileOptimized" content="320"/>
   <meta name="HandheldFriendly" content="true"/>
   <meta name="google-site-verification" content="QkX5a8uo_i1vB9QkBwjOdJxB-gdNwEZaKTTvmHW0myE" />
-  <title>
-    {% block title %}
-      Афиша мероприятий вКалендаре. Куда сходить. Анонсы, концерты, спектакли
-    {% endblock %}
-  </title>
+  <title>{% block title %}Афиша мероприятий вКалендаре. Куда сходить. Анонсы, концерты, спектакли{% endblock %}</title>
   {% block meta %}
     {% if current_location %}
         <meta name="description" content="театры, концерты, выставки, события для детей и другие развлечения. Выбирайте, куда сходить и как провести свободное время в {{ loc.name }}"/>
