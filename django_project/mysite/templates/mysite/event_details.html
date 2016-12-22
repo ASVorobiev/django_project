@@ -15,7 +15,7 @@
     "@type": "Event",
     "name": "{{ event_data.title }}",
     "startDate" : "{{ event_data.start_date }}T{{ event_data.start_time }}",
-    "url" : "{{ request.get_full_path }}",
+    "url" : "{{ request.build_absolute_uri }}",
     "location" : {
       "@type" : "Place",
 {#      "sameAs" : "{{ event_data.place.name }}",#}
