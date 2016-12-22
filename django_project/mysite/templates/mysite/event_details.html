@@ -14,7 +14,7 @@
     "@context": "http://schema.org",
     "@type": "Event",
     "name": "{{ event_data.title }}",
-    "startDate" : "{{ event_data.start_date }}T{{ event_data.start_time }}",
+    "startDate" : "{{ event_data.start_date|date:'Y-m-d' }}T{{ event_data.start_time }}",
     "url" : "{{ request.build_absolute_uri }}",
     "location" : {
       "@type" : "Place",
@@ -38,13 +38,13 @@
   <meta name="keywords" content="афиша, куда сходить в {{ event_data.location.name }}, {{ event_data.description|truncatewords:10|striptags|urlize }}" />
   <meta name="description" property="og:description" content="{{ event_data.description|truncatewords:25|striptags|urlize }}" />
   <meta property="og:title" content="{{ event_data.title }}" />
-  <meta property="og:image" content="{{ event_data.image.url }}" />
+  <meta property="og:image" content="http://{{ request.get_host }}{{ event_data.image.url }}" />
   <meta property="og:site_name" content="Все мероприятия {{ event_data.location.name }} уже вКалендаре!"/>
-  <meta property="og:url" content="{{ request.get_full_path }}" />
+  <meta property="og:url" content="{{ request.build_absolute_uri }}" />
   <meta property="og:type" content="article"/>
   <meta property="og:locale" content="ru_RU"/>
-  <link rel="canonical" href="http://vkalendare.com/{{ event_data.location.site_screen_name }}"/>
-  <link rel="image_src" href="{{ event_data.image.url }}"/>
+  <link rel="canonical" href="http://{{ request.get_host }}/{{ event_data.location.site_screen_name }}"/>
+  <link rel="image_src" href="http://{{ request.get_host }}{{ event_data.image.url }}"/>
 {% endblock %}
 
 {% block content %}
