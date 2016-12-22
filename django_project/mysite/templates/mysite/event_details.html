@@ -19,19 +19,21 @@
 {#    </script>#}
 {% endblock %}
 
-{% block meta %}
-  <meta property="og:title" content="{{ event_data.title }}" />
-  <meta property="og:image" content="{{ event_data.image.url }}" />
-  <meta property="og:site_name" content="vkalendare.com - Все мероприятия твоего города уже вКалендаре!"/>
-  <meta name="keywords" content="{{ event_data.description|truncatewords:15|striptags|urlize }}" />
-  <meta name="description" property="og:description" content="{{ event_data.description|truncatewords:15|striptags|urlize }}" />
-  <meta property="og:type" content="article"/>
-  <meta property="og:locale" content="ru_RU"/>
-  <link rel="image_src" href="{{ event_data.image.url }}"/>
-{% endblock %}
-
 {% block title %}
   {{ event_data.title }} | {{ event_data.location.name }} | вКалендаре
+{% endblock %}
+
+{% block meta %}
+  <meta name="keywords" content="афиша, куда сходить в {{ event_data.location.name }}, {{ event_data.description|truncatewords:10|striptags|urlize }}" />
+  <meta name="description" property="og:description" content="{{ event_data.description|truncatewords:15|striptags|urlize }}" />
+  <meta property="og:title" content="{{ event_data.title }}" />
+  <meta property="og:image" content="{{ event_data.image.url }}" />
+  <meta property="og:site_name" content="Все мероприятия {{ event_data.location.name }} уже вКалендаре!"/>
+  <meta property="og:url" content="{{ event_data.url }}" />
+  <meta property="og:type" content="article"/>
+  <meta property="og:locale" content="ru_RU"/>
+  <link rel="canonical" href="http://vkalendare.com/{{ event_data.location.site_screen_name }}"/>
+  <link rel="image_src" href="{{ event_data.image.url }}"/>
 {% endblock %}
 
 {% block content %}
@@ -46,7 +48,7 @@
   <div class="card">
     <div class="row">
       <div class="col c12 l5">
-        <img class="image_padding materialboxed responsive-img" src="{{ event_data.image.url }}" alt="Афиша {{ event_data.title }}">
+        <img class="image_padding materialboxed responsive-img" src="{{ event_data.image.url }}" alt="Афиша {{ event_data.location.name }} {{ event_data.title }}">
       </div>
       <div class="col s12 l7 section">
         <div class="custom2">
@@ -132,7 +134,7 @@
           Организатор:
           <a href="{{ event_data.organizer.url }}" target="_blank">{{ event_data.organizer }}
             {% if event_data.organizer.vk_type != 'id' %}
-              <img src="{{ event_data.organizer.logo }}" alt="{{ event_data.organizer.name }}" class="circle responsive-img">
+              <img src="{{ event_data.organizer.logo }}" alt="Логотип {{ event_data.organizer.name }}" class="circle responsive-img">
             {% endif %}
           </a>
         </div>
@@ -149,7 +151,7 @@
           {% endif %}
           {{ event_data.place.name }}
           {% if event_data.place.logo %}
-            <img src="{{ event_data.place.logo }}" alt="{{ event_data.place.name }}" class="circle responsive-img">
+            <img src="{{ event_data.place.logo }}" alt="Логотип {{ event_data.place.name }}" class="circle responsive-img">
           {% endif %}
           </a>
         </div>

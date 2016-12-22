@@ -20,7 +20,7 @@
         <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}">
         <div class="container">
           <div class="image">
-            <img src={{ event.image.url }}>
+            <img src="{{ event.image.url }}" alt="Афиша {{ event.title }}">
           </div>
         </div>
         </a>
@@ -43,7 +43,7 @@
         <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}">
           <p>
             <span class="shad grey-text text-darken-3">
-              {{ event.description|linebreaksbr }}
+              {{ event.description|linebreaksbr|truncatewords:15 }}
             </span>
           </p>
         </a>
@@ -55,7 +55,7 @@
         {{ event.title }}
         <i class="material-icons right">close</i>
       </span>
-      <div class="truncate">{{ event.description|linebreaks }}</div>
+      <div class="truncate">{{ event.description|linebreaks|truncatewords:15 }}</div>
     </div>
 {#            <div class="card-action">#}
 {#                <a href="{% url 'event_details' event.location.site_screen_name event.id event.title_translit|urlencode %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span>Подробнее...</a>#}

@@ -7,8 +7,32 @@
   <meta name="MobileOptimized" content="320"/>
   <meta name="HandheldFriendly" content="true"/>
   <meta name="google-site-verification" content="QkX5a8uo_i1vB9QkBwjOdJxB-gdNwEZaKTTvmHW0myE" />
-  {% block meta %}
-  {% endblock %}
+  <title>
+    {% block title %}
+      Афиша мероприятий вКалендаре. Куда сходить. Анонсы, концерты, спектакли
+    {% endblock %}
+  </title>
+  {% if current_location %}
+    {% block meta %}
+      <meta name="description" content="театры, концерты, выставки, события для детей и другие развлечения. Выбирайте, куда сходить и как провести свободное время в {{ loc.name }}"/>
+      <meta name="keywords" content="афиша, {{ loc.name }}, мероприятия, анонсы, куда сходить, расписания концертов, выставок, спектаклей и клубных событий, развлечения для детей" />
+
+{#      <meta property="og:title" content="" />#}
+{#      <meta property="og:image" content="" />#}
+      <meta property="og:site_name" content="Все мероприятия {{ current_location }} уже вКалендаре!"/>
+      <meta property="og:url" content="http://vkalendare.com/{{ loc.site_screen_name }}" />
+      <meta property="og:type" content="article"/>
+      <meta property="og:locale" content="ru_RU"/>
+      <link rel="canonical" href="http://vkalendare.com/{{ locsite_screen_name }}"/>
+      <link rel="image_src" href="{{ event_data.image.url }}"/>
+
+    {% endblock %}
+  {% else %}
+    {% block meta %}
+      <meta name="description" content="театры, концерты, выставки, события для детей и другие развлечения. Выбирайте, куда сходить и как провести свободное время."/>
+      <meta name="keywords" content="афиша,  мероприятия, анонсы, куда сходить, расписания концертов, выставок, спектаклей и клубных событий, развлечения для детей" />
+    {% endblock %}
+  {% endif %}
 
   <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!--Import materialize.css-->
@@ -17,7 +41,6 @@
   <link type="text/css" rel="stylesheet" href="{% static 'css/my_animation.css' %}"  media="screen,projection"/>
   <link rel="shortcut icon" type="image/png" href="{% static 'logo/favicon.ico' %}"/>
 
-  <title>{% block title %}вКалендаре{% endblock %}</title>
   <!--Let browser know website is optimized for mobile-->
 
   <!--Import jQuery before materialize.js-->
