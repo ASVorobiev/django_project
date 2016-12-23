@@ -250,8 +250,8 @@ def add_event_form(request):
     context.update(csrf(request))
     if request.POST:
         # Delete every non utf-8 symbols froms string
-        request.POST['title'] = request.POST['title'].decode('utf-8', 'ignore').encode("utf-8")
-        request.POST['description'] = request.POST['description'].decode('utf-8', 'ignore').encode("utf-8")
+        request.POST['title'] = request.POST['title'].encode("utf-8").decode('utf-8', 'ignore')
+        request.POST['description'] = request.POST['description'].encode("utf-8").decode('utf-8', 'ignore')
 
         new_org_flag = False
         if 'new_org-name' in request.POST.keys():
