@@ -5,6 +5,7 @@ import json
 import os
 from datetime import date, timedelta, timezone
 
+from django.core.mail import send_mail
 from django.db.models import Q
 from io import BytesIO
 import random
@@ -306,6 +307,28 @@ def add_event_form(request):
                 response = {'status': 'OK',
                             'Cache-Control': 'no-cache',
                             'redirect': request.build_absolute_uri(reverse('added_successfully'))}
+
+                if not request.user.is_staff:
+                    mail_title = 'Новый запрос на добавление мероприятия'
+                    mail_body = 'Мероприятие "%s" ожидает модерации. \n\n%s' % (request.POST['title'],
+                                                                                request.POST['description'])
+                    modaration_url = "http://vkalendare.com/admin/mysite/events/?export_vk__exact=9"
+                    if new_org_flag:
+                        mail_title = 'Запрос на добавление мероприятия с НОВЫМ МЕСТОМ!'
+                        place_body = 'Запрос на добавление нового места: "%s" в городе %s. \n' % (org_obj.name,
+                                                                                                  obj.location.name)
+                        mail_body = place_body + mail_body
+
+                    mail_body = mail_body + '\n' + modaration_url
+
+                    mail_result = send_mail(
+                        mail_title,
+                        mail_body,
+                        'admin@vkalendare.com',
+                        ['dell.oxl@gmail.com', 'pr@vkalendare.com'],
+                        fail_silently=False,
+                    )
+                    response['notification'] = mail_result
                 return HttpResponse(json.dumps(response), content_type='application/json')
                 # return HttpResponseRedirect(request.build_absolute_uri(reverse('added_successfully')))
                 # return redirect(added_successfully)
@@ -454,6 +477,26 @@ def jservice(request):
 
     if request.GET['task'] == 'update_event':
         update_event([134224605])
+        return HttpResponse(json.dumps({'result': True}), content_type='application/json')
+
+    if request.GET['task'] == 'test':
+        mail_title = 'Новый запрос на добавление мероприятия'
+        mail_body = 'Мероприятие "%s" ожидает модерации. \n\n%s' % ('ЗАГОЛОВОК',
+                                                                    'ОПИСАНИЕ')
+        modaration_url = "http://vkalendare.com/admin/mysite/events/?export_vk__exact=9"
+        if True:
+            mail_title = 'Запрос на добавление мероприятия с НОВЫМ МЕСТОМ!'
+            place_body = 'Запрос на добавление нового места: "%s" в городе %s. \n' % ("MESTO",
+                                                                                      "CITY")
+            mail_body = place_body + mail_body
+        mail_body = mail_body + '\n' + modaration_url
+        mail_result = send_mail(
+            mail_title,
+            mail_body,
+            'admin@vkalendare.com',
+            ['dell.oxl@gmail.com', 'pr@vkalendare.com'],
+            fail_silently=False,
+        )
         return HttpResponse(json.dumps({'result': True}), content_type='application/json')
 
 
