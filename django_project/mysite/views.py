@@ -249,6 +249,10 @@ def add_event_form(request):
     # context['org_form']['name'].css_classes('foo bar')
     context.update(csrf(request))
     if request.POST:
+        # Delete every non utf-8 symbols froms string
+        request.POST['title'] = request.POST['title'].decode('utf-8', 'ignore').encode("utf-8")
+        request.POST['description'] = request.POST['description'].decode('utf-8', 'ignore').encode("utf-8")
+
         new_org_flag = False
         if 'new_org-name' in request.POST.keys():
             CustomPlacesFormObj = CustomPlacesForm(request.POST, prefix='new_org')
