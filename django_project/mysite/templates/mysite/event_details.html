@@ -21,8 +21,12 @@
     "location" : {
       "@type" : "Place",
 {#      "sameAs" : "{{ event_data.place.name }}",#}
+      {% if event_data.place %}
       "name" : "{{ event_data.place.name }}",
-      "address" : "Russian Federation, Kaluga Oblast (Region), Obninsk city, 249030"
+      {% else %}
+      "name" : "{{ event_data.organizer.name }}",
+      {% endif %}
+      "address" : "Russian Federation, {{ event_data.location.site_screen_name }} city"
     }
   }
   </script>
