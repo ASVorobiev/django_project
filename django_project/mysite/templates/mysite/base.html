@@ -9,9 +9,9 @@
   <meta name="MobileOptimized" content="320"/>
   <meta name="HandheldFriendly" content="true"/>
   <meta name="google-site-verification" content="QkX5a8uo_i1vB9QkBwjOdJxB-gdNwEZaKTTvmHW0myE" />
-  <title>{% block title %}Афиша мероприятий вКалендаре. Куда сходить. Анонсы, концерты, спектакли{% endblock %}</title>
   {% block meta %}
     {% if current_location %}
+        <title>{% block title %}Афиша мероприятий {{ current_location }} вКалендаре. Куда сходить. Анонсы, концерты, спектакли{% endblock %}</title>
         <meta name="description" content="театры, концерты, выставки, события для детей и другие развлечения. Выбирайте, куда сходить и как провести свободное время в {{ current_location }}"/>
         <meta name="keywords" content="афиша, {{ current_location}}, мероприятия, анонсы, куда сходить, расписания концертов, выставок, спектаклей и клубных событий, развлечения для детей" />
 
@@ -25,6 +25,7 @@
     {% else %}
         <meta name="description" content="театры, концерты, выставки, события для детей и другие развлечения. выбирайте, куда сходить и как провести свободное время."/>
         <meta name="keywords" content="афиша, мероприятия, анонсы, куда сходить, расписания концертов, выставок, спектаклей и клубных событий, развлечения для детей" />
+        <title>{% block title %}Афиша мероприятий вКалендаре. Куда сходить. Анонсы, концерты, спектакли{% endblock %}</title>
     {% endif %}
   {% endblock %}
 
@@ -71,7 +72,7 @@
 <!-- Dropdown Structure -->
 <ul id="locations_ddown" class="dropdown-content">
   {% for loc in locations %}
-      <li value={{ loc.site_screen_name }}><a href="{% url 'location_events' loc.site_screen_name %}">{{ loc.name }}</a></li>
+      <li><a href="{% url 'location_events' loc.site_screen_name %}">{{ loc.name }}</a></li>
   {% endfor %}
 </ul>
 
