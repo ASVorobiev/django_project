@@ -5,14 +5,6 @@
 {% load shuffle %}
 {% load myfilters %}
 
-{% block title %}
-  {% if user.location  %}
-    Афиша {{ user.location }} вКалендаре
-  {% else %}
-    Афиша твоего города вКалендаре
-  {% endif %}
-{% endblock %}
-
 {% block meta %}
   {{ block.super }}
   <link rel="stylesheet" type="text/css" href="{% static 'slick/slick.css' %}" />
