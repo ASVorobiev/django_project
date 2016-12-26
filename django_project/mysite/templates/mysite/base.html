@@ -9,9 +9,18 @@
   <meta name="MobileOptimized" content="320"/>
   <meta name="HandheldFriendly" content="true"/>
   <meta name="google-site-verification" content="QkX5a8uo_i1vB9QkBwjOdJxB-gdNwEZaKTTvmHW0myE" />
+  <title>
+    {% block title %}
+      {% if current_location %}
+        Афиша мероприятий {{ current_location }} вКалендаре. Куда сходить. Анонсы, концерты, спектакли
+      {% else %}
+        Афиша мероприятий вКалендаре. Куда сходить. Анонсы, концерты, спектакли
+      {% endif %}
+    {% endblock %}
+  </title>
+
   {% block meta %}
     {% if current_location %}
-        <title>{% block title %}Афиша мероприятий {{ current_location }} вКалендаре. Куда сходить. Анонсы, концерты, спектакли{% endblock %}</title>
         <meta name="description" content="театры, концерты, выставки, события для детей и другие развлечения. Выбирайте, куда сходить и как провести свободное время в {{ current_location }}"/>
         <meta name="keywords" content="афиша, {{ current_location}}, мероприятия, анонсы, куда сходить, расписания концертов, выставок, спектаклей и клубных событий, развлечения для детей" />
 
@@ -25,7 +34,6 @@
     {% else %}
         <meta name="description" content="театры, концерты, выставки, события для детей и другие развлечения. выбирайте, куда сходить и как провести свободное время."/>
         <meta name="keywords" content="афиша, мероприятия, анонсы, куда сходить, расписания концертов, выставок, спектаклей и клубных событий, развлечения для детей" />
-        <title>{% block title %}Афиша мероприятий вКалендаре. Куда сходить. Анонсы, концерты, спектакли{% endblock %}</title>
     {% endif %}
   {% endblock %}
 
