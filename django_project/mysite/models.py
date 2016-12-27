@@ -14,6 +14,7 @@ from django.db import models, connection
 from django.utils.datetime_safe import datetime
 from django.utils.safestring import mark_safe
 from transliterate import translit
+from django.utils.html import urlize
 
 
 class MysiteCategories(models.Model):
@@ -191,8 +192,11 @@ class Events(models.Model):
     image_small.allow_tags = True
 
     def title_translit(self):
-        trans = translit(self.title.strip().replace('.', '_').replace('-', '_'), 'ru', reversed=True)
-        return re.sub("[^.\w-]+", '_', trans)
+        trans = translit(self.title.strip().lower().replace('.', '_').replace('-', '_'), 'ru', reversed=True)
+        url = urlize(re.sub("[^.\w-]+", '_', trans))
+        if url[-1] == '_':
+            url = url[:-1]
+        return url
 
     def get_absolute_url(self):
         return reverse('event_details',
