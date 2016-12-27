@@ -17,10 +17,13 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.contrib.sitemaps.views import sitemap
 
 from django_project import settings
 from django_project.mysite import admin
+from django_project.mysite.sitemap import DinamicSitemap, StaticSitemap
 
+sitemaps = {'events': DinamicSitemap}
 
 urlpatterns = [url(r'', include('django_project.user_auth.urls')),
                url(r'', include('django_project.text_ru.urls')),
@@ -28,7 +31,8 @@ urlpatterns = [url(r'', include('django_project.user_auth.urls')),
                # url(r'^admin/', include(admin.)),
                url(r'', include('django_project.about.urls')),
                url(r'', include('django_project.mysite.urls')),
-
+                url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
+                    name='django.contrib.sitemaps.views.sitemap')
                ]
 
 urlpatterns += staticfiles_urlpatterns()

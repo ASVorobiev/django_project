@@ -3,6 +3,8 @@ import os
 import re
 
 from django.db.models import Manager
+from django.core.urlresolvers import reverse
+from django.http import request
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
 
@@ -90,7 +92,7 @@ def user_directory_path(instance, filename):
     md = hashlib.md5(f).hexdigest()
     n = 2
     local_path = ''
-    for dr in [md[i:i+n] for i in range(0, len(md), n)]:
+    for dr in [md[i:i + n] for i in range(0, len(md), n)]:
         local_path = os.path.join(local_path, dr)
     local_path = os.path.join(local_path, filename)
     return local_path
@@ -135,13 +137,16 @@ class Customplaces(models.Model):
 class Events(models.Model):
     class Meta:
         ordering = ['start_date', 'start_time']
+
     owner = models.ForeignKey(CustomUser, blank=True, null=True, verbose_name='Создатель')
     location = models.ForeignKey(Locations, verbose_name='Локация')
     title = models.CharField(max_length=255, verbose_name='Заголовок')
     description = models.TextField(blank=True, verbose_name='Описание')  # strip=True
     # 'events/%Y/%m/%d'
-    image = models.ImageField(max_length=255, blank=True, null=True, verbose_name='афиша', upload_to=user_directory_path)
-    thumb = models.ImageField(max_length=255, blank=True, null=True, verbose_name='предпросмотр афиши', upload_to=user_directory_path)
+    image = models.ImageField(max_length=255, blank=True, null=True, verbose_name='афиша',
+                              upload_to=user_directory_path)
+    thumb = models.ImageField(max_length=255, blank=True, null=True, verbose_name='предпросмотр афиши',
+                              upload_to=user_directory_path)
     category_id = models.IntegerField(blank=True, null=True)
     start_date = models.DateField(verbose_name='дата начала')
     start_time = models.TimeField(verbose_name='время начала')
@@ -181,12 +186,17 @@ class Events(models.Model):
             return mark_safe('<img src="%s" width="150" height="150" />' % self.image.url)
         else:
             return '(none)'
+
     image_small.short_description = 'Предпросмотр'
     image_small.allow_tags = True
 
     def title_translit(self):
-        trans = translit(self.title.strip(), 'ru', reversed=True)
+        trans = translit(self.title.strip().replace('.', '_').replace('-', '_'), 'ru', reversed=True)
         return re.sub("[^.\w-]+", '_', trans)
+
+    def get_absolute_url(self):
+        return reverse('event_details',
+                       args=[self.location.site_screen_name, str(self.id), self.title_translit()])
 
     def __str__(self):
         return self.title
