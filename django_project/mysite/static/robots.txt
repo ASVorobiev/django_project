@@ -2,5 +2,6 @@ User-agent: *
 Disallow: /login/
 Disallow: /add_event_form/
 Disallow: /admin/
+Host: vkalendare.com
 
 Sitemap: http://vkalendare.com/sitemap.xml
