@@ -225,14 +225,14 @@ def pill(image_io, image_logo='logo/vkalendare_logo_only.png'):
     max_size = 1920, 1080
     buffer = BytesIO()
     im_with_border.thumbnail(max_size, Image.ANTIALIAS)
-    im_with_border.save(fp=buffer, format='JPEG')
+    im_with_border.save(fp=buffer, format='JPEG', optimize=True, quality=75)
 
     img = buffer.getvalue()
 
     size = 128, 128
     im.thumbnail(size, Image.ANTIALIAS)
     buffer2 = BytesIO()
-    im.save(buffer2, "JPEG")
+    im.save(buffer2, "JPEG", optimize=True, quality=75)
     thumb = buffer2.getvalue()
     return ContentFile(img), ContentFile(thumb)
 
