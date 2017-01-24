@@ -1,6 +1,7 @@
 User-agent: *
 Disallow: /login/
 Disallow: /add_event_form/
+Disallow: /add_event_selector/
 Disallow: /admin/
 Host: vkalendare.com
 

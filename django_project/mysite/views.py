@@ -5,6 +5,7 @@ import json
 import os
 from datetime import date, timedelta, timezone
 
+import subprocess
 from django.core.mail import send_mail
 from django.db.models import Q
 from io import BytesIO
@@ -235,6 +236,31 @@ def pill(image_io, image_logo='logo/vkalendare_logo_only.png'):
     im.save(buffer2, "JPEG", optimize=True, quality=75)
     thumb = buffer2.getvalue()
     return ContentFile(img), ContentFile(thumb)
+
+
+@csrf_exempt
+def add_event_selector(request):
+    if request.POST:
+        if 'vk_event_url' in request.POST:
+            if 'vk.com/event' in request.POST['vk_event_url']:
+                event_id = int(request.POST['vk_event_url'].split('vk.com/event')[1])
+            else:
+                event_name = request.POST['vk_event_url'].split('/')[-1]
+                url = 'https://api.vk.com/method/groups.getById'
+                resp = requests.post(url, data={'group_id': event_name}).json()
+                try:
+                    if resp['response'][0]['type'] == "event":
+                        event_id = resp['response'][0]['gid']
+                        print(event_id)
+                except (KeyError, IndexError):
+                    logger.error('Ошибка запроса %s с данными %s' % (url, event_name))
+            shell_cmd = "sudo -u dell /usr/local/bin/python3.4 -u /home/dell/scripts/vkalendare/vk_events.py --parse %d" % event_id
+            result = subprocess.check_output(shell_cmd, shell=True, stderr=subprocess.STDOUT).decode()
+            founded_event_name = re.search('Записываем в базу мероприятие: %d  (.*)\\nINFO:' % event_id, result).group(1)
+            if founded_event_name:
+                return render(request, 'added_successfully.html', {'founded_event_name': founded_event_name})
+        return render(request, 'add_event_form.html')
+    return render(request, 'add_event_selector.html')
 
 
 def add_event_form(request):
