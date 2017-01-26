@@ -1,0 +1,18 @@
+{% extends "mysite/base.html" %}
+
+{% load staticfiles %}
+
+{% block content %}
+  <div class="center-align">
+    <h4>Не удалось добавить ваше мероприятие!</h4>
+    {% if messages %}
+      <ul class="messages">
+          {% for message in messages %}
+              <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+          {% endfor %}
+      </ul>
+    {% endif %}
+
+    <h5>За получением дополнительной информации напишите нам</h5>
+  </div>
+{% endblock %}

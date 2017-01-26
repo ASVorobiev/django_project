@@ -263,7 +263,7 @@ def add_event_selector(request):
                         event_id = resp['response'][0]['gid']
                         print(event_id)
                     else:
-                        messages.add_message(request, messages.INFO, 'Вы пытаетесь добавить %s. Добавление в аншу систему возможно только для Мероприятий(Встреч) из ВК' % resp['response'][0]['type'])
+                        messages.add_message(request, messages.INFO, 'Вы пытаетесь добавить %s. Добавление в нашу систему возможно только для Мероприятий(Встреч) из ВК' % resp['response'][0]['type'])
 
                     try:
                         if resp['response'][0]['city']['id'] not in LocationCities.objects.values('vk_city_id'):
@@ -275,6 +275,8 @@ def add_event_selector(request):
                     logger.error('Ошибка запроса %s с данными %s' % (url, event_screen_name))
             else:
                 messages.add_message(request, messages.ERROR, 'Не удалось получить данные по указанной вами ссылке. Пожалуйста, убедитесь в корректности введённх вами данных и повторите попытку.')
+            if messages.get_messages(request):
+                return redirect('add_failed')
 
             sys.path.append('/home/dell/scripts/py_class/')
             from c_vk_events import VkEvents
@@ -417,9 +419,11 @@ def add_event_form(request):
     return render(request, 'add_event_form.html', context)
 
 
-def added_successfully(request):
-    return render(request, 'added_successfully.html')
+def add_successfully(request):
+    return render(request, 'mysite/templates/mysite/add_successfully.html')
 
+def add_failed(request):
+    return render(request, 'mysite/templates/mysite/add_failed.html')
 
 def admin_list(request):
     if request.method == "POST":
