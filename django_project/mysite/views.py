@@ -6,10 +6,15 @@ import os
 from datetime import date, timedelta, timezone
 
 import subprocess
+
+import pwd
+
+from django.contrib import messages
 from django.core.mail import send_mail
 from django.db.models import Q
 from io import BytesIO
 import random
+import sys
 
 import re
 from time import sleep
@@ -244,21 +249,54 @@ def add_event_selector(request):
         if 'vk_event_url' in request.POST:
             if 'vk.com/event' in request.POST['vk_event_url']:
                 event_id = int(request.POST['vk_event_url'].split('vk.com/event')[1])
+                event_screen_name = event_id
             else:
-                event_name = request.POST['vk_event_url'].split('/')[-1]
-                url = 'https://api.vk.com/method/groups.getById'
-                resp = requests.post(url, data={'group_id': event_name}).json()
+                event_screen_name = request.POST['vk_event_url'].split('/')[-1]
+
+            url = 'https://api.vk.com/method/groups.getById'
+            resp = requests.post(url, data={'group_id': event_screen_name,
+                                            'fields': 'city',
+                                            'version': '5.62'}).json()
+            if resp:
                 try:
                     if resp['response'][0]['type'] == "event":
                         event_id = resp['response'][0]['gid']
                         print(event_id)
+                    else:
+                        messages.add_message(request, messages.INFO, 'Вы пытаетесь добавить %s. Добавление в аншу систему возможно только для Мероприятий(Встреч) из ВК' % resp['response'][0]['type'])
+
+                    try:
+                        if resp['response'][0]['city']['id'] not in LocationCities.objects.values('vk_city_id'):
+                            messages.add_message(request, messages.ERROR, 'В Местопложении вашего мероприятия указан город %s. К сожалению, мы пока не работаем в этом городе.') % resp['response'][0]['city']['id']
+                    except (KeyError, IndexError):
+                        messages.add_message(request, messages.ERROR, 'В вашем мероприятии не заполнено поле "Местоположение"')
+
                 except (KeyError, IndexError):
-                    logger.error('Ошибка запроса %s с данными %s' % (url, event_name))
-            shell_cmd = "sudo -u dell /usr/local/bin/python3.4 -u /home/dell/scripts/vkalendare/vk_events.py --parse %d" % event_id
-            result = subprocess.check_output(shell_cmd, shell=True, stderr=subprocess.STDOUT).decode()
-            founded_event_name = re.search('Записываем в базу мероприятие: %d  (.*)\\nINFO:' % event_id, result).group(1)
-            if founded_event_name:
-                return render(request, 'added_successfully.html', {'founded_event_name': founded_event_name})
+                    logger.error('Ошибка запроса %s с данными %s' % (url, event_screen_name))
+            else:
+                messages.add_message(request, messages.ERROR, 'Не удалось получить данные по указанной вами ссылке. Пожалуйста, убедитесь в корректности введённх вами данных и повторите попытку.')
+
+            sys.path.append('/home/dell/scripts/py_class/')
+            from c_vk_events import VkEvents
+            parse_result = VkEvents().parse_vk_groups([event_id], safely=True, site=True)
+            if parse_result:
+                messages.add_message(request, messages.SUCCESS, parse_result[0]['name'])
+
+                if not request.user.is_staff:
+                    mail_title = 'Новый запрос на добавление мероприятия из VK'
+                    mail_body = 'Мероприятие "%s" ожидает модерации. \n\n%s' % (parse_result[0]['name'],
+                                                                                parse_result[0]['description'])
+                    modaration_url = "http://mod.vkalendare.com/?search=%d" % event_id
+                    mail_body = mail_body + '\n' + modaration_url
+
+                    mail_result = send_mail(
+                        mail_title,
+                        mail_body,
+                        'admin@vkalendare.com',
+                        ['dell.oxl@gmail.com', 'pr@vkalendare.com'],
+                        fail_silently=False,
+                    )
+                return redirect('added_successfully')
         return render(request, 'add_event_form.html')
     return render(request, 'add_event_selector.html')
 
