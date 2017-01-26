@@ -266,8 +266,8 @@ def add_event_selector(request):
                         messages.add_message(request, messages.INFO, 'Вы пытаетесь добавить %s. Добавление в нашу систему возможно только для Мероприятий(Встреч) из ВК' % resp['response'][0]['type'])
 
                     try:
-                        if resp['response'][0]['city']['id'] not in LocationCities.objects.values('vk_city_id'):
-                            messages.add_message(request, messages.ERROR, 'В Местопложении вашего мероприятия указан город %s. К сожалению, мы пока не работаем в этом городе.') % resp['response'][0]['city']['id']
+                        if (resp['response'][0]['city'],) not in LocationCities.objects.values_list('vk_city_id'):
+                            messages.add_message(request, messages.ERROR, 'К сожалению, мы пока не работаем в городе, указаном в Местоположении вашего мероприятия')
                     except (KeyError, IndexError):
                         messages.add_message(request, messages.ERROR, 'В вашем мероприятии не заполнено поле "Местоположение"')
 
