@@ -8692,24 +8692,34 @@ display:block;
 text-align: center;
 }
 
-.img-container {
-  text-align:center; /* Align center inline elements */
-  font: 0/0 a;       /* Hide the characters like spaces */
-}
+/*.img-container {*/
+  /*text-align:center; !* Align center inline elements *!*/
+  /*font: 0/0 a;       !* Hide the characters like spaces *!*/
+/*}*/
 
-.img-container:before {
-  content: ' ';
-  display: inline-block;
-  vertical-align: middle;
-  height: 100%;
-}
+/*.img-container:before {*/
+  /*content: ' ';*/
+  /*display: inline-block;*/
+  /*vertical-align: middle;*/
+  /*height: 90%;*/
+/*}*/
 
-.img-container img {
-  vertical-align: middle;
-  display: inline-block;
-  max-height: 80%;
-  max-width: 80%;
-  width: auto;
+/*.slick-initialized img {*/
+  /*width: auto;*/
+  /*vertical-align: middle;*/
+  /*display: inline-block;*/
+  /*max-height: 80%;*/
+  /*max-width: 80%;*/
+/*}*/
+
+/*.responsive-container{*/
+
+/*}*/
+
+.slick-initialized .slick-slide {
+    float: none;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .location-dropdown {

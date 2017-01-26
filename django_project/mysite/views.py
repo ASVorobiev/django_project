@@ -298,7 +298,7 @@ def add_event_selector(request):
                         ['dell.oxl@gmail.com', 'pr@vkalendare.com'],
                         fail_silently=False,
                     )
-                return redirect('added_successfully')
+                return redirect('add_successfully')
         return render(request, 'add_event_form.html')
     return render(request, 'add_event_selector.html')
 
