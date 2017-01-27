@@ -3445,6 +3445,13 @@ input[type=range] + .thumb {
   margin-right: -0.75rem;
 }
 
+.form_container {
+  /*width: 70%;*/
+  margin-left: 5.0rem;
+  margin-right: 5.0rem;
+}
+
+
 .section {
   padding-top: 1rem;
   padding-bottom: 1rem;

@@ -4,27 +4,50 @@
 
 {% block content %}
   <div class="card-panel">
-    <h5>Вы уже создали мероприятие(встречу) в ВК?</h5>
-    <form action="#" method="post">
-      <div class="row">
-        <div class="input-field col s2">
-          <input class="with-gap"  name="group1" type="radio" id="test1" checked="checked"/>
-          <label for="test1">Да</label>
+    <div class="form_container">
+      <h4>Форма добавления мероприятия</h4>
+      <form class="" action="#" method="post">
+        <div>
+          <div class="section">
+            <h6>Вы уже создали мероприятие(встречу) в ВК?</h6>
+            <div>
+              <input class="with-gap" name="event_has" type="radio" id="radio_yes" value="yes" checked/>
+              <label for="radio_yes">Да</label>
+            </div>
+            <div>
+                <input class="with-gap" name="event_has" type="radio" id="radio_no" value="no" />
+                <label for="radio_no">Нет</label>
+            </div>
+          </div>
+          <div class="section" id="url_div">
+            <h6>Ссылка на ваше мероприятие в ВК</h6>
+            <input placeholder="https://vk.com/" class="validate" type="url" id="vk_event_url" name="vk_event_url" required pattern="https?://vk.com/.+">
+          </div>
+
+          <div id="log"></div>
+          <div class="right-align">
+            <button class="btn waves-effect waves-light" type="submit" name="action">Далее
+              <i class="material-icons right">send</i>
+            </button>
+          </div>
         </div>
-        <div class="input-field col s6">
-          <input placeholder="https://vk.com/" class="validate" type="url" id="vk_event_url" name="vk_event_url" required pattern="https?://vk.com/.+">
-          <label for="vk_event_url">Ссылка на ваше мероприятие в ВК</label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col s2">
-          <input class="with-gap"  name="group1" type="radio" id="test2" />
-          <label for="test2">Нет</label>
-        </div>
-      </div>
-      <button class="btn waves-effect waves-light" type="submit" name="action">Далее
-        <i class="material-icons right">send</i>
-      </button>
-     </form>
+       </form>
+    </div>
   </div>
+
+  <script>
+    $("#radio_yes").click(function() {
+        $("#url_div").show();
+        $("#vk_event_url").attr("required", true);
+{#        $("#test1").attr('checked', 'checked');#}
+{#        $("#test2").removeAttr('checked');#}
+    });
+    $("#radio_no").click(function() {
+        $("#url_div").hide();
+        $("#vk_event_url").removeAttr('required');
+{#        $("#test1").removeAttr('checked');#}
+{#        $("#test2").attr('checked', 'checked');#}
+    });
+  </script>
+
 {% endblock %}

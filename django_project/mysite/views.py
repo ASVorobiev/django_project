@@ -7,8 +7,6 @@ from datetime import date, timedelta, timezone
 
 import subprocess
 
-import pwd
-
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.db.models import Q
@@ -117,7 +115,7 @@ def events_list(request, site_screen_name=None):
 
         response['need_location'] = False
     else:
-        response['current_location'] = 'Выберите ваш город'
+        response['current_location'] = ''
         response['need_location'] = True
 
     response['priority_events'] = response['priority_events'][:8]
@@ -246,7 +244,7 @@ def pill(image_io, image_logo='logo/vkalendare_logo_only.png'):
 @csrf_exempt
 def add_event_selector(request):
     if request.POST:
-        if 'vk_event_url' in request.POST:
+        if request.POST['event_has'] == 'yes':
             if 'vk.com/event' in request.POST['vk_event_url']:
                 event_id = int(request.POST['vk_event_url'].split('vk.com/event')[1])
                 event_screen_name = event_id
@@ -257,24 +255,33 @@ def add_event_selector(request):
             resp = requests.post(url, data={'group_id': event_screen_name,
                                             'fields': 'city',
                                             'version': '5.62'}).json()
-            if resp:
+            if 'response' in resp:
                 try:
                     if resp['response'][0]['type'] == "event":
                         event_id = resp['response'][0]['gid']
                         print(event_id)
+                    elif resp['response'][0]['type'] == "group":
+                        messages.add_message(request, messages.INFO, 'Вы пытаетесь добавить ГРУППУ. Добавление в нашу систему возможно только для Мероприятий(Встреч) из ВК.')
+                    elif resp['response'][0]['type'] == "page":
+                            messages.add_message(request, messages.INFO, 'Вы пытаетесь добавить ПАБЛИК. Добавление в нашу систему возможно только для Мероприятий(Встреч) из ВК.')
                     else:
-                        messages.add_message(request, messages.INFO, 'Вы пытаетесь добавить %s. Добавление в нашу систему возможно только для Мероприятий(Встреч) из ВК' % resp['response'][0]['type'])
+                        messages.add_message(request, messages.INFO, 'Вы пытаетесь добавить %s. Добавление в нашу систему возможно только для Мероприятий(Встреч) из ВК.' % resp['response'][0]['type'])
 
                     try:
                         if (resp['response'][0]['city'],) not in LocationCities.objects.values_list('vk_city_id'):
-                            messages.add_message(request, messages.ERROR, 'К сожалению, мы пока не работаем в городе, указаном в Местоположении вашего мероприятия')
+                            messages.add_message(request, messages.ERROR, 'К сожалению, мы пока не работаем в городе, указаном в Местоположении вашего мероприятия.')
                     except (KeyError, IndexError):
-                        messages.add_message(request, messages.ERROR, 'В вашем мероприятии не заполнено поле "Местоположение"')
+                        messages.add_message(request, messages.ERROR, 'В вашем мероприятии не заполнено поле "Местоположение".')
 
                 except (KeyError, IndexError):
                     logger.error('Ошибка запроса %s с данными %s' % (url, event_screen_name))
             else:
                 messages.add_message(request, messages.ERROR, 'Не удалось получить данные по указанной вами ссылке. Пожалуйста, убедитесь в корректности введённх вами данных и повторите попытку.')
+
+            if 'error' in resp:
+                if resp['error']['error_code'] == 100:
+                    messages.add_message(request, messages.ERROR, 'Указанная вами ссылка не существует.')
+
             if messages.get_messages(request):
                 return redirect('add_failed')
 
@@ -299,7 +306,8 @@ def add_event_selector(request):
                         fail_silently=False,
                     )
                 return redirect('add_successfully')
-        return render(request, 'add_event_form.html')
+        else:
+            return render(request, 'add_event_form.html')
     return render(request, 'add_event_selector.html')
 
 
