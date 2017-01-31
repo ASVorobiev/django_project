@@ -5,7 +5,9 @@
 {% block content %}
 <div class="card-panel">
   <div class="row">
-
+    <div class="section grey-text text-darken-2">
+      <h5>Для продолжения необходимо авторизоваться</h5>
+    </div>
     <div class="col s12">
       <ul class="tabs">
         <li class="tab col s6"><a class="active"  href="#login">Войти</a></li>
@@ -19,7 +21,7 @@
           <div class="card-content">
           <div class="row">
             <div class="col s12 l12 center-align">
-              <span class="card-title">Быстрый и безопасный вход с помощью социальных сетей</span>
+              <span class="card-title">Быстрый вход с помощью социальных сетей</span>
             </div>
             </div>
             {% for sublist in available_backends|social_backends %}

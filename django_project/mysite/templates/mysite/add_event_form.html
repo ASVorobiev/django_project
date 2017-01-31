@@ -71,6 +71,9 @@
 <div class="">
   <form class="card-panel z-depth-3" action="{% url 'add_event_form'%}" method="post" id="main_form" name="main_form" enctype="multipart/form-data">
     {% csrf_token %}
+    <div class="section grey-text text-darken-2">
+      <h5>Заполните форму для добавления вашего мероприятия</h5>
+    </div>
     <!-- Modal Trigger -->
     <a class="col s12 m12 l12 waves-effect waves-light btn modal-trigger" href="#modal2">Читать инструкцию</a>
     <div class="input-field col s12">

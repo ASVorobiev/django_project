@@ -5,7 +5,9 @@
 {% block content %}
   <div class="card-panel">
     <div class="form_container">
-      <h4>Форма добавления мероприятия</h4>
+      <div class="grey-text text-darken-2">
+        <h4>Форма добавления мероприятия</h4>
+      </div>
       <form class="" action="#" method="post">
         <div>
           <div class="section">
@@ -44,7 +46,9 @@
     });
     $("#radio_no").click(function() {
         $("#url_div").hide();
-        $("#vk_event_url").removeAttr('required');
+        $("#vk_event_url")
+            .removeAttr('required')
+            .val('');
 {#        $("#test1").removeAttr('checked');#}
 {#        $("#test2").attr('checked', 'checked');#}
     });

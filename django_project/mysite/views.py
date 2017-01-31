@@ -243,6 +243,9 @@ def pill(image_io, image_logo='logo/vkalendare_logo_only.png'):
 
 @csrf_exempt
 def add_event_selector(request):
+    if request.user.is_anonymous():
+        request.session['add_event_selector_http_referer'] = 1
+        return redirect('login', )
     if request.POST:
         if request.POST['event_has'] == 'yes':
             if 'vk.com/event' in request.POST['vk_event_url']:
@@ -307,7 +310,7 @@ def add_event_selector(request):
                     )
                 return redirect('add_successfully')
         else:
-            return render(request, 'add_event_form.html')
+            return redirect('add_event_form')
     return render(request, 'add_event_selector.html')
 
 
@@ -430,8 +433,10 @@ def add_event_form(request):
 def add_successfully(request):
     return render(request, 'mysite/templates/mysite/add_successfully.html')
 
+
 def add_failed(request):
     return render(request, 'mysite/templates/mysite/add_failed.html')
+
 
 def admin_list(request):
     if request.method == "POST":
