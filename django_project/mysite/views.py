@@ -326,9 +326,14 @@ def add_event_form(request):
     # context['org_form']['name'].css_classes('foo bar')
     context.update(csrf(request))
     if request.POST:
-        # Delete every non utf-8 symbols froms string
-        request.POST['title'] = request.POST['title'].encode("utf-8").decode('utf-8', 'ignore')
-        request.POST['description'] = request.POST['description'].encode("utf-8").decode('utf-8', 'ignore')
+        try:
+            highpoints = re.compile(u'[\U00010000-\U0010ffff]')
+        except re.error:
+            # UCS-2 build
+            highpoints = re.compile(u'[\uD800-\uDBFF][\uDC00-\uDFFF]')
+
+        request.POST['title'] = highpoints.sub(u'', request.POST['title'])
+        request.POST['description'] = highpoints.sub(u'', request.POST['description'])
 
         new_org_flag = False
         if 'new_org-name' in request.POST.keys():
@@ -365,6 +370,8 @@ def add_event_form(request):
 
             new_event_form.title = request.POST['title']
             new_event_form.description = request.POST['description']
+
+            new_event_form.description = request.POST['description']
             new_event_form.location = request.POST['location']
             new_event_form.start_time = request.POST['start_time']
             new_event_form.start_date = request.POST['start_date']
@@ -387,7 +394,7 @@ def add_event_form(request):
                 new_event_form.save_m2m()
                 response = {'status': 'OK',
                             'Cache-Control': 'no-cache',
-                            'redirect': request.build_absolute_uri(reverse('added_successfully'))}
+                            'redirect': request.build_absolute_uri(reverse('add_successfully'))}
 
                 if not request.user.is_staff:
                     mail_title = 'Новый запрос на добавление мероприятия'
