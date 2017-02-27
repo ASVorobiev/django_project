@@ -41,9 +41,9 @@
 {% endblock %}
 {% block title %}{{ event_data.title }} | {{ event_data.location.name }} | вКалендаре{% endblock %}
 {% block meta %}
-  <meta name="keywords" content="афиша, куда сходить в {{ event_data.location.name }}, {{ event_data.description|striptags|truncatewords:10|urlize }}" />
-  <meta name="description" property="og:description" content="{{ event_data.description|striptags|truncatewords:25|urlize }}" />
-  <meta property="og:title" content="{{ event_data.title|striptags }}" />
+  <meta name="keywords" content="афиша, куда сходить в {{ event_data.location.name }}, {{ event_data.description|striptags|truncatewords:10|safe|urlize }}" />
+  <meta name="description" property="og:description" content="{{ event_data.description|striptags|truncatewords:25|safe|urlize }}" />
+  <meta property="og:title" content="{{ event_data.title|striptags|safe }}" />
   <meta property="og:image" content="http://{{ request.get_host }}{{ event_data.image.url }}" />
   <meta property="og:site_name" content="Все мероприятия {{ event_data.location.name }} уже вКалендаре!"/>
   <meta property="og:url" content="{{ request.build_absolute_uri }}" />
