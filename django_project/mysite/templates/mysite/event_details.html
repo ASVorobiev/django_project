@@ -17,7 +17,7 @@
     "startDate" : "{{ event_data.start_date|date:'Y-m-d' }}T{{ event_data.start_time }}",
     "url" : "{{ request.build_absolute_uri }}",
     "image": "http://{{ request.get_host }}{{ event_data.image.url }}",
-    "description": "{{ event_data.description|truncatewords:50|striptags|urlize }}",
+    "description": "{{ event_data.description|truncatewords:50|striptags|safe }}",
     "location" : {
       "@type" : "Place",
 {#      "sameAs" : "{{ event_data.place.name }}",#}

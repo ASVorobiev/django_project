@@ -54,8 +54,6 @@ import pymorphy2
 import logging
 
 logger = logging.getLogger(__name__)
-today = date.today()
-
 
 def home(request):
     return events_list(request)
@@ -67,6 +65,7 @@ def get_item(dictionary, key):
 
 
 def events_list(request, site_screen_name=None):
+    today = date.today()
     response = {}
     response['locations'] = Locations.objects.exclude(created=0, is_deleted=1).order_by('name').all()
 
