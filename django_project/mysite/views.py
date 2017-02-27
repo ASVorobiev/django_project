@@ -172,6 +172,7 @@ def events_list(request, site_screen_name=None):
 
 
 def events_details(request, site_screen_name, pk, title_translit='dont_remove'):
+    today = date.today()
     locations = Locations.objects.exclude(created=0, is_deleted=1).order_by('name').all()
     current_location = Locations.objects.get(site_screen_name=site_screen_name)
     event_data = Events.objects.get(id=pk)
