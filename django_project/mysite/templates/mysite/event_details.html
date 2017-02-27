@@ -41,7 +41,7 @@
 {% endblock %}
 {% block title %}{{ event_data.title }} | {{ event_data.location.name }} | вКалендаре{% endblock %}
 {% block meta %}
-  <meta name="keywords" content="афиша, куда сходить в {{ event_data.location.name }}, {{ event_data.description|striptags|truncatewords:10|safe }}" />
+  <meta name="keywords" content="афиша, {{ event_data.start_date }}, куда сходить в {{ event_data.location.name }}, {{ event_data.description|striptags|truncatewords:10|safe }}" />
   <meta name="description" property="og:description" content="{{ event_data.description|striptags|truncatewords:25|safe }}" />
   <meta property="og:title" content="{{ event_data.title|striptags|safe }}" />
   <meta property="og:image" content="http://{{ request.get_host }}{{ event_data.image.url }}" />
@@ -63,13 +63,13 @@
   </div>
 
   <div class="card">
-    <div class="row">
+    <div class="row" itemscope itemtype="http://schema.org/ImageObject">
       <div class="col c12 l5">
-        <img class="image_padding materialboxed responsive-img" src="{{ event_data.image.url }}" alt="Афиша {{ event_data.location.name }} {{ event_data.title }}">
+        <img itemprop="contentUrl" class="image_padding materialboxed responsive-img" src="{{ event_data.image.url }}" alt="Афиша {{ event_data.location.name }} {{ event_data.title }}">
       </div>
       <div class="col s12 l7 section">
         <div class="custom2">
-          <h1>{{ event_data.title|safe }}</h1>
+          <h1 itemprop="name">{{ event_data.title|safe }}</h1>
         </div>
       <div class="divider"></div>
         <div class="section">
@@ -86,7 +86,7 @@
       {% if event_data.description %}
         <div class="section">
           {% spaceless %}
-            <p>{{ event_data.description|urlize|linebreaks }}</p>
+            <p itemprop="description">{{ event_data.description|urlize|linebreaks }}</p>
           {% endspaceless %}
         </div>
       {% endif %}

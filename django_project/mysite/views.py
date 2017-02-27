@@ -191,7 +191,7 @@ def events_details(request, site_screen_name, pk, title_translit='dont_remove'):
                                                          'locations': locations,
                                                          'event_tags': event_data.tag_it.names(),
                                                          'title_translit': translit(event_data.title, 'ru',
-                                                                                    reversed=True).replace(' ', '_')
+                                                                                    reversed=True).replace(' ', '-').replace('_', '-')
                                                          })
 
 
