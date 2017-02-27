@@ -65,8 +65,8 @@ def get_item(dictionary, key):
 
 
 def events_list(request, site_screen_name=None):
-    today = date.today()
     response = {}
+    today = date.today()
     response['locations'] = Locations.objects.exclude(created=0, is_deleted=1).order_by('name').all()
 
     if not request.user.is_anonymous and not site_screen_name and request.user.location_id:
