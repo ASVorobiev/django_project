@@ -568,7 +568,7 @@ def jservice(request):
         return HttpResponse(json.dumps({'result': True}), content_type='application/json')
 
     if request.GET['task'] == 'update_event':
-        update_event([139675437])
+        update_event([140415724])
         return HttpResponse(json.dumps({'result': True}), content_type='application/json')
 
     if request.GET['task'] == 'test':
